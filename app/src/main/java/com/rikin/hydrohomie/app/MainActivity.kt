@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie
+package com.rikin.hydrohomie.app
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,8 +8,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.airbnb.mvrx.compose.collectAsState
+import com.airbnb.mvrx.compose.mavericksViewModel
+import com.rikin.hydrohomie.app.domain.AppViewModel
 import com.rikin.hydrohomie.design.HydroHomieTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,7 +23,9 @@ class MainActivity : ComponentActivity() {
       HydroHomieTheme {
         // A surface container using the 'background' color from the theme
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-          Greeting("Android")
+          val viewModel: AppViewModel = mavericksViewModel()
+          val greeting by viewModel.collectAsState() { it.greeting }
+          Greeting(name = greeting)
         }
       }
     }
