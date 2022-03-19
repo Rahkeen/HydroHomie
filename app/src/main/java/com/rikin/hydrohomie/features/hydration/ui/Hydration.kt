@@ -1,5 +1,10 @@
 package com.rikin.hydrohomie.features.hydration.ui
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,9 +17,10 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.ThumbUp
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -36,11 +42,47 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
       .fillMaxSize()
       .background(color = MaterialTheme.colors.background)
   ) {
+    val fillPercent by animateFloatAsState(
+      targetValue = state.count / state.goal,
+      animationSpec = tween(
+        durationMillis = 300,
+        easing = LinearEasing
+      )
+    )
+
+    val cornerTransition = updateTransition(
+      targetState = state,
+      label = "CornerTransition"
+    )
+
+    val waterCornerRadius by cornerTransition.animateDp(
+      transitionSpec = {
+        tween(
+          durationMillis = 300,
+          easing = LinearEasing
+        )
+      },
+      label = "WaterCornerRadius"
+    ) { state ->
+      when {
+        state.count > 0 && state.count < state.goal -> 16.dp
+        else -> 0.dp
+      }
+    }
+
     Box(
       modifier = Modifier
         .fillMaxWidth()
-        .fillMaxHeight(fraction = state.count / state.goal)
-        .background(brush = Brush.verticalGradient(colors = listOf(BlueSkiesStart, BlueSkiesEnd)))
+        .fillMaxHeight(fraction = fillPercent)
+        .background(
+          shape = RoundedCornerShape(waterCornerRadius),
+          brush = Brush.verticalGradient(
+            colors = listOf(
+              BlueSkiesStart,
+              BlueSkiesEnd
+            )
+          )
+        )
         .align(Alignment.BottomCenter)
     )
 
@@ -48,7 +90,10 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
       modifier = Modifier
         .wrapContentSize()
         .padding(end = 16.dp)
-        .background(color = MaterialTheme.colors.surface, shape = RoundedCornerShape(22.dp))
+        .background(
+          color = MaterialTheme.colors.surface.copy(alpha = 0.3F),
+          shape = RoundedCornerShape(22.dp)
+        )
         .padding(8.dp)
         .align(Alignment.CenterEnd),
       verticalArrangement = Arrangement.spacedBy(
@@ -61,7 +106,7 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
       HydroIconButton(
         backgroundColor = OzoneOrange,
         iconTint = OzoneOrangeDark,
-        icon = Icons.Rounded.ThumbUp,
+        icon = Icons.Rounded.Add,
         iconDescription = "Add",
         action = {
           actions(
@@ -73,7 +118,7 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
       HydroIconButton(
         backgroundColor = RadRed,
         iconTint = RadRedDark,
-        icon = Icons.Rounded.Delete,
+        icon = Icons.Rounded.Refresh,
         iconDescription = "Clear",
         action = {
           actions(

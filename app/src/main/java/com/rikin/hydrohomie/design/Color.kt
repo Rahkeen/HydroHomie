@@ -7,6 +7,8 @@ val OzoneOrange = Color(0xFFF49052)
 val OzoneOrangeDark = Color(0xFF984A0A)
 val RadRed = Color(0xFFff4f7b)
 val RadRedDark = Color(0xFF890000)
+val Yellowstone = Color(0xFFFFE082)
+val YellowstoneDark = Color(0xFF4d4e01)
 
 val WispyWhite = Color(0xFFFFFBFE)
 val BoldBlack = Color(0xFF1C1B1F)
