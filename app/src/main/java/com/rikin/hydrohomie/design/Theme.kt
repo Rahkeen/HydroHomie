@@ -6,9 +6,15 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
-private val DarkColorPalette = darkColors()
+private val DarkColorPalette = darkColors(
+  background = BoldBlack,
+  surface = BlackRussian
+)
 
-private val LightColorPalette = lightColors()
+private val LightColorPalette = lightColors(
+  background = WispyWhite,
+  surface = Porcelain
+)
 
 @Composable
 fun HydroHomieTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
