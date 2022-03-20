@@ -44,49 +44,8 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
       .fillMaxSize()
       .background(color = MaterialTheme.colors.background)
   ) {
-    val fillPercent by animateFloatAsState(
-      targetValue = state.count / state.goal,
-      animationSpec = tween(
-        durationMillis = 300,
-        easing = LinearEasing
-      )
-    )
 
-    val cornerTransition = updateTransition(
-      targetState = state,
-      label = "CornerTransition"
-    )
-
-    val waterCornerRadius by cornerTransition.animateDp(
-      transitionSpec = {
-        tween(
-          durationMillis = 300,
-          easing = LinearEasing
-        )
-      },
-      label = "WaterCornerRadius"
-    ) { state ->
-      when {
-        state.count > 0 && state.count < state.goal -> 16.dp
-        else -> 0.dp
-      }
-    }
-
-    Box(
-      modifier = Modifier
-        .fillMaxWidth()
-        .fillMaxHeight(fraction = fillPercent)
-        .background(
-          shape = RoundedCornerShape(waterCornerRadius),
-          brush = Brush.verticalGradient(
-            colors = listOf(
-              BlueSkiesStart,
-              BlueSkiesEnd
-            )
-          )
-        )
-        .align(Alignment.BottomCenter)
-    )
+    WaterContainer(state = state)
 
     Column(
       modifier = Modifier
@@ -129,6 +88,58 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
         }
       )
     }
+  }
+}
+
+@Composable
+fun WaterContainer(state: AppState) {
+  Box(modifier = Modifier.fillMaxSize()) {
+    val fillPercent by animateFloatAsState(
+      targetValue = state.count / state.goal,
+      animationSpec = tween(
+        durationMillis = 300,
+        easing = LinearEasing
+      )
+    )
+
+    val cornerTransition = updateTransition(
+      targetState = state,
+      label = "CornerTransition"
+    )
+
+    val waterCornerRadius by cornerTransition.animateDp(
+      transitionSpec = {
+        tween(
+          durationMillis = 300,
+          easing = LinearEasing
+        )
+      },
+      label = "WaterCornerRadius"
+    ) { currentState ->
+      when {
+        currentState.count > 0 && currentState.count < currentState.goal -> 16.dp
+        else -> 0.dp
+      }
+    }
+
+    Box(
+      modifier = Modifier
+        .fillMaxWidth()
+        .fillMaxHeight(fraction = fillPercent)
+        .background(
+          shape = RoundedCornerShape(
+            topStart = waterCornerRadius,
+            topEnd = waterCornerRadius
+          ),
+          brush = Brush.verticalGradient(
+            colors = listOf(
+              BlueSkiesStart,
+              BlueSkiesEnd
+            )
+          )
+        )
+        .align(Alignment.BottomCenter)
+    )
   }
 }
 
