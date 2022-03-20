@@ -53,7 +53,6 @@ fun History(states: List<AppState>) {
       Box(
         modifier = Modifier
           .fillMaxSize()
-          .shadow(elevation = 4.dp)
           .graphicsLayer(
             rotationY = rotationY,
             translationX = translationX * i,
@@ -65,6 +64,7 @@ fun History(states: List<AppState>) {
           modifier = Modifier
             .width(200.dp)
             .height(300.dp)
+            .shadow(elevation = 1.dp)
             .background(color = Porcelain)
         ) {
           WaterContainer(state = states[i])
