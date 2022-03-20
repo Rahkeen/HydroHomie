@@ -42,7 +42,7 @@ fun HydroIconButton(
     contentAlignment = Alignment.Center
   ) {
     Icon(
-      modifier = Modifier.size(16.dp),
+      modifier = Modifier.size(20.dp),
       imageVector = icon,
       contentDescription = iconDescription,
       tint = iconTint

@@ -24,11 +24,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.domain.AppAction
 import com.rikin.hydrohomie.app.domain.AppState
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.BlueSkiesStart
+import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
 import com.rikin.hydrohomie.design.OzoneOrange
 import com.rikin.hydrohomie.design.OzoneOrangeDark
@@ -127,5 +129,13 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
         }
       )
     }
+  }
+}
+
+@Preview
+@Composable
+fun HydrationPreview() {
+  HydroHomieTheme {
+    Hydration(state = AppState(), actions = {})
   }
 }
