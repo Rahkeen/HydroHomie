@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +35,8 @@ import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
 import com.rikin.hydrohomie.design.OzoneOrange
 import com.rikin.hydrohomie.design.OzoneOrangeDark
+import com.rikin.hydrohomie.design.PlayaPurple
+import com.rikin.hydrohomie.design.PlayaPurpleDark
 import com.rikin.hydrohomie.design.RadRed
 import com.rikin.hydrohomie.design.RadRedDark
 
@@ -63,6 +66,17 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
       ),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
+      HydroIconButton(
+        backgroundColor = RadRed,
+        iconTint = RadRedDark,
+        icon = Icons.Rounded.Refresh,
+        iconDescription = "Clear",
+        action = {
+          actions(
+            AppAction.Reset
+          )
+        }
+      )
 
       HydroIconButton(
         backgroundColor = OzoneOrange,
@@ -77,13 +91,13 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
       )
 
       HydroIconButton(
-        backgroundColor = RadRed,
-        iconTint = RadRedDark,
-        icon = Icons.Rounded.Refresh,
+        backgroundColor = PlayaPurple,
+        iconTint = PlayaPurpleDark,
+        icon = Icons.Rounded.Menu,
         iconDescription = "Clear",
         action = {
           actions(
-            AppAction.Reset
+            AppAction.History
           )
         }
       )

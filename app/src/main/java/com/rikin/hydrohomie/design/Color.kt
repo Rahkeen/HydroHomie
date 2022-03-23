@@ -2,13 +2,15 @@ package com.rikin.hydrohomie.design
 
 import androidx.compose.ui.graphics.Color
 
-val CoolBlue = Color(0xFF2b8fe8)
+val CoolBlue = Color(0xFF2962ff)
 val OzoneOrange = Color(0xFFF49052)
 val OzoneOrangeDark = Color(0xFF984A0A)
 val RadRed = Color(0xFFff4f7b)
 val RadRedDark = Color(0xFF890000)
 val Yellowstone = Color(0xFFFFE082)
 val YellowstoneDark = Color(0xFF4d4e01)
+val PlayaPurple = Color(0xFFBA68C8)
+val PlayaPurpleDark = Color(0xFF4D1A57)
 
 val WispyWhite = Color(0xFFFFFBFE)
 val BoldBlack = Color(0xFF1C1B1F)

@@ -9,5 +9,6 @@ data class AppState(
 
 enum class AppAction {
   Drink,
-  Reset
+  Reset,
+  History
 }

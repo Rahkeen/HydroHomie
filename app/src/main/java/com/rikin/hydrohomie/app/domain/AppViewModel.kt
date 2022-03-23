@@ -16,6 +16,9 @@ class AppViewModel(initialState: AppState): MavericksViewModel<AppState>(initial
           copy(count = 0F)
         }
       }
+      AppAction.History -> {
+
+      }
     }
   }
 }
