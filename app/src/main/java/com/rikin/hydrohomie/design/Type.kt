@@ -15,6 +15,10 @@ private val mukta = FontFamily(
   Font(resId = R.font.mukta_bold, weight = FontWeight.Bold)
 )
 
+private val quicksand = FontFamily(
+  Font(resId = R.font.quicksand_semibold, weight = FontWeight.SemiBold)
+)
+
 val Typography = Typography(
   defaultFontFamily = mukta,
   body1 = TextStyle(
@@ -32,6 +36,17 @@ val Typography = Typography(
     fontWeight = FontWeight.Normal,
     fontSize = 48.sp
   ),
+  h4 = TextStyle(
+    fontFamily = quicksand,
+    fontWeight = FontWeight.Normal,
+    fontSize = 34.sp,
+    letterSpacing = 0.25.sp
+  ),
+  caption = TextStyle(
+    fontFamily = quicksand,
+    fontWeight = FontWeight.SemiBold,
+    fontSize = 16.sp
+  )
   /* Other default text styles to override
     button = TextStyle(
         fontFamily = FontFamily.Default,

@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.features.history.ui
+package com.rikin.hydrohomie.features.streak.ui
 
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.updateTransition

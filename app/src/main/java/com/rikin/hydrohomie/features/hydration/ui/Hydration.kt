@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.domain.AppAction
 import com.rikin.hydrohomie.app.domain.AppState
 import com.rikin.hydrohomie.design.BlueSkiesEnd
-import com.rikin.hydrohomie.design.BlueSkiesStart
+import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
 import com.rikin.hydrohomie.design.OzoneOrange
@@ -55,7 +55,7 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
         .wrapContentSize()
         .padding(end = 16.dp)
         .background(
-          color = MaterialTheme.colors.surface.copy(alpha = 0.3F),
+          color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
           shape = RoundedCornerShape(22.dp)
         )
         .padding(8.dp)
@@ -147,8 +147,8 @@ fun WaterContainer(state: AppState) {
           ),
           brush = Brush.verticalGradient(
             colors = listOf(
-              BlueSkiesStart,
-              BlueSkiesEnd
+              CoolBlue,
+              BlueSkiesEnd,
             )
           )
         )
@@ -161,6 +161,6 @@ fun WaterContainer(state: AppState) {
 @Composable
 fun HydrationPreview() {
   HydroHomieTheme {
-    Hydration(state = AppState(), actions = {})
+    Hydration(state = AppState(count = 4F), actions = {})
   }
 }

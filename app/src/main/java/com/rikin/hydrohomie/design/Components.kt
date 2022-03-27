@@ -34,7 +34,7 @@ fun HydroIconButton(
       .height(ButtonHeight)
       .background(
         shape = RoundedCornerShape(16.dp),
-        brush = Brush.verticalGradient(colors = listOf(backgroundColor.copy(alpha = 0.7f), backgroundColor))
+        color = backgroundColor
       )
       .clip(RoundedCornerShape(16.dp))
       .clickable { action() },

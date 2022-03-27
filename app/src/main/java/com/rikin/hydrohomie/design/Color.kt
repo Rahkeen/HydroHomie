@@ -4,7 +4,7 @@ import androidx.compose.ui.graphics.Color
 
 val CoolBlue = Color(0xFF2962ff)
 val OzoneOrange = Color(0xFFF49052)
-val OzoneOrangeDark = Color(0xFF984A0A)
+val OzoneOrangeDark = Color(0xFF8B4307)
 val RadRed = Color(0xFFff4f7b)
 val RadRedDark = Color(0xFF890000)
 val Yellowstone = Color(0xFFFFE082)
