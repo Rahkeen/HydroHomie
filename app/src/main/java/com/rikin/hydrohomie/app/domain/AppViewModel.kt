@@ -2,21 +2,36 @@ package com.rikin.hydrohomie.app.domain
 
 import com.airbnb.mvrx.MavericksViewModel
 
-class AppViewModel(initialState: AppState): MavericksViewModel<AppState>(initialState) {
+class AppViewModel(initialState: AppState) : MavericksViewModel<AppState>(initialState) {
   fun send(action: AppAction) {
-    when(action) {
+    when (action) {
       AppAction.Drink -> {
         setState {
-          val newCount = minOf(count+1, goal)
-          copy(count = newCount)
+          copy(
+            weeklyHydration = List(weeklyHydration.size) { index ->
+              if (index == dayOfWeek-1) {
+                weeklyHydration[index].copy(count = weeklyHydration[index].count + 1)
+              } else {
+                weeklyHydration[index]
+              }
+            }
+          )
         }
       }
       AppAction.Reset -> {
         setState {
-          copy(count = 0F)
+          copy(
+            weeklyHydration = List(weeklyHydration.size) { index ->
+              if (index == dayOfWeek-1) {
+                HydrationState()
+              } else {
+                weeklyHydration[index]
+              }
+            }
+          )
         }
       }
-      AppAction.History -> {
+      AppAction.Streaks -> {
 
       }
     }

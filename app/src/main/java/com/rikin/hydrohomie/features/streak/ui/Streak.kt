@@ -21,6 +21,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rikin.hydrohomie.app.domain.HydrationState
+import com.rikin.hydrohomie.app.domain.StreakState
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
@@ -28,7 +30,7 @@ import com.rikin.hydrohomie.design.HydroHomieTheme
 val DAYS = listOf("S", "M", "T", "W", "T", "F", "S")
 
 @Composable
-fun Streaks() {
+fun Streaks(state: StreakState) {
   Column(
     modifier = Modifier.fillMaxSize(),
     verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
@@ -42,8 +44,8 @@ fun Streaks() {
       ),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      repeat(7) { index ->
-        StreakDotTwo(filled = index < 6, DAYS[index])
+      state.currentWeek.forEachIndexed { index, hydrationState ->
+        StreakDotTwo(hydrationState = hydrationState, dayLetter = DAYS[index])
       }
     }
   }
@@ -53,7 +55,21 @@ fun Streaks() {
 @Composable
 fun StreaksPreview() {
   HydroHomieTheme {
-    Streaks()
+    Streaks(
+      state = StreakState(
+        currentStreak = 6,
+        bestStreak = 14,
+        currentWeek = listOf(
+          HydrationState(count = 8F),
+          HydrationState(count = 8F),
+          HydrationState(count = 8F),
+          HydrationState(count = 8F),
+          HydrationState(count = 8F),
+          HydrationState(count = 8F),
+          HydrationState(count = 0F),
+        )
+      )
+    )
   }
 }
 
@@ -83,9 +99,9 @@ fun StreakDotOne(filled: Boolean) {
 }
 
 @Composable
-fun StreakDotTwo(filled: Boolean, dayLetter: String) {
-  val brushColor = when (filled) {
-    true -> {
+fun StreakDotTwo(hydrationState: HydrationState, dayLetter: String) {
+  val brushColor = when {
+    hydrationState.count > 0 -> {
       Brush.verticalGradient(
         colors = listOf(
           CoolBlue,
@@ -93,16 +109,16 @@ fun StreakDotTwo(filled: Boolean, dayLetter: String) {
         )
       )
     }
-    false -> {
+    else -> {
       Brush.horizontalGradient(
         colors = listOf(Color.Gray, Color.Gray)
       )
     }
   }
 
-  val emoji = when (filled) {
-    true -> ""
-    false -> "😵"
+  val emoji = when {
+    hydrationState.count > 0 -> ""
+    else -> "😵"
   }
 
   Column(horizontalAlignment = Alignment.CenterHorizontally) {

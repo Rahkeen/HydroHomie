@@ -27,8 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rikin.hydrohomie.app.App
 import com.rikin.hydrohomie.app.domain.AppAction
 import com.rikin.hydrohomie.app.domain.AppState
+import com.rikin.hydrohomie.app.domain.HydrationState
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
@@ -41,7 +43,11 @@ import com.rikin.hydrohomie.design.RadRed
 import com.rikin.hydrohomie.design.RadRedDark
 
 @Composable
-fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
+fun Hydration(
+  state: HydrationState,
+  actions: (AppAction) -> Unit,
+  navigation: (String) -> Unit,
+) {
   Box(
     modifier = Modifier
       .fillMaxSize()
@@ -97,8 +103,9 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
         iconDescription = "Clear",
         action = {
           actions(
-            AppAction.History
+            AppAction.Streaks
           )
+          navigation("streaks")
         }
       )
     }
@@ -106,7 +113,7 @@ fun Hydration(state: AppState, actions: (AppAction) -> Unit) {
 }
 
 @Composable
-fun WaterContainer(state: AppState) {
+fun WaterContainer(state: HydrationState) {
   Box(modifier = Modifier.fillMaxSize()) {
     val fillPercent by animateFloatAsState(
       targetValue = state.count / state.goal,
@@ -161,6 +168,10 @@ fun WaterContainer(state: AppState) {
 @Composable
 fun HydrationPreview() {
   HydroHomieTheme {
-    Hydration(state = AppState(count = 4F), actions = {})
+    Hydration(
+      state = HydrationState(count = 4f),
+      actions = {},
+      navigation = {}
+   )
   }
 }

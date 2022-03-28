@@ -67,7 +67,7 @@ fun History(states: List<AppState>) {
             .shadow(elevation = 1.dp)
             .background(color = Porcelain)
         ) {
-          WaterContainer(state = states[i])
+//          WaterContainer(state = states[i])
         }
       }
     }
@@ -80,12 +80,12 @@ fun HistoryPreview() {
   HydroHomieTheme {
     History(
       states = listOf(
-        AppState(count = 5F, goal = 8F),
-        AppState(count = 7F, goal = 8F),
-        AppState(count = 7F, goal = 8F),
-        AppState(count = 8F, goal = 8F),
-        AppState(count = 8F, goal = 8F),
-        AppState(count = 8F, goal = 8F),
+//        AppState(count = 5F, goal = 8F),
+//        AppState(count = 7F, goal = 8F),
+//        AppState(count = 7F, goal = 8F),
+//        AppState(count = 8F, goal = 8F),
+//        AppState(count = 8F, goal = 8F),
+//        AppState(count = 8F, goal = 8F),
       )
     )
   }
