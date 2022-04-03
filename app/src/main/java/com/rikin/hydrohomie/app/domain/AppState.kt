@@ -5,12 +5,12 @@ import com.airbnb.mvrx.MavericksState
 data class AppState(
   val dayOfWeek: Int = 7,
   val weeklyHydration: List<HydrationState> = listOf(
-    HydrationState(),
-    HydrationState(),
-    HydrationState(),
-    HydrationState(),
-    HydrationState(),
-    HydrationState(),
+    HydrationState(count = 8f),
+    HydrationState(count = 8f),
+    HydrationState(count = 8f),
+    HydrationState(count = 8f),
+    HydrationState(count = 8f),
+    HydrationState(count = 8f),
     HydrationState()
   ),
 ): MavericksState {
@@ -20,11 +20,9 @@ data class AppState(
 data class HydrationState(
   val count: Float = 0F,
   val goal: Float = 8F
-)
-
-data class StreakState(
-  val currentWeek: List<HydrationState>
-)
+) {
+  val percent = count / goal
+}
 
 enum class AppAction {
   Drink,

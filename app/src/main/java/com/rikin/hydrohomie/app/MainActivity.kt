@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.airbnb.mvrx.compose.collectAsState
+import com.airbnb.mvrx.compose.mavericksActivityViewModel
 import com.airbnb.mvrx.compose.mavericksViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rikin.hydrohomie.app.domain.AppViewModel
@@ -52,14 +53,14 @@ fun App() {
 
   NavHost(navController = navController, startDestination = "hydration") {
     composable("hydration") {
-      val viewModel: AppViewModel = mavericksViewModel()
+      val viewModel: AppViewModel = mavericksActivityViewModel()
       val state by viewModel.collectAsState()
       logcat { "Current State: $state" }
       Hydration(state = state.currentHydration, actions = viewModel::send, navigation = navController::navigate)
     }
 
     composable("streaks") {
-      val viewModel: AppViewModel = mavericksViewModel()
+      val viewModel: AppViewModel = mavericksActivityViewModel()
       val state by viewModel.collectAsState()
       logcat { "Current State: $state" }
       Streaks(state = state.weeklyHydration)
