@@ -18,7 +18,9 @@
         <entry key="../../../../../layout/compose-model-1648362205121.xml" value="0.22930743243243243" />
         <entry key="../../../../../layout/compose-model-1648435503168.xml" value="0.23015202702702703" />
         <entry key="../../../../../layout/compose-model-1648436551098.xml" value="0.19578059071729959" />
+        <entry key="app/src/main/java/com/rikin/hydrohomie/features/streak/ui/Streak.kt" value="0.3435185185185185" />
       </map>
     </option>
   </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
 </project>

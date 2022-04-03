@@ -15,11 +15,6 @@ data class AppState(
   ),
 ): MavericksState {
   val currentHydration = weeklyHydration[dayOfWeek-1]
-  val streaks = StreakState(
-    currentStreak = 6,
-    bestStreak = 10,
-    currentWeek = weeklyHydration
-  )
 }
 
 data class HydrationState(
@@ -28,9 +23,7 @@ data class HydrationState(
 )
 
 data class StreakState(
-  val currentStreak: Int = 0,
-  val bestStreak: Int = 0,
-  val currentWeek: List<HydrationState> = listOf()
+  val currentWeek: List<HydrationState>
 )
 
 enum class AppAction {

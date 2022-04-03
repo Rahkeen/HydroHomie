@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,6 +20,7 @@ import com.rikin.hydrohomie.app.domain.AppViewModel
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.ui.Hydration
 import com.rikin.hydrohomie.features.streak.ui.Streaks
+import logcat.logcat
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,14 +53,16 @@ fun App() {
   NavHost(navController = navController, startDestination = "hydration") {
     composable("hydration") {
       val viewModel: AppViewModel = mavericksViewModel()
-      val state by viewModel.collectAsState { it.currentHydration }
-      Hydration(state = state, actions = viewModel::send, navigation = navController::navigate)
+      val state by viewModel.collectAsState()
+      logcat { "Current State: $state" }
+      Hydration(state = state.currentHydration, actions = viewModel::send, navigation = navController::navigate)
     }
 
     composable("streaks") {
       val viewModel: AppViewModel = mavericksViewModel()
-      val state by viewModel.collectAsState { it.streaks }
-      Streaks(state = state)
+      val state by viewModel.collectAsState()
+      logcat { "Current State: $state" }
+      Streaks(state = state.weeklyHydration)
     }
   }
 }

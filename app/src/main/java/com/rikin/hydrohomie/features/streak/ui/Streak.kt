@@ -30,7 +30,7 @@ import com.rikin.hydrohomie.design.HydroHomieTheme
 val DAYS = listOf("S", "M", "T", "W", "T", "F", "S")
 
 @Composable
-fun Streaks(state: StreakState) {
+fun Streaks(state: List<HydrationState>) {
   Column(
     modifier = Modifier.fillMaxSize(),
     verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
@@ -44,7 +44,7 @@ fun Streaks(state: StreakState) {
       ),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      state.currentWeek.forEachIndexed { index, hydrationState ->
+      state.forEachIndexed { index, hydrationState ->
         StreakDotTwo(hydrationState = hydrationState, dayLetter = DAYS[index])
       }
     }
@@ -56,18 +56,14 @@ fun Streaks(state: StreakState) {
 fun StreaksPreview() {
   HydroHomieTheme {
     Streaks(
-      state = StreakState(
-        currentStreak = 6,
-        bestStreak = 14,
-        currentWeek = listOf(
-          HydrationState(count = 8F),
-          HydrationState(count = 8F),
-          HydrationState(count = 8F),
-          HydrationState(count = 8F),
-          HydrationState(count = 8F),
-          HydrationState(count = 8F),
-          HydrationState(count = 0F),
-        )
+      state = listOf(
+        HydrationState(count = 8F),
+        HydrationState(count = 8F),
+        HydrationState(count = 8F),
+        HydrationState(count = 8F),
+        HydrationState(count = 8F),
+        HydrationState(count = 8F),
+        HydrationState(count = 0F),
       )
     )
   }
