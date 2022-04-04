@@ -7,12 +7,12 @@ import com.rikin.hydrohomie.features.streak.domain.StreakState
 data class AppState(
   val dayOfWeek: Int = 7,
   val hydrationWeek: List<HydrationState> = listOf(
-    HydrationState(count = 8f),
-    HydrationState(count = 8f),
-    HydrationState(count = 8f),
-    HydrationState(count = 8f),
-    HydrationState(count = 8f),
-    HydrationState(count = 8f),
+    HydrationState(),
+    HydrationState(),
+    HydrationState(),
+    HydrationState(),
+    HydrationState(),
+    HydrationState(),
     HydrationState()
   ),
 ) : MavericksState {
