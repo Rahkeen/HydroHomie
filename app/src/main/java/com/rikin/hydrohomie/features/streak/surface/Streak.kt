@@ -1,6 +1,5 @@
 package com.rikin.hydrohomie.features.streak.surface
 
-import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -34,15 +33,16 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.domain.AppState
-import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
+import com.rikin.hydrohomie.features.hydration.domain.HydrationState
+import com.rikin.hydrohomie.features.streak.domain.StreakState
 
 val DAYS = listOf("S", "M", "T", "W", "T", "F", "S")
 
 @Composable
-fun Streaks(state: AppState) {
+fun Streaks(state: StreakState) {
   Column(
     modifier = Modifier.fillMaxSize(),
     verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
@@ -56,11 +56,11 @@ fun Streaks(state: AppState) {
       ),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      state.hydrationWeek.forEachIndexed { index, hydrationState ->
+      state.currentWeek.forEachIndexed { index, hydrationState ->
         StreakCup(
           hydrationState = hydrationState,
           dayLetter = DAYS[index],
-          isToday = index == state.dayOfWeek - 1
+          isToday = index == state.currentDay - 1
         )
       }
     }
@@ -72,9 +72,9 @@ fun Streaks(state: AppState) {
 fun StreaksPreview() {
   HydroHomieTheme {
     Streaks(
-      state = AppState(
-        dayOfWeek = 7,
-        hydrationWeek = listOf(
+      state = StreakState(
+        currentDay = 7,
+        currentWeek = listOf(
           HydrationState(count = 8F),
           HydrationState(count = 8F),
           HydrationState(count = 8F),
