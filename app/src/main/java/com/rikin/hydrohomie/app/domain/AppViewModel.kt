@@ -1,6 +1,7 @@
 package com.rikin.hydrohomie.app.domain
 
 import com.airbnb.mvrx.MavericksViewModel
+import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 
 class AppViewModel(initialState: AppState) : MavericksViewModel<AppState>(initialState) {
   fun send(action: AppAction) {
@@ -8,11 +9,11 @@ class AppViewModel(initialState: AppState) : MavericksViewModel<AppState>(initia
       AppAction.Drink -> {
         setState {
           copy(
-            weeklyHydration = List(weeklyHydration.size) { index ->
-              if (index == dayOfWeek-1) {
-                weeklyHydration[index].copy(count = weeklyHydration[index].count + 1)
+            hydrationWeek = List(hydrationWeek.size) { index ->
+              if (index == dayOfWeek - 1) {
+                hydrationWeek[index].copy(count = hydrationWeek[index].count + 1)
               } else {
-                weeklyHydration[index]
+                hydrationWeek[index]
               }
             }
           )
@@ -21,19 +22,17 @@ class AppViewModel(initialState: AppState) : MavericksViewModel<AppState>(initia
       AppAction.Reset -> {
         setState {
           copy(
-            weeklyHydration = List(weeklyHydration.size) { index ->
-              if (index == dayOfWeek-1) {
+            hydrationWeek = List(hydrationWeek.size) { index ->
+              if (index == dayOfWeek - 1) {
                 HydrationState()
               } else {
-                weeklyHydration[index]
+                hydrationWeek[index]
               }
             }
           )
         }
       }
-      AppAction.Streaks -> {
-
-      }
+      AppAction.Streaks -> {}
     }
   }
 }

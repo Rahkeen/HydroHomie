@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.features.hydration.ui
+package com.rikin.hydrohomie.features.hydration.surface
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDp
@@ -27,10 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rikin.hydrohomie.app.App
 import com.rikin.hydrohomie.app.domain.AppAction
-import com.rikin.hydrohomie.app.domain.AppState
-import com.rikin.hydrohomie.app.domain.HydrationState
+import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
@@ -172,6 +170,6 @@ fun HydrationPreview() {
       state = HydrationState(count = 4f),
       actions = {},
       navigation = {}
-   )
+    )
   }
 }

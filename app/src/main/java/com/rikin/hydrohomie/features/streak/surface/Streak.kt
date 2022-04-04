@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.features.streak.ui
+package com.rikin.hydrohomie.features.streak.surface
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rikin.hydrohomie.app.domain.HydrationState
+import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
