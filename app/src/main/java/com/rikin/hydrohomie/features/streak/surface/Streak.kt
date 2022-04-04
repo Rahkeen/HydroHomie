@@ -1,25 +1,39 @@
 package com.rikin.hydrohomie.features.streak.surface
 
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rikin.hydrohomie.app.domain.AppState
 import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
@@ -28,7 +42,7 @@ import com.rikin.hydrohomie.design.HydroHomieTheme
 val DAYS = listOf("S", "M", "T", "W", "T", "F", "S")
 
 @Composable
-fun Streaks(state: List<HydrationState>) {
+fun Streaks(state: AppState) {
   Column(
     modifier = Modifier.fillMaxSize(),
     verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
@@ -42,8 +56,12 @@ fun Streaks(state: List<HydrationState>) {
       ),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      state.forEachIndexed { index, hydrationState ->
-        StreakCup(hydrationState = hydrationState, dayLetter = DAYS[index])
+      state.hydrationWeek.forEachIndexed { index, hydrationState ->
+        StreakCup(
+          hydrationState = hydrationState,
+          dayLetter = DAYS[index],
+          isToday = index == state.dayOfWeek - 1
+        )
       }
     }
   }
@@ -54,21 +72,24 @@ fun Streaks(state: List<HydrationState>) {
 fun StreaksPreview() {
   HydroHomieTheme {
     Streaks(
-      state = listOf(
-        HydrationState(count = 8F),
-        HydrationState(count = 8F),
-        HydrationState(count = 8F),
-        HydrationState(count = 8F),
-        HydrationState(count = 8F),
-        HydrationState(count = 8F),
-        HydrationState(count = 0F),
+      state = AppState(
+        dayOfWeek = 7,
+        hydrationWeek = listOf(
+          HydrationState(count = 8F),
+          HydrationState(count = 8F),
+          HydrationState(count = 8F),
+          HydrationState(count = 8F),
+          HydrationState(count = 8F),
+          HydrationState(count = 8F),
+          HydrationState(count = 0F),
+        )
       )
     )
   }
 }
 
 @Composable
-fun StreakCup(hydrationState: HydrationState, dayLetter: String) {
+fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolean = false) {
 
   val brushColor = Brush.verticalGradient(
     colors = listOf(
@@ -83,6 +104,21 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String) {
   }
 
   Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    val transition = rememberInfiniteTransition()
+    val todayTranslationY = transition.animateFloat(initialValue = 0F, targetValue = 15F, animationSpec = infiniteRepeatable(
+      animation = tween(durationMillis = 500, easing = LinearEasing),
+      repeatMode = RepeatMode.Reverse
+    ))
+
+    if (isToday) {
+      Icon(
+        modifier = Modifier.size(24.dp).graphicsLayer { translationY = todayTranslationY.value },
+        imageVector = Icons.Rounded.ArrowDropDown,
+        contentDescription = ""
+      )
+    } else {
+      Spacer(modifier = Modifier.size(24.dp))
+    }
     Box(
       modifier = Modifier
         .width(30.dp)
@@ -106,5 +142,13 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String) {
       Text(text = emoji)
     }
     Text(text = dayLetter, style = MaterialTheme.typography.caption)
+  }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun StreakCupPreview() {
+  HydroHomieTheme {
+    StreakCup(hydrationState = HydrationState(), dayLetter = "M", isToday = true)
   }
 }

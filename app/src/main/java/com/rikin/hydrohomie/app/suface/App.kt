@@ -28,7 +28,7 @@ fun App() {
       val viewModel: AppViewModel = mavericksActivityViewModel()
       val state by viewModel.collectAsState()
       logcat { "Current State: $state" }
-      Streaks(state = state.hydrationWeek)
+      Streaks(state = state)
     }
   }
 }
