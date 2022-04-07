@@ -4,7 +4,9 @@ import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
+import com.rikin.hydrohomie.drinkrepo.DrinkModel
 import com.rikin.hydrohomie.features.hydration.domain.HydrationState
+import kotlinx.coroutines.launch
 
 class AppViewModel(
   initialState: AppState,
@@ -21,76 +23,72 @@ class AppViewModel(
   }
 
   init {
-    environment.store
-      .collection("drinks")
-      .document(environment.dates.today)
-      .get()
-      .addOnSuccessListener { document ->
-        setState {
-          AppState(
-            weekday = environment.dates.dayOfWeek.toWeekday(),
-            hydrations = buildList {
-              repeat(7) { index ->
-                if (index == environment.dates.dayOfWeek) {
-                  add(
-                    HydrationState(
-                      count = (document.data?.get("count") ?: 0.0) as Double,
-                    )
-                  )
-                } else if (index < environment.dates.dayOfWeek) {
-                  add(HydrationState(count = 8.0))
-                } else {
-                  add(HydrationState())
-                }
+    viewModelScope.launch {
+      val drink = environment.store.getDrink(environment.dates.today)
+      setState {
+        AppState(
+          weekday = environment.dates.dayOfWeek.toWeekday(),
+          hydrations = buildList {
+            repeat(HYDRATION_LIMIT) { index ->
+              if (index == environment.dates.dayOfWeek) {
+                add(HydrationState(count = drink.count))
+              } else if (index < environment.dates.dayOfWeek) {
+                add(HydrationState(count = 8.0))
+              } else {
+                add(HydrationState())
               }
             }
-          )
-        }
+          }
+        )
       }
+    }
   }
 
   fun send(action: AppAction) {
     when (action) {
       AppAction.Drink -> {
         withState { state ->
-          environment.store.collection("drinks").document(environment.dates.today).set(
-            hashMapOf<String, Any>(
-              "date" to environment.dates.today,
-              "count" to state.hydrations[state.weekday.ordinal].count + 1,
-            )
-          ).addOnSuccessListener {
-            setState {
-              copy(
-                hydrations = List(hydrations.size) { index ->
-                  if (index == weekday.ordinal) {
-                    hydrations[index].copy(count = hydrations[index].count + 1)
-                  } else {
-                    hydrations[index]
-                  }
-                }
+          viewModelScope.launch {
+            environment
+              .store
+              .updateDrink(
+                day = environment.dates.today,
+                drink = DrinkModel(state.currentHydration.count + 1)
               )
-            }
           }
+        }
+        setState {
+          copy(
+            hydrations = List(hydrations.size) { index ->
+              if (index == weekday.ordinal) {
+                hydrations[index].copy(count = hydrations[index].count + 1)
+              } else {
+                hydrations[index]
+              }
+            }
+          )
         }
       }
       AppAction.Reset -> {
-        environment.store
-          .collection("drinks")
-          .document(environment.dates.today)
-          .update("count", 0)
-          .addOnSuccessListener {
-            setState {
-              copy(
-                hydrations = List(hydrations.size) { index ->
-                  if (index == weekday.ordinal) {
-                    HydrationState()
-                  } else {
-                    hydrations[index]
-                  }
-                }
-              )
+        viewModelScope.launch {
+          environment
+            .store
+            .updateCount(
+              day = environment.dates.today,
+              count = 0.0
+            )
+        }
+        setState {
+          copy(
+            hydrations = List(hydrations.size) { index ->
+              if (index == weekday.ordinal) {
+                HydrationState()
+              } else {
+                hydrations[index]
+              }
             }
-          }
+          )
+        }
       }
       AppAction.Streaks -> {}
     }

@@ -7,13 +7,15 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.rikin.hydrohomie.dates.Dates
+import com.rikin.hydrohomie.drinkrepo.DrinkRepository
+import com.rikin.hydrohomie.drinkrepo.RealDrinkRepository
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import java.time.format.DateTimeFormatter
 
 class HydroHomieApplication : Application() {
 
-  lateinit var store: FirebaseFirestore
+  lateinit var store: DrinkRepository
   val dates = Dates(formatter = DateTimeFormatter.ofPattern(DATE_PATTERN))
 
   override fun onCreate() {
@@ -23,7 +25,7 @@ class HydroHomieApplication : Application() {
     FirebaseApp.initializeApp(this)
     AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
 
-    store = Firebase.firestore
+    store = RealDrinkRepository(Firebase.firestore)
   }
 }
 
