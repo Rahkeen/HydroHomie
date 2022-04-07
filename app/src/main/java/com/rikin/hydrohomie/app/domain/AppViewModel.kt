@@ -3,9 +3,7 @@ package com.rikin.hydrohomie.app.domain
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.google.firebase.firestore.FirebaseFirestore
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
-import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 
 class AppViewModel(
@@ -14,7 +12,7 @@ class AppViewModel(
 ) : MavericksViewModel<AppState>(initialState) {
 
   companion object : MavericksViewModelFactory<AppViewModel, AppState> {
-    override fun create(viewModelContext: ViewModelContext, state: AppState): AppViewModel? {
+    override fun create(viewModelContext: ViewModelContext, state: AppState): AppViewModel {
       val store = viewModelContext.app<HydroHomieApplication>().store
       val dates = viewModelContext.app<HydroHomieApplication>().dates
       val environment = AppEnvironment(store, dates)
@@ -23,24 +21,24 @@ class AppViewModel(
   }
 
   init {
-    environment.firestore
+    environment.store
       .collection("drinks")
       .document(environment.dates.today)
       .get()
       .addOnSuccessListener { document ->
         setState {
           AppState(
-            dayOfWeek = environment.dates.dayOfWeek,
-            hydrationWeek = buildList {
+            weekday = environment.dates.dayOfWeek.toWeekday(),
+            hydrations = buildList {
               repeat(7) { index ->
-                if (index == environment.dates.dayOfWeekIndex) {
+                if (index == environment.dates.dayOfWeek) {
                   add(
                     HydrationState(
-                      count = ((document.data?.get("count") ?: 0.0) as Double).toFloat(),
+                      count = (document.data?.get("count") ?: 0.0) as Double,
                     )
                   )
-                } else if (index < environment.dates.dayOfWeekIndex) {
-                  add(HydrationState(count = 8F))
+                } else if (index < environment.dates.dayOfWeek) {
+                  add(HydrationState(count = 8.0))
                 } else {
                   add(HydrationState())
                 }
@@ -55,19 +53,19 @@ class AppViewModel(
     when (action) {
       AppAction.Drink -> {
         withState { state ->
-          environment.firestore.collection("drinks").document(environment.dates.today).set(
+          environment.store.collection("drinks").document(environment.dates.today).set(
             hashMapOf<String, Any>(
               "date" to environment.dates.today,
-              "count" to state.hydrationWeek[state.dayOfWeek - 1].count + 1F,
+              "count" to state.hydrations[state.weekday.ordinal].count + 1,
             )
           ).addOnSuccessListener {
             setState {
               copy(
-                hydrationWeek = List(hydrationWeek.size) { index ->
-                  if (index == dayOfWeek - 1) {
-                    hydrationWeek[index].copy(count = hydrationWeek[index].count + 1)
+                hydrations = List(hydrations.size) { index ->
+                  if (index == weekday.ordinal) {
+                    hydrations[index].copy(count = hydrations[index].count + 1)
                   } else {
-                    hydrationWeek[index]
+                    hydrations[index]
                   }
                 }
               )
@@ -76,15 +74,18 @@ class AppViewModel(
         }
       }
       AppAction.Reset -> {
-        environment.firestore.collection("drinks").document(environment.dates.today).delete()
+        environment.store
+          .collection("drinks")
+          .document(environment.dates.today)
+          .update("count", 0)
           .addOnSuccessListener {
             setState {
               copy(
-                hydrationWeek = List(hydrationWeek.size) { index ->
-                  if (index == dayOfWeek - 1) {
+                hydrations = List(hydrations.size) { index ->
+                  if (index == weekday.ordinal) {
                     HydrationState()
                   } else {
-                    hydrationWeek[index]
+                    hydrations[index]
                   }
                 }
               )

@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.domain.AppState
+import com.rikin.hydrohomie.app.domain.Weekday
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
@@ -60,7 +61,7 @@ fun Streaks(state: StreakState) {
         StreakCup(
           hydrationState = hydrationState,
           dayLetter = DAYS[index],
-          isToday = index == state.currentDay - 1
+          isToday = index == state.currentDay.ordinal
         )
       }
     }
@@ -73,15 +74,15 @@ fun StreaksPreview() {
   HydroHomieTheme {
     Streaks(
       state = StreakState(
-        currentDay = 7,
+        currentDay = Weekday.Sunday,
         currentWeek = listOf(
-          HydrationState(count = 8F),
-          HydrationState(count = 8F),
-          HydrationState(count = 8F),
-          HydrationState(count = 8F),
-          HydrationState(count = 8F),
-          HydrationState(count = 8F),
-          HydrationState(count = 0F),
+          HydrationState(count = 8.0),
+          HydrationState(count = 8.0),
+          HydrationState(count = 8.0),
+          HydrationState(count = 8.0),
+          HydrationState(count = 8.0),
+          HydrationState(count = 8.0),
+          HydrationState(count = 0.0),
         )
       )
     )
@@ -132,7 +133,7 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
       Box(
         modifier = Modifier
           .fillMaxWidth()
-          .fillMaxHeight(hydrationState.percent)
+          .fillMaxHeight(hydrationState.percent.toFloat())
           .background(
             brush = brushColor,
             shape = RoundedCornerShape(8.dp)
