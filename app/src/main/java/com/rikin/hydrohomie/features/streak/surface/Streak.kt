@@ -39,7 +39,7 @@ import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 import com.rikin.hydrohomie.features.streak.domain.StreakState
 
-val DAYS = listOf("S", "M", "T", "W", "T", "F", "S")
+val DAYS = listOf("M", "T", "W", "T", "F", "S", "S")
 
 @Composable
 fun Streaks(state: StreakState) {
