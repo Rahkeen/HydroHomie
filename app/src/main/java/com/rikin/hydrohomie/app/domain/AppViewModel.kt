@@ -5,43 +5,41 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.google.firebase.firestore.FirebaseFirestore
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
+import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.features.hydration.domain.HydrationState
-import logcat.logcat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 class AppViewModel(
   initialState: AppState,
-  private val store: FirebaseFirestore
+  private val environment: AppEnvironment
 ) : MavericksViewModel<AppState>(initialState) {
-
-  private val formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy")
-  private val date = LocalDate.now().format(formatter)
-  private val day = LocalDate.now().dayOfWeek
 
   companion object : MavericksViewModelFactory<AppViewModel, AppState> {
     override fun create(viewModelContext: ViewModelContext, state: AppState): AppViewModel? {
       val store = viewModelContext.app<HydroHomieApplication>().store
-      return AppViewModel(state, store)
+      val dates = viewModelContext.app<HydroHomieApplication>().dates
+      val environment = AppEnvironment(store, dates)
+      return AppViewModel(state, environment)
     }
   }
 
   init {
-    store
+    environment.firestore
       .collection("drinks")
-      .document(date)
+      .document(environment.dates.today)
       .get()
       .addOnSuccessListener { document ->
         setState {
           AppState(
-            dayOfWeek = day.value,
+            dayOfWeek = environment.dates.dayOfWeek,
             hydrationWeek = buildList {
               repeat(7) { index ->
-                if (index == day.value - 1) {
-                  add(HydrationState(
-                    count = ((document.data?.get("count") ?: 0.0) as Double).toFloat(),
-                  ))
-                } else if (index < day.value) {
+                if (index == environment.dates.dayOfWeekIndex) {
+                  add(
+                    HydrationState(
+                      count = ((document.data?.get("count") ?: 0.0) as Double).toFloat(),
+                    )
+                  )
+                } else if (index < environment.dates.dayOfWeekIndex) {
                   add(HydrationState(count = 8F))
                 } else {
                   add(HydrationState())
@@ -57,10 +55,10 @@ class AppViewModel(
     when (action) {
       AppAction.Drink -> {
         withState { state ->
-          store.collection("drinks").document(date).set(
+          environment.firestore.collection("drinks").document(environment.dates.today).set(
             hashMapOf<String, Any>(
-              "date" to date,
-              "count" to state.hydrationWeek[state.dayOfWeek-1].count + 1F,
+              "date" to environment.dates.today,
+              "count" to state.hydrationWeek[state.dayOfWeek - 1].count + 1F,
             )
           ).addOnSuccessListener {
             setState {
@@ -78,19 +76,20 @@ class AppViewModel(
         }
       }
       AppAction.Reset -> {
-        store.collection("drinks").document(date).delete().addOnSuccessListener {
-          setState {
-            copy(
-              hydrationWeek = List(hydrationWeek.size) { index ->
-                if (index == dayOfWeek - 1) {
-                  HydrationState()
-                } else {
-                  hydrationWeek[index]
+        environment.firestore.collection("drinks").document(environment.dates.today).delete()
+          .addOnSuccessListener {
+            setState {
+              copy(
+                hydrationWeek = List(hydrationWeek.size) { index ->
+                  if (index == dayOfWeek - 1) {
+                    HydrationState()
+                  } else {
+                    hydrationWeek[index]
+                  }
                 }
-              }
-            )
+              )
+            }
           }
-        }
       }
       AppAction.Streaks -> {}
     }
