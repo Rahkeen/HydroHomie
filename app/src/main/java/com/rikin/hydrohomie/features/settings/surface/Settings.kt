@@ -2,7 +2,6 @@ package com.rikin.hydrohomie.features.settings.surface
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
@@ -19,28 +18,24 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rikin.hydrohomie.app.domain.AppAction
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.design.JuicyOrangeEnd
-import com.rikin.hydrohomie.design.OzoneOrange
 import com.rikin.hydrohomie.design.PlayaPurple
 import com.rikin.hydrohomie.design.RadRed
 import com.rikin.hydrohomie.design.Typography
 import com.rikin.hydrohomie.design.imageGradient
 import com.rikin.hydrohomie.features.settings.domain.SettingsState
+import logcat.logcat
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 @Composable
-fun Settings(state: SettingsState) {
+fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
   Column(
     modifier = Modifier.fillMaxSize(),
     verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
@@ -70,16 +65,18 @@ fun Settings(state: SettingsState) {
       low = 30.0,
       high = 200.0,
       current = state.personalGoal,
-      sliderName = "Goal"
+      sliderName = "Goal",
+      onUpdate = { actions(AppAction.UpdateGoal(goal = round(it))) }
     )
 
     // Set your Default Increment
     GoalSlider(
       low = 4.0,
       high = 32.0,
-      current = state.drinkSize,
+      current = state.drinkAmount,
       sliderName = "Drink Size",
-      color = RadRed
+      color = RadRed,
+      onUpdate = { actions(AppAction.UpdateDrinkSize(drinkSize = round(it))) }
     )
   }
 }
@@ -88,7 +85,7 @@ fun Settings(state: SettingsState) {
 @Composable
 fun SettingsPreview() {
   HydroHomieTheme {
-    Settings(SettingsState())
+    Settings(state = SettingsState(), actions = {})
   }
 }
 
@@ -98,15 +95,17 @@ fun GoalSlider(
   high: Double,
   current: Double,
   sliderName: String,
-  color: Color = PlayaPurple
+  color: Color = PlayaPurple,
+  onUpdate: (Double) -> Unit
 ) {
-  var currentState by remember { mutableStateOf(current) }
   val draggableState = rememberDraggableState() { delta ->
-    val maxStep = (high - low) / 150.0
+    val maxStep = (high - low) / 50.0
     val reducedDelta = delta.toDouble().coerceIn(-maxStep..maxStep)
-    currentState = (currentState + reducedDelta).coerceIn(low..high)
+    val updatedValue = (current + reducedDelta).coerceIn(low..high)
+    logcat(tag = "GoalSlider") { "$updatedValue" }
+    onUpdate(updatedValue)
   }
-  val progress = currentState / high
+  val progress = current / high
   Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
     Text(
       modifier = Modifier.padding(start = 8.dp),
@@ -136,7 +135,7 @@ fun GoalSlider(
         )
       }
 
-      Text(text = "${currentState.roundToInt()} oz", style = Typography.caption)
+      Text(text = "${current.roundToInt()} oz", style = Typography.caption)
     }
   }
 }
@@ -149,7 +148,8 @@ fun GoalSliderPreview() {
       low = 30.0,
       high = 200.0,
       current = 60.0,
-      sliderName = "Goal"
+      sliderName = "Goal",
+      onUpdate = {}
     )
   }
 }

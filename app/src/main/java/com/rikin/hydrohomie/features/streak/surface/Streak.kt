@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rikin.hydrohomie.app.domain.Weekday
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
@@ -75,12 +76,12 @@ fun StreaksPreview() {
       state = StreakState(
         currentDay = Weekday.Sunday,
         currentWeek = listOf(
-          HydrationState(drank = 8.0),
-          HydrationState(drank = 8.0),
-          HydrationState(drank = 8.0),
-          HydrationState(drank = 8.0),
-          HydrationState(drank = 8.0),
-          HydrationState(drank = 8.0),
+          HydrationState(drank = 64.0),
+          HydrationState(drank = 64.0),
+          HydrationState(drank = 64.0),
+          HydrationState(drank = 64.0),
+          HydrationState(drank = 64.0),
+          HydrationState(drank = 64.0),
           HydrationState(drank = 0.0),
         )
       )
@@ -144,7 +145,7 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
           )
           .align(Alignment.BottomCenter)
       )
-      Text(text = emoji)
+      Text(text = emoji, fontSize = 16.sp)
     }
     Text(text = dayLetter, style = MaterialTheme.typography.caption)
   }

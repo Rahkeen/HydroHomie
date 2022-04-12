@@ -9,10 +9,12 @@ interface DrinkRepository {
   suspend fun getDrink(day: String): DrinkModel
   suspend fun updateDrink(day: String, drink: DrinkModel)
   suspend fun updateCount(day: String, count: Double)
+  suspend fun updateGoal(day: String, goal: Double)
 }
 
 data class DrinkModel(
-  val count: Double
+  val count: Double,
+  val goal: Double
 )
 
 class RealDrinkRepository(private val store: FirebaseFirestore) : DrinkRepository {
@@ -25,7 +27,8 @@ class RealDrinkRepository(private val store: FirebaseFirestore) : DrinkRepositor
         .await()
 
       val count = (document.data?.get("count") ?: 0.0) as Double
-      DrinkModel(count)
+      val goal = (document.data?.get("goal") ?: 64.0) as Double
+      DrinkModel(count, goal)
     }
   }
 
@@ -37,6 +40,7 @@ class RealDrinkRepository(private val store: FirebaseFirestore) : DrinkRepositor
         .set(
           hashMapOf<String, Any>(
             "count" to drink.count,
+            "goal" to drink.goal,
             "date" to day
           )
         )
@@ -50,6 +54,16 @@ class RealDrinkRepository(private val store: FirebaseFirestore) : DrinkRepositor
         .collection("drinks")
         .document(day)
         .update("count", count)
+        .await()
+    }
+  }
+
+  override suspend fun updateGoal(day: String, goal: Double) {
+    withContext(Dispatchers.IO) {
+      store
+        .collection("drinks")
+        .document(day)
+        .update("goal", goal)
         .await()
     }
   }

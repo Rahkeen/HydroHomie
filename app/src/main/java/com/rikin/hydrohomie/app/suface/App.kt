@@ -14,6 +14,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rikin.hydrohomie.app.domain.AppViewModel
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.surface.Hydration
+import com.rikin.hydrohomie.features.settings.surface.Settings
 import com.rikin.hydrohomie.features.streak.surface.Streaks
 
 @Composable
@@ -42,6 +43,12 @@ fun App() {
         val viewModel: AppViewModel = mavericksActivityViewModel()
         val state by viewModel.collectAsState { it.streakState }
         Streaks(state = state)
+      }
+
+      composable("settings") {
+        val viewModel: AppViewModel = mavericksActivityViewModel()
+        val state by viewModel.collectAsState() { it.settingsState }
+        Settings(state = state, actions = viewModel::send)
       }
     }
   }

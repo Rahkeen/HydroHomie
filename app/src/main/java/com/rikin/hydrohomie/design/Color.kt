@@ -12,6 +12,8 @@ val Yellowstone = Color(0xFFFFE082)
 val YellowstoneDark = Color(0xFF4d4e01)
 val PlayaPurple = Color(0xFFBA68C8)
 val PlayaPurpleDark = Color(0xFF4D1A57)
+val GangstaGreen = Color(0xFF30c67c)
+val GangstaGreenDark = Color(0xFF28532A)
 
 val WispyWhite = Color(0xFFFFFBFE)
 val BoldBlack = Color(0xFF1C1B1F)

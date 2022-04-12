@@ -7,6 +7,7 @@ import com.rikin.hydrohomie.app.platform.HydroHomieApplication
 import com.rikin.hydrohomie.drinkrepo.DrinkModel
 import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 import kotlinx.coroutines.launch
+import logcat.logcat
 
 class AppViewModel(
   initialState: AppState,
@@ -31,9 +32,9 @@ class AppViewModel(
           hydrations = buildList {
             repeat(HYDRATION_LIMIT) { index ->
               if (index == environment.dates.dayOfWeek) {
-                add(HydrationState(drank = drink.count))
+                add(HydrationState(drank = drink.count, goal = drink.goal))
               } else if (index < environment.dates.dayOfWeek) {
-                add(HydrationState(drank = 8.0))
+                add(HydrationState(drank = 64.0))
               } else {
                 add(HydrationState())
               }
@@ -45,15 +46,20 @@ class AppViewModel(
   }
 
   fun send(action: AppAction) {
+    logcat { action.toString() }
     when (action) {
-      AppAction.Drink -> {
+      is AppAction.Drink -> {
         withState { state ->
           viewModelScope.launch {
             environment
               .store
               .updateDrink(
                 day = environment.dates.today,
-                drink = DrinkModel(state.currentHydration.drank + 1)
+                drink = DrinkModel(
+                  count = (state.currentHydration.drank + state.drinkAmount)
+                    .coerceAtMost(state.currentHydration.goal),
+                  goal = state.currentHydration.goal
+                )
               )
           }
         }
@@ -61,7 +67,9 @@ class AppViewModel(
           copy(
             hydrations = List(hydrations.size) { index ->
               if (index == weekday.ordinal) {
-                hydrations[index].copy(drank = hydrations[index].drank + 1)
+                hydrations[index].copy(
+                  drank = (hydrations[index].drank + drinkAmount).coerceAtMost(currentHydration.goal)
+                )
               } else {
                 hydrations[index]
               }
@@ -69,7 +77,7 @@ class AppViewModel(
           )
         }
       }
-      AppAction.Reset -> {
+      is AppAction.Reset -> {
         viewModelScope.launch {
           environment
             .store
@@ -82,7 +90,7 @@ class AppViewModel(
           copy(
             hydrations = List(hydrations.size) { index ->
               if (index == weekday.ordinal) {
-                HydrationState()
+                hydrations[index].copy(drank = 0.0)
               } else {
                 hydrations[index]
               }
@@ -90,7 +98,24 @@ class AppViewModel(
           )
         }
       }
-      AppAction.Streaks -> {}
+      is AppAction.UpdateDrinkSize -> {
+        setState {
+          copy(drinkAmount = action.drinkSize)
+        }
+      }
+      is AppAction.UpdateGoal -> {
+        setState {
+          copy(
+            hydrations = List(hydrations.size) { index ->
+              if (index == weekday.ordinal) {
+                hydrations[index].copy(goal = action.goal)
+              } else {
+                hydrations[index]
+              }
+            }
+          )
+        }
+      }
     }
   }
 }

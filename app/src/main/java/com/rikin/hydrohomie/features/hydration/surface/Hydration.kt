@@ -19,6 +19,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Menu
+import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,9 +29,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.domain.AppAction
-import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
+import com.rikin.hydrohomie.design.GangstaGreen
+import com.rikin.hydrohomie.design.GangstaGreenDark
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
 import com.rikin.hydrohomie.design.OzoneOrange
@@ -39,6 +41,7 @@ import com.rikin.hydrohomie.design.PlayaPurple
 import com.rikin.hydrohomie.design.PlayaPurpleDark
 import com.rikin.hydrohomie.design.RadRed
 import com.rikin.hydrohomie.design.RadRedDark
+import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 
 @Composable
 fun Hydration(
@@ -100,15 +103,23 @@ fun Hydration(
         icon = Icons.Rounded.Menu,
         iconDescription = "Clear",
         action = {
-          actions(
-            AppAction.Streaks
-          )
           navigation("streaks")
+        }
+      )
+
+      HydroIconButton(
+        backgroundColor = GangstaGreen,
+        iconTint = GangstaGreenDark,
+        icon = Icons.Rounded.MoreVert,
+        iconDescription = "Settings",
+        action = {
+          navigation("settings")
         }
       )
     }
   }
 }
+
 
 @Composable
 fun WaterContainer(state: HydrationState) {
