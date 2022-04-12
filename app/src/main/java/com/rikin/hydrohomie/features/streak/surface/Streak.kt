@@ -32,7 +32,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rikin.hydrohomie.app.domain.AppState
 import com.rikin.hydrohomie.app.domain.Weekday
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
@@ -68,7 +67,7 @@ fun Streaks(state: StreakState) {
   }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun StreaksPreview() {
   HydroHomieTheme {
@@ -76,13 +75,13 @@ fun StreaksPreview() {
       state = StreakState(
         currentDay = Weekday.Sunday,
         currentWeek = listOf(
-          HydrationState(count = 8.0),
-          HydrationState(count = 8.0),
-          HydrationState(count = 8.0),
-          HydrationState(count = 8.0),
-          HydrationState(count = 8.0),
-          HydrationState(count = 8.0),
-          HydrationState(count = 0.0),
+          HydrationState(drank = 8.0),
+          HydrationState(drank = 8.0),
+          HydrationState(drank = 8.0),
+          HydrationState(drank = 8.0),
+          HydrationState(drank = 8.0),
+          HydrationState(drank = 8.0),
+          HydrationState(drank = 0.0),
         )
       )
     )
@@ -100,20 +99,25 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
   )
 
   val emoji = when {
-    hydrationState.count > 0 -> ""
+    hydrationState.drank > 0 -> ""
     else -> "😵"
   }
 
   Column(horizontalAlignment = Alignment.CenterHorizontally) {
-    val transition = rememberInfiniteTransition()
-    val todayTranslationY = transition.animateFloat(initialValue = 0F, targetValue = 15F, animationSpec = infiniteRepeatable(
-      animation = tween(durationMillis = 500, easing = LinearEasing),
-      repeatMode = RepeatMode.Reverse
-    ))
-
+    val indicatorTransition = rememberInfiniteTransition()
+    val indicatorY = indicatorTransition.animateFloat(
+      initialValue = 0F,
+      targetValue = 15F,
+      animationSpec = infiniteRepeatable(
+        animation = tween(durationMillis = 500, easing = LinearEasing),
+        repeatMode = RepeatMode.Reverse
+      )
+    )
     if (isToday) {
       Icon(
-        modifier = Modifier.size(24.dp).graphicsLayer { translationY = todayTranslationY.value },
+        modifier = Modifier
+          .size(24.dp)
+          .graphicsLayer { translationY = indicatorY.value },
         imageVector = Icons.Rounded.ArrowDropDown,
         contentDescription = ""
       )

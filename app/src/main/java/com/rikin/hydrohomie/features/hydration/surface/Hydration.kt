@@ -114,7 +114,7 @@ fun Hydration(
 fun WaterContainer(state: HydrationState) {
   Box(modifier = Modifier.fillMaxSize()) {
     val fillPercent by animateFloatAsState(
-      targetValue = (state.count / state.goal).toFloat(),
+      targetValue = (state.drank / state.goal).toFloat(),
       animationSpec = tween(
         durationMillis = 300,
         easing = LinearEasing
@@ -136,7 +136,7 @@ fun WaterContainer(state: HydrationState) {
       label = "WaterCornerRadius"
     ) { currentState ->
       when {
-        currentState.count > 0 && currentState.count < currentState.goal -> 16.dp
+        currentState.drank > 0 && currentState.drank < currentState.goal -> 16.dp
         else -> 0.dp
       }
     }
@@ -167,7 +167,7 @@ fun WaterContainer(state: HydrationState) {
 fun HydrationPreview() {
   HydroHomieTheme {
     Hydration(
-      state = HydrationState(count = 4.0),
+      state = HydrationState(drank = 4.0),
       actions = {},
       navigation = {}
     )

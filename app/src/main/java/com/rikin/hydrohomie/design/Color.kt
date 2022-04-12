@@ -1,5 +1,6 @@
 package com.rikin.hydrohomie.design
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val CoolBlue = Color(0xFF2962ff)
@@ -23,3 +24,27 @@ val JuicyOrangeEnd = Color(0xffFFC837)
 
 val BlueSkiesStart = Color(0xff56CCF2)
 val BlueSkiesEnd = Color(0xff2F80ED)
+
+val PurpleDreamStart = Color(0xFF696EFF)
+val PurpleDreamEnd = Color(0xFFF8ACFF)
+
+val waterGradient = Brush.verticalGradient(
+  colors = listOf(
+    CoolBlue,
+    BlueSkiesEnd
+  )
+)
+
+val imageGradient = Brush.verticalGradient(
+  colors = listOf(
+    JuicyOrangeStart,
+    JuicyOrangeEnd,
+  )
+)
+
+val sliderGradient = Brush.horizontalGradient(
+  colors = listOf(
+    JuicyOrangeStart,
+    JuicyOrangeEnd,
+  )
+)

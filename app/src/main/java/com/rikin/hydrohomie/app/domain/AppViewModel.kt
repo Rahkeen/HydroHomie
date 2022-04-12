@@ -31,9 +31,9 @@ class AppViewModel(
           hydrations = buildList {
             repeat(HYDRATION_LIMIT) { index ->
               if (index == environment.dates.dayOfWeek) {
-                add(HydrationState(count = drink.count))
+                add(HydrationState(drank = drink.count))
               } else if (index < environment.dates.dayOfWeek) {
-                add(HydrationState(count = 8.0))
+                add(HydrationState(drank = 8.0))
               } else {
                 add(HydrationState())
               }
@@ -53,7 +53,7 @@ class AppViewModel(
               .store
               .updateDrink(
                 day = environment.dates.today,
-                drink = DrinkModel(state.currentHydration.count + 1)
+                drink = DrinkModel(state.currentHydration.drank + 1)
               )
           }
         }
@@ -61,7 +61,7 @@ class AppViewModel(
           copy(
             hydrations = List(hydrations.size) { index ->
               if (index == weekday.ordinal) {
-                hydrations[index].copy(count = hydrations[index].count + 1)
+                hydrations[index].copy(drank = hydrations[index].drank + 1)
               } else {
                 hydrations[index]
               }
