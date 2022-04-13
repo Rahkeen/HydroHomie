@@ -60,13 +60,13 @@ fun Hydration(
     Column(
       modifier = Modifier
         .wrapContentSize()
-        .padding(end = 16.dp)
+        .padding(end = 16.dp, bottom = 16.dp)
         .background(
           color = MaterialTheme.colors.surface.copy(alpha = 0.5f),
           shape = RoundedCornerShape(22.dp)
         )
         .padding(8.dp)
-        .align(Alignment.CenterEnd),
+        .align(Alignment.BottomEnd),
       verticalArrangement = Arrangement.spacedBy(
         space = 8.dp,
         alignment = Alignment.CenterVertically
