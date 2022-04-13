@@ -1,5 +1,6 @@
 package com.rikin.hydrohomie.features.settings.surface
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -18,19 +19,30 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.mvrx.compose.collectAsState
 import com.rikin.hydrohomie.app.domain.AppAction
+import com.rikin.hydrohomie.app.domain.AppEnvironment
+import com.rikin.hydrohomie.app.domain.AppState
+import com.rikin.hydrohomie.app.domain.AppViewModel
+import com.rikin.hydrohomie.app.platform.DATE_PATTERN
+import com.rikin.hydrohomie.dates.RealDates
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.PlayaPurple
 import com.rikin.hydrohomie.design.RadRed
 import com.rikin.hydrohomie.design.Typography
 import com.rikin.hydrohomie.design.imageGradient
+import com.rikin.hydrohomie.drinkrepo.FakeDrinkRepository
 import com.rikin.hydrohomie.features.settings.domain.SettingsState
 import logcat.logcat
+import java.time.format.DateTimeFormatter
 import kotlin.math.round
 import kotlin.math.roundToInt
 
@@ -89,6 +101,25 @@ fun SettingsPreview() {
   }
 }
 
+@Preview(showBackground = true)
+@Composable
+fun FunctionalSettingsPreview() {
+  HydroHomieTheme {
+    val viewModel = remember {
+      AppViewModel(
+        initialState = AppState(),
+        environment = AppEnvironment(
+          store = FakeDrinkRepository(),
+          dates = RealDates(DateTimeFormatter.ofPattern(DATE_PATTERN))
+        )
+      )
+    }
+
+    val state by viewModel.collectAsState() { it.settingsState }
+    Settings(state = state, actions = viewModel::send)
+  }
+}
+
 @Composable
 fun GoalSlider(
   low: Double,
@@ -98,14 +129,19 @@ fun GoalSlider(
   color: Color = PlayaPurple,
   onUpdate: (Double) -> Unit
 ) {
-  val draggableState = rememberDraggableState() { delta ->
-    val maxStep = (high - low) / 50.0
-    val reducedDelta = delta.toDouble().coerceIn(-maxStep..maxStep)
-    val updatedValue = (current + reducedDelta).coerceIn(low..high)
-    logcat(tag = "GoalSlider") { "$updatedValue" }
-    onUpdate(updatedValue)
+  val draggableState = rememberDraggableState { delta ->
+    logcat(tag = "GoalSlider") { "$delta" }
+    val smoothDelta = when {
+      delta > 0 -> 1
+      delta < 0 -> -1
+      else -> 0
+    }
+
+    val update = current + smoothDelta
+    onUpdate(update.coerceIn(low..high))
   }
-  val progress = current / high
+  val progress by animateFloatAsState(targetValue = (current / high).toFloat())
+
   Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
     Text(
       modifier = Modifier.padding(start = 8.dp),
@@ -120,14 +156,17 @@ fun GoalSlider(
     ) {
       Box(
         modifier = Modifier
-          .weight(1F)
+          .weight(5F)
           .height(60.dp),
       ) {
         Box(
           modifier = Modifier
             .fillMaxHeight()
-            .fillMaxWidth(fraction = progress.toFloat())
-            .draggable(state = draggableState, orientation = Orientation.Horizontal)
+            .fillMaxWidth(fraction = progress)
+            .draggable(
+              state = draggableState,
+              orientation = Orientation.Horizontal
+            )
             .background(
               color = color,
               shape = RoundedCornerShape(16.dp)
@@ -135,7 +174,12 @@ fun GoalSlider(
         )
       }
 
-      Text(text = "${current.roundToInt()} oz", style = Typography.caption)
+      Text(
+        modifier = Modifier.weight(1F),
+        text = "${current.roundToInt()} oz",
+        style = Typography.caption,
+        textAlign = TextAlign.Start
+      )
     }
   }
 }

@@ -6,7 +6,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.rikin.hydrohomie.dates.Dates
+import com.rikin.hydrohomie.dates.RealDates
 import com.rikin.hydrohomie.drinkrepo.DrinkRepository
 import com.rikin.hydrohomie.drinkrepo.RealDrinkRepository
 import logcat.AndroidLogcatLogger
@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter
 class HydroHomieApplication : Application() {
 
   lateinit var store: DrinkRepository
-  val dates = Dates(formatter = DateTimeFormatter.ofPattern(DATE_PATTERN))
+  val dates = RealDates(formatter = DateTimeFormatter.ofPattern(DATE_PATTERN))
 
   override fun onCreate() {
     super.onCreate()
@@ -29,4 +29,4 @@ class HydroHomieApplication : Application() {
   }
 }
 
-private const val DATE_PATTERN = "MM-dd-yyyy"
+const val DATE_PATTERN = "MM-dd-yyyy"

@@ -68,3 +68,18 @@ class RealDrinkRepository(private val store: FirebaseFirestore) : DrinkRepositor
     }
   }
 }
+
+class FakeDrinkRepository: DrinkRepository {
+  override suspend fun getDrink(day: String): DrinkModel {
+    return DrinkModel(0.0, 64.0)
+  }
+
+  override suspend fun updateDrink(day: String, drink: DrinkModel) {
+  }
+
+  override suspend fun updateCount(day: String, count: Double) {
+  }
+
+  override suspend fun updateGoal(day: String, goal: Double) {
+  }
+}
