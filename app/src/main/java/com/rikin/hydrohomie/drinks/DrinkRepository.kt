@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.drinkrepo
+package com.rikin.hydrohomie.drinks
 
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers

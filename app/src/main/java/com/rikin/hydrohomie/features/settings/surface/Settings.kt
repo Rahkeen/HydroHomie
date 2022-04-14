@@ -33,13 +33,14 @@ import com.rikin.hydrohomie.app.domain.AppEnvironment
 import com.rikin.hydrohomie.app.domain.AppState
 import com.rikin.hydrohomie.app.domain.AppViewModel
 import com.rikin.hydrohomie.app.platform.DATE_PATTERN
+import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.dates.RealDates
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.PlayaPurple
 import com.rikin.hydrohomie.design.RadRed
 import com.rikin.hydrohomie.design.Typography
 import com.rikin.hydrohomie.design.imageGradient
-import com.rikin.hydrohomie.drinkrepo.FakeDrinkRepository
+import com.rikin.hydrohomie.drinks.FakeDrinkRepository
 import com.rikin.hydrohomie.features.settings.domain.SettingsState
 import logcat.logcat
 import java.time.format.DateTimeFormatter
@@ -53,7 +54,6 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
     verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
   ) {
 
-    // Profile Image Section
     Box(
       modifier = Modifier
         .width(100.dp)
@@ -65,14 +65,12 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       Text("💩")
     }
 
-    // Username
     Text(
       text = "@heyrikin",
       modifier = Modifier.align(Alignment.CenterHorizontally),
       style = MaterialTheme.typography.body1,
     )
 
-    // Set Your Goal
     GoalSlider(
       low = 30.0,
       high = 200.0,
@@ -81,7 +79,6 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       onUpdate = { actions(AppAction.UpdateGoal(goal = round(it))) }
     )
 
-    // Set your Default Increment
     GoalSlider(
       low = 4.0,
       high = 32.0,
@@ -109,8 +106,8 @@ fun FunctionalSettingsPreview() {
       AppViewModel(
         initialState = AppState(),
         environment = AppEnvironment(
-          store = FakeDrinkRepository(),
-          dates = RealDates(DateTimeFormatter.ofPattern(DATE_PATTERN))
+          drinkRepository = FakeDrinkRepository(),
+          dates = FakeDates(),
         )
       )
     }

@@ -4,7 +4,7 @@ import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
-import com.rikin.hydrohomie.drinkrepo.DrinkModel
+import com.rikin.hydrohomie.drinks.DrinkModel
 import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 import kotlinx.coroutines.launch
 import logcat.logcat
@@ -16,16 +16,16 @@ class AppViewModel(
 
   companion object : MavericksViewModelFactory<AppViewModel, AppState> {
     override fun create(viewModelContext: ViewModelContext, state: AppState): AppViewModel {
-      val store = viewModelContext.app<HydroHomieApplication>().store
+      val drinkRepository = viewModelContext.app<HydroHomieApplication>().drinkRepository
       val dates = viewModelContext.app<HydroHomieApplication>().dates
-      val environment = AppEnvironment(store, dates)
+      val environment = AppEnvironment(drinkRepository, dates)
       return AppViewModel(state, environment)
     }
   }
 
   init {
     viewModelScope.launch {
-      val drink = environment.store.getDrink(environment.dates.today)
+      val drink = environment.drinkRepository.getDrink(environment.dates.today)
       setState {
         AppState(
           weekday = environment.dates.dayOfWeek.toWeekday(),
@@ -52,7 +52,7 @@ class AppViewModel(
         withState { state ->
           viewModelScope.launch {
             environment
-              .store
+              .drinkRepository
               .updateDrink(
                 day = environment.dates.today,
                 drink = DrinkModel(
@@ -80,7 +80,7 @@ class AppViewModel(
       is AppAction.Reset -> {
         viewModelScope.launch {
           environment
-            .store
+            .drinkRepository
             .updateCount(
               day = environment.dates.today,
               count = 0.0
