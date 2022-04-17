@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.features.hydration.domain
+package com.rikin.hydrohomie.features.hydration.mavericks.domain
 
 data class HydrationState(
   val drank: Double = 0.0,

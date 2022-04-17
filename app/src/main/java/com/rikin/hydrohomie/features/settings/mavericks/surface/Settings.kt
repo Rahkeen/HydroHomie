@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.features.settings.surface
+package com.rikin.hydrohomie.features.settings.mavericks.surface
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -28,10 +28,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.mvrx.compose.collectAsState
-import com.rikin.hydrohomie.app.domain.AppAction
-import com.rikin.hydrohomie.app.domain.AppEnvironment
-import com.rikin.hydrohomie.app.domain.AppState
-import com.rikin.hydrohomie.app.domain.AppViewModel
+import com.rikin.hydrohomie.app.mavericks.domain.AppAction
+import com.rikin.hydrohomie.app.mavericks.domain.AppEnvironment
+import com.rikin.hydrohomie.app.mavericks.domain.AppState
+import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.app.platform.DATE_PATTERN
 import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.dates.RealDates
@@ -41,7 +41,7 @@ import com.rikin.hydrohomie.design.RadRed
 import com.rikin.hydrohomie.design.Typography
 import com.rikin.hydrohomie.design.imageGradient
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
-import com.rikin.hydrohomie.features.settings.domain.SettingsState
+import com.rikin.hydrohomie.features.settings.mavericks.domain.SettingsState
 import logcat.logcat
 import java.time.format.DateTimeFormatter
 import kotlin.math.round

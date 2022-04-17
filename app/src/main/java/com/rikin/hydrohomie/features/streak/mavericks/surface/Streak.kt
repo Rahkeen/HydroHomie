@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.features.streak.surface
+package com.rikin.hydrohomie.features.streak.mavericks.surface
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -33,12 +33,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rikin.hydrohomie.app.domain.Weekday
+import com.rikin.hydrohomie.app.mavericks.domain.Weekday
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.features.hydration.domain.HydrationState
-import com.rikin.hydrohomie.features.streak.domain.StreakState
+import com.rikin.hydrohomie.features.hydration.mavericks.domain.HydrationState
+import com.rikin.hydrohomie.features.streak.mavericks.domain.StreakState
 
 val DAYS = listOf("M", "T", "W", "T", "F", "S", "S")
 

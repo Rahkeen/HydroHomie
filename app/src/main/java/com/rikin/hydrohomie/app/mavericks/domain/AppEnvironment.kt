@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.app.domain
+package com.rikin.hydrohomie.app.mavericks.domain
 
 import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.drinks.DrinkRepository

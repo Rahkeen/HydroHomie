@@ -1,11 +1,11 @@
-package com.rikin.hydrohomie.app.domain
+package com.rikin.hydrohomie.app.mavericks.domain
 
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
 import com.rikin.hydrohomie.drinks.DrinkModel
-import com.rikin.hydrohomie.features.hydration.domain.HydrationState
+import com.rikin.hydrohomie.features.hydration.mavericks.domain.HydrationState
 import kotlinx.coroutines.launch
 import logcat.logcat
 
