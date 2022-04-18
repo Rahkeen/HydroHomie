@@ -1,61 +1,36 @@
 package com.rikin.hydrohomie.app.workflow.domain
 
-import com.rikin.hydrohomie.app.mavericks.domain.AppAction
 import com.rikin.hydrohomie.app.mavericks.domain.AppState
+import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.Hydrating
+import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationWorkflow
 import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow
-import com.squareup.workflow1.action
+import com.squareup.workflow1.renderChild
 
-object AppWorkflow: StatefulWorkflow<Unit, AppState, Nothing, AppRendering>() {
+sealed class WorkflowState(val appState: AppState) {
+  class Hydrating(appState: AppState): WorkflowState(appState)
+  class Streaks(appState: AppState): WorkflowState(appState)
+  class Settings(appState: AppState): WorkflowState(appState)
+}
 
-  override fun initialState(props: Unit, snapshot: Snapshot?): AppState {
-    return AppState()
+object AppWorkflow: StatefulWorkflow<Unit, WorkflowState, Nothing, Any>() {
+
+  override fun initialState(props: Unit, snapshot: Snapshot?): WorkflowState {
+    return Hydrating(appState = AppState())
   }
-
-  private fun onAction(action: AppAction) = action {
-    when (action) {
-      AppAction.Drink -> {
-        state = state.copy(
-          hydrations = List(state.hydrations.size) { index ->
-            if (index == state.weekday.ordinal) {
-              state.hydrations[index].copy(
-                drank = (state.hydrations[index].drank + state.drinkAmount).coerceAtMost(state.currentHydration.goal)
-              )
-            } else {
-              state.hydrations[index]
-            }
-          }
-        )
-      }
-      AppAction.Reset -> {
-        state = state.copy(
-          hydrations = List(state.hydrations.size) { index ->
-            if (index == state.weekday.ordinal) {
-              state.hydrations[index].copy(drank = 0.0)
-            } else {
-              state.hydrations[index]
-            }
-          }
-        )
-      }
-      is AppAction.UpdateDrinkSize -> {}
-      is AppAction.UpdateGoal -> {}
-    }
-  }
-
 
   override fun render(
     renderProps: Unit,
-    renderState: AppState,
+    renderState: WorkflowState,
     context: RenderContext
-  ): AppRendering {
-    return AppRendering(
-      state = renderState,
-      actions = { action ->
-        context.actionSink.send(onAction(action))
+  ): Any {
+    return when(renderState) {
+      is Hydrating -> {
+        context.renderChild(child = HydrationWorkflow, props = renderState.appState)
       }
-    )
+      else -> {  }
+    }
   }
 
-  override fun snapshotState(state: AppState): Snapshot? = null
+  override fun snapshotState(state: WorkflowState): Snapshot? = null
 }
