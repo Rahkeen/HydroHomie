@@ -67,6 +67,7 @@ dependencies {
     // Workflow
     implementation("com.squareup.workflow1:workflow-ui-core-android:$workflow_version")
     implementation("com.squareup.workflow1:workflow-ui-container-android:$workflow_version")
+    implementation("com.squareup.workflow1:workflow-ui-compose:$workflow_version")
 
     // logcat
     implementation 'com.squareup.logcat:logcat:0.1'

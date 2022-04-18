@@ -18,7 +18,7 @@ import com.rikin.hydrohomie.features.settings.mavericks.surface.Settings
 import com.rikin.hydrohomie.features.streak.mavericks.surface.Streaks
 
 @Composable
-fun App() {
+fun MavericksApp() {
   val systemUiController = rememberSystemUiController()
   val useDarkIcons = MaterialTheme.colors.isLight
 
