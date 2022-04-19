@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.features.hydration.mavericks.surface
+package com.rikin.hydrohomie.features.hydration.common.surface
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDp

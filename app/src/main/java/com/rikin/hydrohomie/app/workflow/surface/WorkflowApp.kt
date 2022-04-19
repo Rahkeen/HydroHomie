@@ -2,6 +2,7 @@
 
 package com.rikin.hydrohomie.app.workflow.surface
 
+import android.content.Context
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -10,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
+import com.rikin.hydrohomie.app.workflow.domain.AppWorkflow
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.workflow.surface.HydrationBinding
 import com.rikin.hydrohomie.features.settings.workflow.surface.SettingsBinding
@@ -43,11 +45,15 @@ fun WorkflowApp() {
   }
 
   HydroHomieTheme {
-    val appWorkflow = (LocalContext.current.applicationContext as HydroHomieApplication).appWorkflow
+    val appWorkflow = getAppWorkflow(LocalContext.current.applicationContext)
     val rendering by appWorkflow.renderAsState(props = Unit, onOutput = {})
     WorkflowRendering(
       rendering = rendering,
       viewEnvironment = viewEnvironment
     )
   }
+}
+
+private fun getAppWorkflow(appContext: Context): AppWorkflow {
+  return (appContext as HydroHomieApplication).appWorkflow
 }

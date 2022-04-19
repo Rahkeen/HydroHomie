@@ -54,6 +54,10 @@ class AppWorkflow(
     state = HydrationMachine(loadedState)
   }
 
+  private fun onBack() = action {
+    state = HydrationMachine(state.appState)
+  }
+
   private fun onHydrationOutput(output: HydrationOutput) = action {
     state = when (output) {
       StreaksTapped -> {
@@ -100,10 +104,6 @@ class AppWorkflow(
         SettingsMachine(appState)
       }
     }
-  }
-
-  private fun onBack() = action {
-    state = HydrationMachine(state.appState)
   }
 
   override fun render(

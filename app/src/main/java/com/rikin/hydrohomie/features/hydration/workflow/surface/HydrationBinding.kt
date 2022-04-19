@@ -1,7 +1,7 @@
 package com.rikin.hydrohomie.features.hydration.workflow.surface
 
 import com.rikin.hydrohomie.app.workflow.domain.AppTransition
-import com.rikin.hydrohomie.features.hydration.mavericks.surface.Hydration
+import com.rikin.hydrohomie.features.hydration.common.surface.Hydration
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationRendering
 import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
 import com.squareup.workflow1.ui.compose.composeViewFactory
