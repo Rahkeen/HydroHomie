@@ -69,7 +69,7 @@ class RealDrinkRepository(private val store: FirebaseFirestore) : DrinkRepositor
   }
 }
 
-class FakeDrinkRepository: DrinkRepository {
+class FakeDrinkRepository : DrinkRepository {
   override suspend fun getDrink(day: String): DrinkModel {
     return DrinkModel(0.0, 64.0)
   }

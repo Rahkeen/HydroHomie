@@ -47,7 +47,7 @@ fun MavericksApp() {
 
       composable("settings") {
         val viewModel: AppViewModel = mavericksActivityViewModel()
-        val state by viewModel.collectAsState() { it.settingsState }
+        val state by viewModel.collectAsState { it.settingsState }
         Settings(state = state, actions = viewModel::send)
       }
     }

@@ -7,5 +7,5 @@ import com.squareup.workflow1.ui.compose.composeViewFactory
 
 @WorkflowUiExperimentalApi
 val StreakBinding = composeViewFactory<StreakRendering> { rendering, _ ->
-    Streaks(rendering.state.streakState)
+  Streaks(rendering.state)
 }

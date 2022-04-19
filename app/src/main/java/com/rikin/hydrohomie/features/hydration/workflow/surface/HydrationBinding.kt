@@ -8,18 +8,18 @@ import com.squareup.workflow1.ui.compose.composeViewFactory
 
 @WorkflowUiExperimentalApi
 val HydrationBinding = composeViewFactory<HydrationRendering> { rendering, _ ->
-    Hydration(
-        state = rendering.state.currentHydration,
-        actions = rendering.actions,
-        navigation = { location ->
-            when (location) {
-                "streaks" -> {
-                    rendering.transitions(AppTransition.ToStreak)
-                }
-                "settings" -> {
-                    rendering.transitions(AppTransition.ToSetting)
-                }
-            }
+  Hydration(
+    state = rendering.state,
+    actions = rendering.actions,
+    navigation = { location ->
+      when (location) {
+        "streaks" -> {
+          rendering.transitions(AppTransition.ToStreak)
         }
-    )
+        "settings" -> {
+          rendering.transitions(AppTransition.ToSetting)
+        }
+      }
+    }
+  )
 }

@@ -21,89 +21,115 @@ import com.squareup.workflow1.ui.backstack.BackStackScreen
 import com.squareup.workflow1.ui.backstack.toBackStackScreen
 
 sealed class WorkflowState(val appState: AppState) {
-    class HydrationMachine(appState: AppState) : WorkflowState(appState)
-    class StreaksMachine(appState: AppState) : WorkflowState(appState)
-    class SettingsMachine(appState: AppState) : WorkflowState(appState)
+  class HydrationMachine(appState: AppState) : WorkflowState(appState)
+  class StreaksMachine(appState: AppState) : WorkflowState(appState)
+  class SettingsMachine(appState: AppState) : WorkflowState(appState)
 }
 
 @WorkflowUiExperimentalApi
 object AppWorkflow : StatefulWorkflow<Unit, WorkflowState, Nothing, BackStackScreen<Any>>() {
 
-    override fun initialState(props: Unit, snapshot: Snapshot?): WorkflowState {
-        return HydrationMachine(appState = AppState())
-    }
+  override fun initialState(props: Unit, snapshot: Snapshot?): WorkflowState {
+    return HydrationMachine(appState = AppState())
+  }
 
-    private fun onHydrationOutput(output: HydrationOutput) = action {
-        state = when (output) {
-            StreaksTapped -> {
-                StreaksMachine(state.appState)
+  private fun onHydrationOutput(output: HydrationOutput) = action {
+    state = when (output) {
+      StreaksTapped -> {
+        StreaksMachine(state.appState)
+      }
+      SettingsTapped -> {
+        SettingsMachine(state.appState)
+      }
+      is HydrationOutput.UpdateState -> {
+        val appState = with(state.appState) {
+          copy(
+            hydrations = List(hydrations.size) { index ->
+              if (index == weekday.ordinal) {
+                output.state
+              } else {
+                hydrations[index]
+              }
             }
-            SettingsTapped -> {
-                SettingsMachine(state.appState)
-            }
-            is HydrationOutput.UpdateState -> {
-                HydrationMachine(output.state)
-            }
+          )
         }
+        HydrationMachine(appState)
+      }
     }
+  }
 
-    private fun onSettingsOutput(output: SettingsOutput) = action {
-        state = when (output) {
-            is SettingsOutput.UpdateState -> {
-                SettingsMachine(output.state)
+  private fun onSettingsOutput(output: SettingsOutput) = action {
+    state = when (output) {
+      is SettingsOutput.UpdateState -> {
+        val appState = with(state.appState) {
+          copy(
+            drinkAmount = output.state.drinkAmount,
+            hydrations = List(hydrations.size) { index ->
+              if (index == weekday.ordinal) {
+                hydrations[index].copy(
+                  goal = output.state.personalGoal,
+                  drinkAmount = output.state.drinkAmount
+                )
+              } else {
+                hydrations[index]
+              }
             }
+          )
         }
+        SettingsMachine(appState)
+      }
     }
+  }
 
-    private fun onBack() = action {
-        state = HydrationMachine(state.appState)
+  private fun onBack() = action {
+    state = HydrationMachine(state.appState)
+  }
+
+  override fun render(
+    renderProps: Unit,
+    renderState: WorkflowState,
+    context: RenderContext
+  ): BackStackScreen<Any> {
+    val backstack = mutableListOf<Any>()
+
+    val hydrationScreen = context.renderChild(
+      child = HydrationWorkflow,
+      props = renderState.appState
+    ) {
+      onHydrationOutput(it)
     }
+    backstack.add(hydrationScreen)
 
-    override fun render(
-        renderProps: Unit,
-        renderState: WorkflowState,
-        context: RenderContext
-    ): BackStackScreen<Any> {
-        val backstack = mutableListOf<Any>()
-
-        val hydrationScreen = context.renderChild(
-            child = HydrationWorkflow,
-            props = renderState.appState
+    when (renderState) {
+      is HydrationMachine -> {}
+      is SettingsMachine -> {
+        val settingsScreen = context.renderChild(
+          child = SettingsWorkflow,
+          props = renderState.appState
         ) {
-            onHydrationOutput(it)
+          onSettingsOutput(it)
         }
-        backstack.add(hydrationScreen)
-
-        when (renderState) {
-            is HydrationMachine -> {}
-            is SettingsMachine -> {
-                val settingsScreen = context.renderChild(
-                    child = SettingsWorkflow,
-                    props = renderState.appState
-                ) {
-                    onSettingsOutput(it)
-                }
-                backstack.add(
-                    BackButtonScreen(settingsScreen) {
-                        context.actionSink.send(onBack())
-                    }
-                )
-            }
-            is StreaksMachine -> {
-                val streaksScreen = context.renderChild(
-                    child = StreakWorkflow,
-                    props = renderState.appState
-                )
-                backstack.add(
-                    BackButtonScreen(streaksScreen) {
-                        context.actionSink.send(onBack())
-                    }
-                )
-            }
-        }
-
-        return backstack.toBackStackScreen()
+        backstack.add(
+          BackButtonScreen(settingsScreen) {
+            context.actionSink.send(onBack())
+          }
+        )
+      }
+      is StreaksMachine -> {
+        val streaksScreen = context.renderChild(
+          child = StreakWorkflow,
+          props = renderState.appState
+        )
+        backstack.add(
+          BackButtonScreen(streaksScreen) {
+            context.actionSink.send(onBack())
+          }
+        )
+      }
     }
 
-    override fun snapshotState(state: WorkflowState): Snapshot? = null
+    return backstack.toBackStackScreen()
+  }
+
+  override fun snapshotState(state: WorkflowState): Snapshot? = null
 }

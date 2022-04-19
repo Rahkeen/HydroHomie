@@ -7,8 +7,8 @@ import com.squareup.workflow1.ui.compose.composeViewFactory
 
 @WorkflowUiExperimentalApi
 val SettingsBinding = composeViewFactory<SettingsRendering> { rendering, _ ->
-    Settings(
-        state = rendering.state.settingsState,
-        actions = rendering.actions
-    )
+  Settings(
+    state = rendering.state,
+    actions = rendering.actions
+  )
 }

@@ -11,7 +11,7 @@ data class AppState(
   val drinkAmount: Double = 8.0,
   val hydrations: List<HydrationState> = buildList {
     repeat(HYDRATION_LIMIT) {
-      add(HydrationState())
+      add(HydrationState(drinkAmount = drinkAmount))
     }
   }
 ) : MavericksState {

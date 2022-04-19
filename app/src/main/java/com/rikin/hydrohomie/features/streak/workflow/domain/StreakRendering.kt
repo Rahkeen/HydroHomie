@@ -1,7 +1,7 @@
 package com.rikin.hydrohomie.features.streak.workflow.domain
 
-import com.rikin.hydrohomie.app.mavericks.domain.AppState
+import com.rikin.hydrohomie.features.streak.mavericks.domain.StreakState
 
 data class StreakRendering(
-    val state: AppState,
+  val state: StreakState,
 )

@@ -21,31 +21,31 @@ import com.squareup.workflow1.ui.compose.WorkflowRendering
 import com.squareup.workflow1.ui.compose.renderAsState
 
 private val viewRegistry = ViewRegistry(
-    BackStackContainer,
-    HydrationBinding,
-    StreakBinding,
-    SettingsBinding
+  BackStackContainer,
+  HydrationBinding,
+  StreakBinding,
+  SettingsBinding
 )
 
 private val viewEnvironment = ViewEnvironment(mapOf(ViewRegistry to viewRegistry))
 
 @Composable
 fun WorkflowApp() {
-    val systemUiController = rememberSystemUiController()
-    val useDarkIcons = MaterialTheme.colors.isLight
+  val systemUiController = rememberSystemUiController()
+  val useDarkIcons = MaterialTheme.colors.isLight
 
-    SideEffect {
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent,
-            darkIcons = useDarkIcons
-        )
-    }
+  SideEffect {
+    systemUiController.setSystemBarsColor(
+      color = Color.Transparent,
+      darkIcons = useDarkIcons
+    )
+  }
 
-    HydroHomieTheme {
-        val rendering by AppWorkflow.renderAsState(props = Unit, onOutput = {})
-        WorkflowRendering(
-            rendering = rendering,
-            viewEnvironment = viewEnvironment
-        )
-    }
+  HydroHomieTheme {
+    val rendering by AppWorkflow.renderAsState(props = Unit, onOutput = {})
+    WorkflowRendering(
+      rendering = rendering,
+      viewEnvironment = viewEnvironment
+    )
+  }
 }

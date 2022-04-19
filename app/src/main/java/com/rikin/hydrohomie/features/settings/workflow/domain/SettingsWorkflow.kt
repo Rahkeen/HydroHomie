@@ -2,52 +2,45 @@ package com.rikin.hydrohomie.features.settings.workflow.domain
 
 import com.rikin.hydrohomie.app.mavericks.domain.AppAction
 import com.rikin.hydrohomie.app.mavericks.domain.AppState
+import com.rikin.hydrohomie.features.settings.mavericks.domain.SettingsState
 import com.rikin.hydrohomie.features.settings.workflow.domain.SettingsOutput.UpdateState
 import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow
 import com.squareup.workflow1.action
 
 object SettingsWorkflow :
-    StatefulWorkflow<AppState, AppState, SettingsOutput, SettingsRendering>() {
-    override fun initialState(props: AppState, snapshot: Snapshot?): AppState {
-        return props
-    }
+  StatefulWorkflow<AppState, SettingsState, SettingsOutput, SettingsRendering>() {
+  override fun initialState(props: AppState, snapshot: Snapshot?): SettingsState {
+    return props.settingsState
+  }
 
-    private fun onAction(action: AppAction) = action {
-        when (action) {
-            AppAction.Drink -> Unit
-            AppAction.Reset -> Unit
-            is AppAction.UpdateDrinkSize -> {
-                state = state.copy(drinkAmount = action.drinkSize)
-                setOutput(UpdateState(state))
-            }
-            is AppAction.UpdateGoal -> {
-                state = state.copy(
-                    hydrations = List(state.hydrations.size) { index ->
-                        if (index == state.weekday.ordinal) {
-                            state.hydrations[index].copy(goal = action.goal)
-                        } else {
-                            state.hydrations[index]
-                        }
-                    }
-                )
-                setOutput(UpdateState(state))
-            }
-        }
+  private fun onAction(action: AppAction) = action {
+    when (action) {
+      AppAction.Drink -> Unit
+      AppAction.Reset -> Unit
+      is AppAction.UpdateDrinkSize -> {
+        state = state.copy(drinkAmount = action.drinkSize)
+        setOutput(UpdateState(state))
+      }
+      is AppAction.UpdateGoal -> {
+        state = state.copy(personalGoal = action.goal)
+        setOutput(UpdateState(state))
+      }
     }
+  }
 
-    override fun render(
-        renderProps: AppState,
-        renderState: AppState,
-        context: RenderContext
-    ): SettingsRendering {
-        return SettingsRendering(
-            state = renderState,
-            actions = { context.actionSink.send(onAction(it)) }
-        )
-    }
+  override fun render(
+    renderProps: AppState,
+    renderState: SettingsState,
+    context: RenderContext
+  ): SettingsRendering {
+    return SettingsRendering(
+      state = renderState,
+      actions = { context.actionSink.send(onAction(it)) }
+    )
+  }
 
-    override fun snapshotState(state: AppState): Snapshot? {
-        return null
-    }
+  override fun snapshotState(state: SettingsState): Snapshot? {
+    return null
+  }
 }
