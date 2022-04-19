@@ -14,7 +14,10 @@ val HydrationBinding = composeViewFactory<HydrationRendering> { rendering, _ ->
         navigation = { location ->
             when (location) {
                 "streaks" -> {
-                  rendering.transitions(AppTransition.ToStreak)
+                    rendering.transitions(AppTransition.ToStreak)
+                }
+                "settings" -> {
+                    rendering.transitions(AppTransition.ToSetting)
                 }
             }
         }
