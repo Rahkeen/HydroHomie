@@ -1,9 +1,13 @@
 package com.rikin.hydrohomie.app.workflow.domain
 
+import com.rikin.hydrohomie.app.mavericks.domain.AppEnvironment
 import com.rikin.hydrohomie.app.mavericks.domain.AppState
+import com.rikin.hydrohomie.app.mavericks.domain.toWeekday
 import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.HydrationMachine
+import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.InitialLoad
 import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.SettingsMachine
 import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.StreaksMachine
+import com.rikin.hydrohomie.app.workflow.workers.InitialLoadWorker
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput.SettingsTapped
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput.StreaksTapped
@@ -15,22 +19,39 @@ import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow
 import com.squareup.workflow1.action
 import com.squareup.workflow1.renderChild
+import com.squareup.workflow1.runningWorker
 import com.squareup.workflow1.ui.BackButtonScreen
 import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
 import com.squareup.workflow1.ui.backstack.BackStackScreen
 import com.squareup.workflow1.ui.backstack.toBackStackScreen
 
 sealed class WorkflowState(val appState: AppState) {
+  class InitialLoad(appState: AppState) : WorkflowState(appState)
   class HydrationMachine(appState: AppState) : WorkflowState(appState)
   class StreaksMachine(appState: AppState) : WorkflowState(appState)
   class SettingsMachine(appState: AppState) : WorkflowState(appState)
 }
 
 @WorkflowUiExperimentalApi
-object AppWorkflow : StatefulWorkflow<Unit, WorkflowState, Nothing, BackStackScreen<Any>>() {
+class AppWorkflow(
+  private val environment: AppEnvironment,
+) : StatefulWorkflow<Unit, WorkflowState, Nothing, BackStackScreen<Any>>() {
+
+  private val initialLoadWorker = InitialLoadWorker(
+    environment.dates,
+    environment.drinkRepository
+  )
 
   override fun initialState(props: Unit, snapshot: Snapshot?): WorkflowState {
-    return HydrationMachine(appState = AppState())
+    return InitialLoad(
+      appState = AppState(
+        weekday = environment.dates.dayOfWeek.toWeekday()
+      )
+    )
+  }
+
+  private fun initialLoadAction(loadedState: AppState) = action {
+    state = HydrationMachine(loadedState)
   }
 
   private fun onHydrationOutput(output: HydrationOutput) = action {
@@ -101,6 +122,11 @@ object AppWorkflow : StatefulWorkflow<Unit, WorkflowState, Nothing, BackStackScr
     backstack.add(hydrationScreen)
 
     when (renderState) {
+      is InitialLoad -> {
+        context.runningWorker(initialLoadWorker) {
+          initialLoadAction(it)
+        }
+      }
       is HydrationMachine -> {}
       is SettingsMachine -> {
         val settingsScreen = context.renderChild(
