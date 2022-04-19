@@ -14,6 +14,10 @@ import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow
 import com.squareup.workflow1.action
 import com.squareup.workflow1.renderChild
+import com.squareup.workflow1.ui.BackButtonScreen
+import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
+import com.squareup.workflow1.ui.backstack.BackStackScreen
+import com.squareup.workflow1.ui.backstack.toBackStackScreen
 
 sealed class WorkflowState(val appState: AppState) {
     class HydrationMachine(appState: AppState) : WorkflowState(appState)
@@ -21,7 +25,8 @@ sealed class WorkflowState(val appState: AppState) {
     class SettingsMachine(appState: AppState) : WorkflowState(appState)
 }
 
-object AppWorkflow : StatefulWorkflow<Unit, WorkflowState, Nothing, Any>() {
+@WorkflowUiExperimentalApi
+object AppWorkflow : StatefulWorkflow<Unit, WorkflowState, Nothing, BackStackScreen<Any>>() {
 
     override fun initialState(props: Unit, snapshot: Snapshot?): WorkflowState {
         return HydrationMachine(appState = AppState())
@@ -38,25 +43,52 @@ object AppWorkflow : StatefulWorkflow<Unit, WorkflowState, Nothing, Any>() {
         }
     }
 
+    private fun onBack() = action {
+        state = HydrationMachine(state.appState)
+    }
 
     override fun render(
         renderProps: Unit,
         renderState: WorkflowState,
         context: RenderContext
-    ): Any {
-        return when (renderState) {
-            is HydrationMachine -> {
-                context.renderChild(child = HydrationWorkflow, props = renderState.appState) {
-                    onHydrationOutput(it)
-                }
-            }
+    ): BackStackScreen<Any> {
+        val backstack = mutableListOf<Any>()
+
+        val hydrationScreen = context.renderChild(
+            child = HydrationWorkflow,
+            props = renderState.appState
+        ) {
+            onHydrationOutput(it)
+        }
+        backstack.add(hydrationScreen)
+
+        when (renderState) {
+            is HydrationMachine -> {}
             is SettingsMachine -> {
-                context.renderChild(child = SettingsWorkflow, props = renderState.appState)
+                val settingsScreen = context.renderChild(
+                    child = SettingsWorkflow,
+                    props = renderState.appState
+                )
+                backstack.add(
+                    BackButtonScreen(settingsScreen) {
+                        context.actionSink.send(onBack())
+                    }
+                )
             }
             is StreaksMachine -> {
-                context.renderChild(child = StreakWorkflow, props = renderState.appState)
+                val streaksScreen = context.renderChild(
+                    child = StreakWorkflow,
+                    props = renderState.appState
+                )
+                backstack.add(
+                    BackButtonScreen(streaksScreen) {
+                        context.actionSink.send(onBack())
+                    }
+                )
             }
         }
+
+        return backstack.toBackStackScreen()
     }
 
     override fun snapshotState(state: WorkflowState): Snapshot? = null

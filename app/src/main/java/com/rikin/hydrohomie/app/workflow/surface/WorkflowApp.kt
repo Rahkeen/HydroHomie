@@ -16,10 +16,12 @@ import com.rikin.hydrohomie.features.streak.workflow.surface.StreakBinding
 import com.squareup.workflow1.ui.ViewEnvironment
 import com.squareup.workflow1.ui.ViewRegistry
 import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
+import com.squareup.workflow1.ui.backstack.BackStackContainer
 import com.squareup.workflow1.ui.compose.WorkflowRendering
 import com.squareup.workflow1.ui.compose.renderAsState
 
 private val viewRegistry = ViewRegistry(
+    BackStackContainer,
     HydrationBinding,
     StreakBinding,
     SettingsBinding
