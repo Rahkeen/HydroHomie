@@ -1,9 +1,9 @@
 package com.rikin.hydrohomie.features.hydration.workflow.domain
 
-import com.rikin.hydrohomie.app.mavericks.domain.AppAction
-import com.rikin.hydrohomie.app.mavericks.domain.AppState
+import com.rikin.hydrohomie.app.common.domain.AppAction
+import com.rikin.hydrohomie.app.common.domain.AppState
 import com.rikin.hydrohomie.app.workflow.domain.AppTransition
-import com.rikin.hydrohomie.features.hydration.mavericks.domain.HydrationState
+import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput.UpdateState
 import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow
@@ -42,10 +42,10 @@ object HydrationWorkflow :
 
   private fun onTransition(transition: AppTransition) = action {
     when (transition) {
-      AppTransition.ToStreak -> {
+      AppTransition.ToStreaks -> {
         setOutput(HydrationOutput.StreaksTapped)
       }
-      AppTransition.ToSetting -> {
+      AppTransition.ToSettings -> {
         setOutput(HydrationOutput.SettingsTapped)
       }
     }

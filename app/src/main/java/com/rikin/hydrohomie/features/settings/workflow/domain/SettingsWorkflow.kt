@@ -1,8 +1,8 @@
 package com.rikin.hydrohomie.features.settings.workflow.domain
 
-import com.rikin.hydrohomie.app.mavericks.domain.AppAction
-import com.rikin.hydrohomie.app.mavericks.domain.AppState
-import com.rikin.hydrohomie.features.settings.mavericks.domain.SettingsState
+import com.rikin.hydrohomie.app.common.domain.AppAction
+import com.rikin.hydrohomie.app.common.domain.AppState
+import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import com.rikin.hydrohomie.features.settings.workflow.domain.SettingsOutput.UpdateState
 import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow

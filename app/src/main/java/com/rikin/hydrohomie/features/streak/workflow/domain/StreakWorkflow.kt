@@ -1,7 +1,7 @@
 package com.rikin.hydrohomie.features.streak.workflow.domain
 
-import com.rikin.hydrohomie.app.mavericks.domain.AppState
-import com.rikin.hydrohomie.features.streak.mavericks.domain.StreakState
+import com.rikin.hydrohomie.app.common.domain.AppState
+import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow
 

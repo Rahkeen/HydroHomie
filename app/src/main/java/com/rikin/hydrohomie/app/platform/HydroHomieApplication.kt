@@ -5,7 +5,7 @@ import com.airbnb.mvrx.Mavericks
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.rikin.hydrohomie.app.mavericks.domain.AppEnvironment
+import com.rikin.hydrohomie.app.common.domain.AppEnvironment
 import com.rikin.hydrohomie.app.workflow.domain.AppWorkflow
 import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.dates.RealDates

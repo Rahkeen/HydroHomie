@@ -1,8 +1,8 @@
 package com.rikin.hydrohomie.app.workflow.domain
 
-import com.rikin.hydrohomie.app.mavericks.domain.AppEnvironment
-import com.rikin.hydrohomie.app.mavericks.domain.AppState
-import com.rikin.hydrohomie.app.mavericks.domain.toWeekday
+import com.rikin.hydrohomie.app.common.domain.AppEnvironment
+import com.rikin.hydrohomie.app.common.domain.AppState
+import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.HydrationMachine
 import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.InitialLoad
 import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.SettingsMachine

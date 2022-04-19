@@ -1,10 +1,10 @@
-package com.rikin.hydrohomie.app.mavericks.domain
+package com.rikin.hydrohomie.app.common.domain
 
 import com.airbnb.mvrx.MavericksState
-import com.rikin.hydrohomie.app.mavericks.domain.Weekday.Monday
-import com.rikin.hydrohomie.features.hydration.mavericks.domain.HydrationState
-import com.rikin.hydrohomie.features.settings.mavericks.domain.SettingsState
-import com.rikin.hydrohomie.features.streak.mavericks.domain.StreakState
+import com.rikin.hydrohomie.app.common.domain.Weekday.Monday
+import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
+import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 
 data class AppState(
   val weekday: Weekday = Monday,

@@ -14,8 +14,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.mavericks.surface.Hydration
-import com.rikin.hydrohomie.features.settings.mavericks.surface.Settings
-import com.rikin.hydrohomie.features.streak.mavericks.surface.Streaks
+import com.rikin.hydrohomie.features.settings.common.surface.Settings
+import com.rikin.hydrohomie.features.streak.common.surface.Streaks
 
 @Composable
 fun MavericksApp() {

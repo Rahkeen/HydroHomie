@@ -28,7 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rikin.hydrohomie.app.mavericks.domain.AppAction
+import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.GangstaGreen
@@ -41,7 +41,7 @@ import com.rikin.hydrohomie.design.PlayaPurple
 import com.rikin.hydrohomie.design.PlayaPurpleDark
 import com.rikin.hydrohomie.design.RadRed
 import com.rikin.hydrohomie.design.RadRedDark
-import com.rikin.hydrohomie.features.hydration.mavericks.domain.HydrationState
+import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 
 @Composable
 fun Hydration(

@@ -43,8 +43,7 @@ fun WorkflowApp() {
   }
 
   HydroHomieTheme {
-    val application = LocalContext.current.applicationContext as HydroHomieApplication
-    val appWorkflow = application.appWorkflow
+    val appWorkflow = (LocalContext.current.applicationContext as HydroHomieApplication).appWorkflow
     val rendering by appWorkflow.renderAsState(props = Unit, onOutput = {})
     WorkflowRendering(
       rendering = rendering,

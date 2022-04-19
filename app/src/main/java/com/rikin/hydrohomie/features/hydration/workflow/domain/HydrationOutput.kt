@@ -1,6 +1,6 @@
 package com.rikin.hydrohomie.features.hydration.workflow.domain
 
-import com.rikin.hydrohomie.features.hydration.mavericks.domain.HydrationState
+import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 
 sealed class HydrationOutput {
   object StreaksTapped : HydrationOutput()

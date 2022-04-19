@@ -1,11 +1,11 @@
 package com.rikin.hydrohomie.app.workflow.workers
 
-import com.rikin.hydrohomie.app.mavericks.domain.AppState
-import com.rikin.hydrohomie.app.mavericks.domain.HYDRATION_LIMIT
-import com.rikin.hydrohomie.app.mavericks.domain.toWeekday
+import com.rikin.hydrohomie.app.common.domain.AppState
+import com.rikin.hydrohomie.app.common.domain.HYDRATION_LIMIT
+import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.drinks.DrinkRepository
-import com.rikin.hydrohomie.features.hydration.mavericks.domain.HydrationState
+import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import com.squareup.workflow1.Worker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
