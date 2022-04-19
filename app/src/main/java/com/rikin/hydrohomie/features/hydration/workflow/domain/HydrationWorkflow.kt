@@ -3,6 +3,7 @@ package com.rikin.hydrohomie.features.hydration.workflow.domain
 import com.rikin.hydrohomie.app.mavericks.domain.AppAction
 import com.rikin.hydrohomie.app.mavericks.domain.AppState
 import com.rikin.hydrohomie.app.workflow.domain.AppTransition
+import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput.UpdateState
 import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow
 import com.squareup.workflow1.action
@@ -11,6 +12,10 @@ object HydrationWorkflow :
     StatefulWorkflow<AppState, AppState, HydrationOutput, HydrationRendering>() {
     override fun initialState(props: AppState, snapshot: Snapshot?): AppState {
         return props
+    }
+
+    override fun onPropsChanged(old: AppState, new: AppState, state: AppState): AppState {
+        return new
     }
 
     private fun onAction(action: AppAction) = action {
@@ -29,6 +34,7 @@ object HydrationWorkflow :
                         }
                     }
                 )
+                setOutput(UpdateState(state))
             }
             AppAction.Reset -> {
                 state = state.copy(
@@ -40,6 +46,7 @@ object HydrationWorkflow :
                         }
                     }
                 )
+                setOutput(UpdateState(state))
             }
             is AppAction.UpdateDrinkSize -> {}
             is AppAction.UpdateGoal -> {}

@@ -2,11 +2,13 @@ package com.rikin.hydrohomie.features.settings.workflow.domain
 
 import com.rikin.hydrohomie.app.mavericks.domain.AppAction
 import com.rikin.hydrohomie.app.mavericks.domain.AppState
+import com.rikin.hydrohomie.features.settings.workflow.domain.SettingsOutput.UpdateState
 import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow
 import com.squareup.workflow1.action
 
-object SettingsWorkflow : StatefulWorkflow<AppState, AppState, Nothing, SettingsRendering>() {
+object SettingsWorkflow :
+    StatefulWorkflow<AppState, AppState, SettingsOutput, SettingsRendering>() {
     override fun initialState(props: AppState, snapshot: Snapshot?): AppState {
         return props
     }
@@ -17,6 +19,7 @@ object SettingsWorkflow : StatefulWorkflow<AppState, AppState, Nothing, Settings
             AppAction.Reset -> Unit
             is AppAction.UpdateDrinkSize -> {
                 state = state.copy(drinkAmount = action.drinkSize)
+                setOutput(UpdateState(state))
             }
             is AppAction.UpdateGoal -> {
                 state = state.copy(
@@ -28,6 +31,7 @@ object SettingsWorkflow : StatefulWorkflow<AppState, AppState, Nothing, Settings
                         }
                     }
                 )
+                setOutput(UpdateState(state))
             }
         }
     }

@@ -8,6 +8,7 @@ import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput.SettingsTapped
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput.StreaksTapped
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationWorkflow
+import com.rikin.hydrohomie.features.settings.workflow.domain.SettingsOutput
 import com.rikin.hydrohomie.features.settings.workflow.domain.SettingsWorkflow
 import com.rikin.hydrohomie.features.streak.workflow.domain.StreakWorkflow
 import com.squareup.workflow1.Snapshot
@@ -40,6 +41,17 @@ object AppWorkflow : StatefulWorkflow<Unit, WorkflowState, Nothing, BackStackScr
             SettingsTapped -> {
                 SettingsMachine(state.appState)
             }
+            is HydrationOutput.UpdateState -> {
+                HydrationMachine(output.state)
+            }
+        }
+    }
+
+    private fun onSettingsOutput(output: SettingsOutput) = action {
+        state = when (output) {
+            is SettingsOutput.UpdateState -> {
+                SettingsMachine(output.state)
+            }
         }
     }
 
@@ -68,7 +80,9 @@ object AppWorkflow : StatefulWorkflow<Unit, WorkflowState, Nothing, BackStackScr
                 val settingsScreen = context.renderChild(
                     child = SettingsWorkflow,
                     props = renderState.appState
-                )
+                ) {
+                    onSettingsOutput(it)
+                }
                 backstack.add(
                     BackButtonScreen(settingsScreen) {
                         context.actionSink.send(onBack())
