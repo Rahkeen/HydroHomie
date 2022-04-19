@@ -2,11 +2,12 @@ package com.rikin.hydrohomie.features.hydration.workflow.domain
 
 import com.rikin.hydrohomie.app.mavericks.domain.AppAction
 import com.rikin.hydrohomie.app.mavericks.domain.AppState
+import com.rikin.hydrohomie.app.workflow.domain.AppTransition
 import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow
 import com.squareup.workflow1.action
 
-object HydrationWorkflow: StatefulWorkflow<AppState, AppState, Nothing, HydrationRendering>() {
+object HydrationWorkflow: StatefulWorkflow<AppState, AppState, HydrationOutput, HydrationRendering>() {
   override fun initialState(props: AppState, snapshot: Snapshot?): AppState {
     return props
   }
@@ -42,6 +43,14 @@ object HydrationWorkflow: StatefulWorkflow<AppState, AppState, Nothing, Hydratio
     }
   }
 
+  private fun onTransition(transition: AppTransition) = action {
+    when (transition) {
+      AppTransition.ToStreak -> { setOutput(HydrationOutput.StreaksTapped) }
+      AppTransition.ToSetting -> { }
+      AppTransition.ToHydration -> { }
+    }
+  }
+
   override fun render(
     renderProps: AppState,
     renderState: AppState,
@@ -49,7 +58,8 @@ object HydrationWorkflow: StatefulWorkflow<AppState, AppState, Nothing, Hydratio
   ): HydrationRendering {
     return HydrationRendering(
       state = renderState,
-      actions = { context.actionSink.send(onAction(it)) }
+      actions = { context.actionSink.send(onAction(it)) },
+      transitions = { context.actionSink.send(onTransition(it)) }
     )
   }
 

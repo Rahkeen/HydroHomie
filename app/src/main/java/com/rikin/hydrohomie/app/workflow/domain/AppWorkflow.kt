@@ -1,22 +1,36 @@
 package com.rikin.hydrohomie.app.workflow.domain
 
 import com.rikin.hydrohomie.app.mavericks.domain.AppState
-import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.Hydrating
+import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.HydrationMachine
+import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.SettingsMachine
+import com.rikin.hydrohomie.app.workflow.domain.WorkflowState.StreaksMachine
+import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput
+import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput.StreaksTapped
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationWorkflow
+import com.rikin.hydrohomie.features.streak.workflow.domain.StreakWorkflow
 import com.squareup.workflow1.Snapshot
 import com.squareup.workflow1.StatefulWorkflow
+import com.squareup.workflow1.action
 import com.squareup.workflow1.renderChild
 
 sealed class WorkflowState(val appState: AppState) {
-  class Hydrating(appState: AppState): WorkflowState(appState)
-  class Streaks(appState: AppState): WorkflowState(appState)
-  class Settings(appState: AppState): WorkflowState(appState)
+  class HydrationMachine(appState: AppState): WorkflowState(appState)
+  class StreaksMachine(appState: AppState): WorkflowState(appState)
+  class SettingsMachine(appState: AppState): WorkflowState(appState)
 }
 
 object AppWorkflow: StatefulWorkflow<Unit, WorkflowState, Nothing, Any>() {
 
   override fun initialState(props: Unit, snapshot: Snapshot?): WorkflowState {
-    return Hydrating(appState = AppState())
+    return HydrationMachine(appState = AppState())
+  }
+
+  private fun onHydrationOutput(output: HydrationOutput) = action {
+    when (output) {
+      StreaksTapped -> {
+        state = StreaksMachine(state.appState)
+      }
+    }
   }
 
   override fun render(
@@ -25,10 +39,15 @@ object AppWorkflow: StatefulWorkflow<Unit, WorkflowState, Nothing, Any>() {
     context: RenderContext
   ): Any {
     return when(renderState) {
-      is Hydrating -> {
-        context.renderChild(child = HydrationWorkflow, props = renderState.appState)
+      is HydrationMachine -> {
+        context.renderChild(child = HydrationWorkflow, props = renderState.appState) {
+         onHydrationOutput(it)
+        }
       }
-      else -> {  }
+      is SettingsMachine -> { }
+      is StreaksMachine -> {
+        context.renderChild(child = StreakWorkflow, props = renderState.appState)
+      }
     }
   }
 
