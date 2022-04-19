@@ -48,7 +48,6 @@ object HydrationWorkflow :
       AppTransition.ToSetting -> {
         setOutput(HydrationOutput.SettingsTapped)
       }
-      AppTransition.ToHydration -> {}
     }
   }
 
