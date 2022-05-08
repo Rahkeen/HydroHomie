@@ -30,12 +30,6 @@ val BlueSkiesEnd = Color(0xff2F80ED)
 val PurpleDreamStart = Color(0xFF696EFF)
 val PurpleDreamEnd = Color(0xFFF8ACFF)
 
-val waterGradient = Brush.verticalGradient(
-  colors = listOf(
-    CoolBlue,
-    BlueSkiesEnd
-  )
-)
 
 val imageGradient = Brush.verticalGradient(
   colors = listOf(
@@ -67,6 +61,13 @@ val NeonGradient = Brush.verticalGradient(
   colors = listOf(
     NeonPink,
     NeonDarkerPurple,
+  )
+)
+
+val WaterGradient = Brush.verticalGradient(
+  colors = listOf(
+    CoolBlue,
+    BlueSkiesEnd
   )
 )
 

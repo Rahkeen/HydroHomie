@@ -36,9 +36,11 @@ import com.rikin.hydrohomie.app.common.domain.Weekday
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
+import com.rikin.hydrohomie.design.NeonLightBlue
 import com.rikin.hydrohomie.design.NeonLighterBlue
 import com.rikin.hydrohomie.design.NeonPink
 import com.rikin.hydrohomie.design.SpaceCadet
+import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 
@@ -94,13 +96,6 @@ fun StreaksPreview() {
 @Composable
 fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolean = false) {
 
-  val brushColor = Brush.verticalGradient(
-    colors = listOf(
-      CoolBlue,
-      BlueSkiesEnd
-    )
-  )
-
   val emoji = when {
     hydrationState.drank > 0 -> ""
     else -> "😵"
@@ -143,14 +138,14 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
           .fillMaxWidth()
           .fillMaxHeight(hydrationState.percent.toFloat())
           .background(
-            brush = brushColor,
+            brush = WaterGradient,
             shape = RoundedCornerShape(8.dp)
           )
           .align(Alignment.BottomCenter)
       )
       Text(text = emoji, fontSize = 16.sp)
     }
-    Text(text = dayLetter, style = MaterialTheme.typography.caption, color = NeonLighterBlue)
+    Text(text = dayLetter, style = MaterialTheme.typography.caption, color = NeonPink)
   }
 }
 

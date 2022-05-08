@@ -34,9 +34,16 @@ import com.rikin.hydrohomie.app.common.domain.AppState
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.design.HydroHomieTheme
+import com.rikin.hydrohomie.design.NeonBlue
+import com.rikin.hydrohomie.design.NeonDarkerBlue
+import com.rikin.hydrohomie.design.NeonLightBlue
+import com.rikin.hydrohomie.design.NeonLighterBlue
+import com.rikin.hydrohomie.design.NeonMagenta
+import com.rikin.hydrohomie.design.NeonPink
+import com.rikin.hydrohomie.design.NeonPurple
 import com.rikin.hydrohomie.design.PlayaPurple
-import com.rikin.hydrohomie.design.RadRed
 import com.rikin.hydrohomie.design.Typography
+import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.design.imageGradient
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
@@ -47,7 +54,7 @@ import kotlin.math.roundToInt
 @Composable
 fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
   Column(
-    modifier = Modifier.fillMaxSize(),
+    modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colors.background),
     verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
   ) {
 
@@ -66,6 +73,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       text = "@heyrikin",
       modifier = Modifier.align(Alignment.CenterHorizontally),
       style = MaterialTheme.typography.body1,
+      color = NeonLightBlue
     )
 
     GoalSlider(
@@ -73,6 +81,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       high = 200.0,
       current = state.personalGoal,
       sliderName = "Goal",
+      color = NeonPurple,
       onUpdate = { actions(AppAction.UpdateGoal(goal = round(it))) }
     )
 
@@ -81,7 +90,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       high = 32.0,
       current = state.drinkAmount,
       sliderName = "Drink Size",
-      color = RadRed,
+      color = NeonLightBlue,
       onUpdate = { actions(AppAction.UpdateDrinkSize(drinkSize = round(it))) }
     )
   }
@@ -140,7 +149,8 @@ fun GoalSlider(
     Text(
       modifier = Modifier.padding(start = 8.dp),
       text = sliderName,
-      style = Typography.caption
+      style = Typography.caption,
+      color = NeonPink
     )
     Row(
       modifier = Modifier
@@ -172,7 +182,8 @@ fun GoalSlider(
         modifier = Modifier.weight(1F),
         text = "${current.roundToInt()} oz",
         style = Typography.caption,
-        textAlign = TextAlign.Start
+        textAlign = TextAlign.Start,
+        color = NeonPink
       )
     }
   }

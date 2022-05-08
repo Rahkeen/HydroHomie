@@ -33,11 +33,15 @@ import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
+import com.rikin.hydrohomie.design.NeonBlue
 import com.rikin.hydrohomie.design.NeonLightBlue
 import com.rikin.hydrohomie.design.NeonLighterBlue
+import com.rikin.hydrohomie.design.NeonMagenta
 import com.rikin.hydrohomie.design.NeonPink
+import com.rikin.hydrohomie.design.NeonPurple
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SuperButton
+import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 
 @Composable
@@ -155,12 +159,7 @@ fun WaterContainer(state: HydrationState) {
             topStart = waterCornerRadius,
             topEnd = waterCornerRadius
           ),
-          brush = Brush.verticalGradient(
-            colors = listOf(
-              CoolBlue,
-              BlueSkiesEnd,
-            )
-          )
+          brush = WaterGradient
         )
         .align(Alignment.BottomCenter)
     )
