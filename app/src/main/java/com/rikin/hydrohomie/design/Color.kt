@@ -62,5 +62,13 @@ val NeonBlue = Color(0xFF4361EE)
 val NeonLightBlue = Color(0xFF4895EF)
 val NeonLighterBlue = Color(0xFF4CC9F0)
 
-val SpaceCadet = Color(0xFF3D385C)
+val NeonGradient = Brush.verticalGradient(
+  startY = 1.0f,
+  colors = listOf(
+    NeonPink,
+    NeonDarkerPurple,
+  )
+)
+
+val SpaceCadet = Color(0xFF333972)
 val SpaceCadetDark = Color(0xFF21254A)

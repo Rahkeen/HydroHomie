@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Refresh
@@ -37,9 +36,8 @@ import com.rikin.hydrohomie.design.HydroIconButton
 import com.rikin.hydrohomie.design.NeonLightBlue
 import com.rikin.hydrohomie.design.NeonLighterBlue
 import com.rikin.hydrohomie.design.NeonPink
-import com.rikin.hydrohomie.design.NeonPurple
 import com.rikin.hydrohomie.design.SpaceCadet
-import com.rikin.hydrohomie.design.WispyWhite
+import com.rikin.hydrohomie.design.SuperButton
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 
 @Composable
@@ -112,17 +110,7 @@ fun BoxScope.ActionBar(
       }
     )
 
-    HydroIconButton(
-      backgroundColor = NeonPurple,
-      iconTint = WispyWhite,
-      icon = Icons.Rounded.Add,
-      iconDescription = "Add",
-      action = {
-        actions(
-          AppAction.Drink
-        )
-      }
-    )
+    SuperButton(action = { actions(AppAction.Drink) })
   }
 }
 
