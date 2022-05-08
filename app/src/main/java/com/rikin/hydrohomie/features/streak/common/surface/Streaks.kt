@@ -28,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +36,9 @@ import com.rikin.hydrohomie.app.common.domain.Weekday
 import com.rikin.hydrohomie.design.BlueSkiesEnd
 import com.rikin.hydrohomie.design.CoolBlue
 import com.rikin.hydrohomie.design.HydroHomieTheme
+import com.rikin.hydrohomie.design.NeonLighterBlue
+import com.rikin.hydrohomie.design.NeonPink
+import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 
@@ -45,7 +47,7 @@ val DAYS = listOf("M", "T", "W", "T", "F", "S", "S")
 @Composable
 fun Streaks(state: StreakState) {
   Column(
-    modifier = Modifier.fillMaxSize(),
+    modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colors.background),
     verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
@@ -120,6 +122,7 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
           .size(24.dp)
           .graphicsLayer { translationY = indicatorY.value },
         imageVector = Icons.Rounded.ArrowDropDown,
+        tint = NeonPink,
         contentDescription = ""
       )
     } else {
@@ -130,7 +133,7 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
         .width(30.dp)
         .height(60.dp)
         .background(
-          color = Color.Gray,
+          color = SpaceCadet,
           shape = RoundedCornerShape(8.dp)
         ),
       contentAlignment = Alignment.Center
@@ -147,7 +150,7 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
       )
       Text(text = emoji, fontSize = 16.sp)
     }
-    Text(text = dayLetter, style = MaterialTheme.typography.caption)
+    Text(text = dayLetter, style = MaterialTheme.typography.caption, color = NeonLighterBlue)
   }
 }
 
