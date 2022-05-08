@@ -35,12 +35,10 @@ private val viewEnvironment = ViewEnvironment(mapOf(ViewRegistry to viewRegistry
 @Composable
 fun WorkflowApp() {
   val systemUiController = rememberSystemUiController()
-  val useDarkIcons = MaterialTheme.colors.isLight
 
   SideEffect {
     systemUiController.setSystemBarsColor(
       color = Color.Transparent,
-      darkIcons = useDarkIcons
     )
   }
 

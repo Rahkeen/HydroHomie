@@ -20,12 +20,10 @@ import com.rikin.hydrohomie.features.streak.common.surface.Streaks
 @Composable
 fun MavericksApp() {
   val systemUiController = rememberSystemUiController()
-  val useDarkIcons = MaterialTheme.colors.isLight
 
   SideEffect {
     systemUiController.setSystemBarsColor(
-      color = Color.Transparent,
-      darkIcons = useDarkIcons
+      color = Color.Transparent
     )
   }
 
