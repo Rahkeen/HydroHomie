@@ -53,8 +53,8 @@ fun HydroIconButton(
 fun HydroIconButtonPreview() {
   HydroHomieTheme {
     HydroIconButton(
-      backgroundColor = RadRed,
-      iconTint = Color.White,
+      backgroundColor = NeonPurple,
+      iconTint = NeonPink,
       icon = Icons.Rounded.Add,
       iconDescription = "Add",
       action = {}

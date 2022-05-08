@@ -1,6 +1,5 @@
 package com.rikin.hydrohomie.app.mavericks.suface
 
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue

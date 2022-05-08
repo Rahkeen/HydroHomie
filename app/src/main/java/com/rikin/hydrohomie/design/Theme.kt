@@ -7,8 +7,8 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
-  background = BoldBlack,
-  surface = BlackRussian
+  background = SpaceCadetDark,
+  surface = SpaceCadet
 )
 
 private val LightColorPalette = lightColors(

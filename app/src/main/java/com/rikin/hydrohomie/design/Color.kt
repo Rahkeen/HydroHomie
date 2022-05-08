@@ -50,3 +50,17 @@ val sliderGradient = Brush.horizontalGradient(
     JuicyOrangeEnd,
   )
 )
+
+val NeonPink = Color(0xFFF72585)
+val NeonMagenta = Color(0xFFB5179E)
+val NeonPurple = Color(0xFF7209B7)
+val NeonDarkPurple = Color(0xFF560BAD)
+val NeonDarkerPurple = Color(0xFF480CA8)
+val NeonDarkerBlue = Color(0xFF3A0CA3)
+val NeonDarkBlue = Color(0xFF3F37C9)
+val NeonBlue = Color(0xFF4361EE)
+val NeonLightBlue = Color(0xFF4895EF)
+val NeonLighterBlue = Color(0xFF4CC9F0)
+
+val SpaceCadet = Color(0xFF3D385C)
+val SpaceCadetDark = Color(0xFF21254A)
