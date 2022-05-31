@@ -14,8 +14,8 @@ class MainActivity : ComponentActivity() {
     WindowCompat.setDecorFitsSystemWindows(window, false)
 
     setContent {
-//      MavericksApp()
-      WorkflowApp()
+      MavericksApp()
+//      WorkflowApp()
     }
   }
 }
