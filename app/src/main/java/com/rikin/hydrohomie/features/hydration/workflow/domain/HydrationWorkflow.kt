@@ -12,7 +12,7 @@ import com.squareup.workflow1.action
 object HydrationWorkflow :
   StatefulWorkflow<AppState, HydrationState, HydrationOutput, HydrationRendering>() {
   override fun initialState(props: AppState, snapshot: Snapshot?): HydrationState {
-    return props.currentHydration
+    return props.hydrationState
   }
 
   override fun onPropsChanged(
@@ -20,7 +20,7 @@ object HydrationWorkflow :
     new: AppState,
     state: HydrationState
   ): HydrationState {
-    return new.currentHydration
+    return new.hydrationState
   }
 
   private fun onAction(action: AppAction) = action {

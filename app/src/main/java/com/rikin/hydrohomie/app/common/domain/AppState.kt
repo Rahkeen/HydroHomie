@@ -15,14 +15,14 @@ data class AppState(
     }
   }
 ) : MavericksState {
-  val currentHydration = hydrations[weekday.ordinal]
+  val hydrationState = hydrations[weekday.ordinal]
   val streakState = StreakState(
     currentWeek = hydrations,
     currentDay = weekday
   )
   val settingsState = SettingsState(
     drinkAmount = drinkAmount,
-    personalGoal = currentHydration.goal
+    personalGoal = hydrationState.goal
   )
 }
 

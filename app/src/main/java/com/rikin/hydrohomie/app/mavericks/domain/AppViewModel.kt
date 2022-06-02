@@ -64,9 +64,9 @@ class AppViewModel(
               .updateDrink(
                 day = environment.dates.today,
                 drink = DrinkModel(
-                  count = (state.currentHydration.drank + state.drinkAmount)
-                    .coerceAtMost(state.currentHydration.goal),
-                  goal = state.currentHydration.goal
+                  count = (state.hydrationState.drank + state.drinkAmount)
+                    .coerceAtMost(state.hydrationState.goal),
+                  goal = state.hydrationState.goal
                 )
               )
           }
@@ -76,7 +76,7 @@ class AppViewModel(
             hydrations = List(hydrations.size) { index ->
               if (index == weekday.ordinal) {
                 hydrations[index].copy(
-                  drank = (hydrations[index].drank + drinkAmount).coerceAtMost(currentHydration.goal)
+                  drank = (hydrations[index].drank + drinkAmount).coerceAtMost(hydrationState.goal)
                 )
               } else {
                 hydrations[index]

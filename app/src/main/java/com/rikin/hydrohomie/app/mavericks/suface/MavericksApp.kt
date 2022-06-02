@@ -32,7 +32,7 @@ fun MavericksApp() {
     NavHost(navController = navController, startDestination = "hydration") {
       composable("hydration") {
         val viewModel: AppViewModel = mavericksActivityViewModel()
-        val state by viewModel.collectAsState { it.currentHydration }
+        val state by viewModel.collectAsState { it.hydrationState }
         Hydration(state = state, actions = viewModel::send, navigation = navController::navigate)
       }
 
