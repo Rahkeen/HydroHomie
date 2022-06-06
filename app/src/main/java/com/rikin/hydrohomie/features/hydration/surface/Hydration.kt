@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.features.hydration.common.surface
+package com.rikin.hydrohomie.features.hydration.surface
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDp
@@ -25,24 +25,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.rikin.hydrohomie.app.common.domain.AppAction
-import com.rikin.hydrohomie.design.BlueSkiesEnd
-import com.rikin.hydrohomie.design.CoolBlue
+import com.rikin.hydrohomie.app.domain.AppAction
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
-import com.rikin.hydrohomie.design.NeonBlue
 import com.rikin.hydrohomie.design.NeonLightBlue
 import com.rikin.hydrohomie.design.NeonLighterBlue
-import com.rikin.hydrohomie.design.NeonMagenta
 import com.rikin.hydrohomie.design.NeonPink
-import com.rikin.hydrohomie.design.NeonPurple
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SuperButton
 import com.rikin.hydrohomie.design.WaterGradient
-import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 
 @Composable
 fun Hydration(

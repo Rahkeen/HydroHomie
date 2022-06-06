@@ -1,18 +1,13 @@
 @file:OptIn(WorkflowUiExperimentalApi::class)
 
-package com.rikin.hydrohomie.app.mavericks.domain
+package com.rikin.hydrohomie.app.domain
 
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
-import com.rikin.hydrohomie.app.common.domain.AppAction
-import com.rikin.hydrohomie.app.common.domain.AppEnvironment
-import com.rikin.hydrohomie.app.common.domain.AppState
-import com.rikin.hydrohomie.app.common.domain.HYDRATION_LIMIT
-import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
 import com.rikin.hydrohomie.drinks.DrinkModel
-import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.features.hydration.domain.HydrationState
 import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
 import kotlinx.coroutines.launch
 import logcat.logcat

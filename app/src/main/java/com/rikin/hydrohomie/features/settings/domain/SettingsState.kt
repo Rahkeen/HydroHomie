@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.features.settings.common.domain
+package com.rikin.hydrohomie.features.settings.domain
 
 data class SettingsState(
   val drinkAmount: Double = 8.0,

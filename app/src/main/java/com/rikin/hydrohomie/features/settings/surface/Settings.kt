@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.features.settings.common.surface
+package com.rikin.hydrohomie.features.settings.surface
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -28,25 +28,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.mvrx.compose.collectAsState
-import com.rikin.hydrohomie.app.common.domain.AppAction
-import com.rikin.hydrohomie.app.common.domain.AppEnvironment
-import com.rikin.hydrohomie.app.common.domain.AppState
-import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
+import com.rikin.hydrohomie.app.domain.AppAction
+import com.rikin.hydrohomie.app.domain.AppEnvironment
+import com.rikin.hydrohomie.app.domain.AppState
+import com.rikin.hydrohomie.app.domain.AppViewModel
 import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.design.NeonBlue
-import com.rikin.hydrohomie.design.NeonDarkerBlue
 import com.rikin.hydrohomie.design.NeonLightBlue
-import com.rikin.hydrohomie.design.NeonLighterBlue
-import com.rikin.hydrohomie.design.NeonMagenta
 import com.rikin.hydrohomie.design.NeonPink
 import com.rikin.hydrohomie.design.NeonPurple
 import com.rikin.hydrohomie.design.PlayaPurple
 import com.rikin.hydrohomie.design.Typography
-import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.design.imageGradient
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
-import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
+import com.rikin.hydrohomie.features.settings.domain.SettingsState
 import logcat.logcat
 import kotlin.math.round
 import kotlin.math.roundToInt
@@ -54,7 +49,9 @@ import kotlin.math.roundToInt
 @Composable
 fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
   Column(
-    modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colors.background),
+    modifier = Modifier
+      .fillMaxSize()
+      .background(color = MaterialTheme.colors.background),
     verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
   ) {
 

@@ -5,8 +5,6 @@ import com.airbnb.mvrx.Mavericks
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.rikin.hydrohomie.app.common.domain.AppEnvironment
-import com.rikin.hydrohomie.app.workflow.domain.AppWorkflow
 import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.dates.RealDates
 import com.rikin.hydrohomie.drinks.DrinkRepository
@@ -20,7 +18,6 @@ import java.time.format.DateTimeFormatter
 class HydroHomieApplication : Application() {
 
   lateinit var drinkRepository: DrinkRepository
-  lateinit var appWorkflow: AppWorkflow
   val dates: Dates = RealDates(formatter = DateTimeFormatter.ofPattern(DATE_PATTERN))
 
   override fun onCreate() {
@@ -31,12 +28,6 @@ class HydroHomieApplication : Application() {
     AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
 
     drinkRepository = RealDrinkRepository(Firebase.firestore)
-    appWorkflow = AppWorkflow(
-      environment = AppEnvironment(
-        dates = dates,
-        drinkRepository = drinkRepository
-      ),
-    )
   }
 }
 

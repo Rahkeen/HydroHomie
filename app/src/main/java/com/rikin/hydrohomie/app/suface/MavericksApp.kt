@@ -1,4 +1,4 @@
-package com.rikin.hydrohomie.app.mavericks.suface
+package com.rikin.hydrohomie.app.suface
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -10,11 +10,11 @@ import androidx.navigation.compose.rememberNavController
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksActivityViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
+import com.rikin.hydrohomie.app.domain.AppViewModel
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.features.hydration.common.surface.Hydration
-import com.rikin.hydrohomie.features.settings.common.surface.Settings
-import com.rikin.hydrohomie.features.streak.common.surface.Streaks
+import com.rikin.hydrohomie.features.hydration.surface.Hydration
+import com.rikin.hydrohomie.features.settings.surface.Settings
+import com.rikin.hydrohomie.features.streak.surface.Streaks
 
 @Composable
 fun MavericksApp() {
