@@ -57,20 +57,6 @@ class AppViewModel(
     logcat { action.toString() }
     when (action) {
       is AppAction.Drink -> {
-        withState { state ->
-          viewModelScope.launch {
-            environment
-              .drinkRepository
-              .updateDrink(
-                day = environment.dates.today,
-                drink = DrinkModel(
-                  count = (state.hydrationState.drank + state.drinkAmount)
-                    .coerceAtMost(state.hydrationState.goal),
-                  goal = state.hydrationState.goal
-                )
-              )
-          }
-        }
         setState {
           copy(
             hydrations = List(hydrations.size) { index ->
@@ -83,6 +69,19 @@ class AppViewModel(
               }
             }
           )
+        }
+        withState { state ->
+          viewModelScope.launch {
+            environment
+              .drinkRepository
+              .updateDrink(
+                day = environment.dates.today,
+                drink = DrinkModel(
+                  count = state.hydrationState.drank,
+                  goal = state.hydrationState.goal
+                )
+              )
+          }
         }
       }
       is AppAction.Reset -> {
