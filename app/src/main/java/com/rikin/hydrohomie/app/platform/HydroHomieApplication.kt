@@ -9,12 +9,10 @@ import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.dates.RealDates
 import com.rikin.hydrohomie.drinks.DrinkRepository
 import com.rikin.hydrohomie.drinks.RealDrinkRepository
-import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import java.time.format.DateTimeFormatter
 
-@WorkflowUiExperimentalApi
 class HydroHomieApplication : Application() {
 
   lateinit var drinkRepository: DrinkRepository
