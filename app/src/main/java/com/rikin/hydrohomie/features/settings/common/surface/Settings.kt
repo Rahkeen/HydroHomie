@@ -2,19 +2,16 @@ package com.rikin.hydrohomie.features.settings.common.surface
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
-import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -34,27 +31,23 @@ import com.rikin.hydrohomie.app.common.domain.AppState
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.design.NeonBlue
-import com.rikin.hydrohomie.design.NeonDarkerBlue
 import com.rikin.hydrohomie.design.NeonLightBlue
-import com.rikin.hydrohomie.design.NeonLighterBlue
 import com.rikin.hydrohomie.design.NeonMagenta
-import com.rikin.hydrohomie.design.NeonPink
-import com.rikin.hydrohomie.design.NeonPurple
 import com.rikin.hydrohomie.design.PlayaPurple
 import com.rikin.hydrohomie.design.Typography
 import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.design.imageGradient
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
-import logcat.logcat
 import kotlin.math.round
 import kotlin.math.roundToInt
 
 @Composable
 fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
   Column(
-    modifier = Modifier.fillMaxSize().background(color = MaterialTheme.colors.background),
+    modifier = Modifier
+      .fillMaxSize()
+      .background(color = MaterialTheme.colors.background),
     verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
   ) {
 
@@ -77,11 +70,11 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
     )
 
     GoalSlider(
-      low = 30.0,
+      low = 32.0,
       high = 200.0,
       current = state.personalGoal,
       sliderName = "Goal",
-      color = NeonPurple,
+      color = NeonMagenta,
       onUpdate = { actions(AppAction.UpdateGoal(goal = round(it))) }
     )
 
@@ -132,17 +125,6 @@ fun GoalSlider(
   color: Color = PlayaPurple,
   onUpdate: (Double) -> Unit
 ) {
-  val draggableState = rememberDraggableState { delta ->
-    logcat(tag = "GoalSlider") { "$delta" }
-    val smoothDelta = when {
-      delta > 0 -> 1
-      delta < 0 -> -1
-      else -> 0
-    }
-
-    val update = current + smoothDelta
-    onUpdate(update.coerceIn(low..high))
-  }
   val progress by animateFloatAsState(targetValue = (current / high).toFloat())
 
   Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -150,7 +132,7 @@ fun GoalSlider(
       modifier = Modifier.padding(start = 8.dp),
       text = sliderName,
       style = Typography.caption,
-      color = NeonPink
+      color = WispyWhite
     )
     Row(
       modifier = Modifier
@@ -158,32 +140,21 @@ fun GoalSlider(
       Arrangement.spacedBy(16.dp),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      Box(
-        modifier = Modifier
-          .weight(5F)
-          .height(60.dp),
-      ) {
-        Box(
-          modifier = Modifier
-            .fillMaxHeight()
-            .fillMaxWidth(fraction = progress)
-            .draggable(
-              state = draggableState,
-              orientation = Orientation.Horizontal
-            )
-            .background(
-              color = color,
-              shape = RoundedCornerShape(16.dp)
-            )
-        )
-      }
-
+      SquigglySlider(
+        modifier = Modifier.weight(5F).wrapContentHeight(),
+        value = progress,
+        low = low.toFloat(),
+        high = high.toFloat(),
+        color = color,
+        animateWave = true,
+        onValueChanged = { onUpdate(it.toDouble()) }
+      )
       Text(
         modifier = Modifier.weight(1F),
         text = "${current.roundToInt()} oz",
         style = Typography.caption,
         textAlign = TextAlign.Start,
-        color = NeonPink
+        color = WispyWhite
       )
     }
   }
