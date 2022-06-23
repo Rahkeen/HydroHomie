@@ -15,7 +15,7 @@ import com.rikin.hydrohomie.R
 //  Font(resId = R.font.mukta_bold, weight = FontWeight.Bold)
 //)
 
-private val quicksand = FontFamily(
+val quicksand = FontFamily(
   Font(resId = R.font.quicksand_semibold, weight = FontWeight.SemiBold),
   Font(resId = R.font.quicksand_semibold, weight = FontWeight.Normal)
 )

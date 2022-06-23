@@ -56,6 +56,17 @@ val NeonBlue = Color(0xFF4361EE)
 val NeonLightBlue = Color(0xFF4895EF)
 val NeonLighterBlue = Color(0xFF4CC9F0)
 
+val JuicyOrange1 = Color(0xFFFF7B00)
+val JuicyOrange2 = Color(0xFFFF8800)
+val JuicyOrange3 = Color(0xFFFF9500)
+val JuicyOrange4 = Color(0xFFFFA200)
+val JuicyOrange5 = Color(0xFFFFAA00)
+val JuicyOrange6 = Color(0xFFFFB700)
+val JuicyOrange7 = Color(0xFFFFC300)
+val JuicyOrange8 = Color(0xFFFFD000)
+val JuicyOrange9 = Color(0xFFFFDD00)
+val JuicyOrange10 = Color(0xFFFFEA00)
+
 val NeonGradient = Brush.verticalGradient(
   startY = 1.0f,
   colors = listOf(
