@@ -18,16 +18,15 @@
         <entry key="../../../../../layout/compose-model-1648362205121.xml" value="0.22930743243243243" />
         <entry key="../../../../../layout/compose-model-1648435503168.xml" value="0.23015202702702703" />
         <entry key="../../../../../layout/compose-model-1648436551098.xml" value="0.19578059071729959" />
-        <entry key="app/src/main/java/com/rikin/hydrohomie/features/hydration/common/surface/Hydration.kt" value="0.625" />
+        <entry key="app/src/main/java/com/rikin/hydrohomie/features/hydration/common/surface/Hydration.kt" value="0.335" />
+        <entry key="app/src/main/java/com/rikin/hydrohomie/features/hydration/mavericks/surface/Hydration.kt" value="0.16574074074074074" />
         <entry key="app/src/main/java/com/rikin/hydrohomie/features/hydration/surface/Hydration.kt" value="0.335" />
         <entry key="app/src/main/java/com/rikin/hydrohomie/features/hydration/ui/Hydration.kt" value="0.29907407407407405" />
-        <entry key="app/src/main/java/com/rikin/hydrohomie/features/hydration/workflow/surface/Hydration.kt" value="0.86" />
-        <entry key="app/src/main/java/com/rikin/hydrohomie/features/settings/common/surface/Settings.kt" value="0.2853007397877131" />
-        <entry key="app/src/main/java/com/rikin/hydrohomie/features/settings/common/surface/Sliders.kt" value="0.27037037037037037" />
+        <entry key="app/src/main/java/com/rikin/hydrohomie/features/settings/mavericks/surface/Settings.kt" value="0.16574074074074074" />
         <entry key="app/src/main/java/com/rikin/hydrohomie/features/settings/surface/Settings.kt" value="0.25" />
+        <entry key="app/src/main/java/com/rikin/hydrohomie/features/streak/mavericks/surface/Streak.kt" value="0.2270566727605119" />
         <entry key="app/src/main/java/com/rikin/hydrohomie/features/streak/surface/Streak.kt" value="0.29907407407407405" />
         <entry key="app/src/main/java/com/rikin/hydrohomie/features/streak/ui/Streak.kt" value="0.3435185185185185" />
-        <entry key="app/src/main/java/com/rikin/hydrohomie/features/streak/workflow/surface/Streaks.kt" value="0.86" />
       </map>
     </option>
   </component>

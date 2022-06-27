@@ -1,39 +1,59 @@
 package com.rikin.hydrohomie.features.hydration.common.surface
 
+import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
@@ -50,7 +70,9 @@ import com.rikin.hydrohomie.design.NeonPink
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SuperButton
 import com.rikin.hydrohomie.design.WaterGradient
+import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import kotlin.math.roundToInt
 
 @Composable
 fun Hydration(
@@ -65,7 +87,7 @@ fun Hydration(
   ) {
     WaterContainer(state = state)
     ActionBar(actions = actions, navigation = navigation)
-    IndicatorLine(modifier = Modifier.padding(start = 16.dp))
+    IndicatorLineAlternate(state)
   }
 }
 
@@ -207,7 +229,7 @@ fun IndicatorLine(modifier: Modifier = Modifier) {
     ) {
       val horizontalPadding = 0F
       val verticalPadding = 64.dp.toPx()
-      val lineStrokeWidth = 2.dp.toPx()
+      val lineStrokeWidth = 4.dp.toPx()
       val pathEffect = null
       val colorsList = listOf(
         JuicyOrange1,
@@ -222,21 +244,11 @@ fun IndicatorLine(modifier: Modifier = Modifier) {
         colors = colorsList
       )
 
-      // ruler
-      drawLine(
-        brush = rulerBrush,
-        start = Offset(horizontalPadding, verticalPadding),
-        end = Offset(horizontalPadding, size.height - verticalPadding),
-        strokeWidth = lineStrokeWidth,
-        cap = StrokeCap.Round,
-        pathEffect = pathEffect
-      )
-
       // ruler lines
       drawLine(
         color = colorsList[0],
         start = Offset(horizontalPadding, size.height * 0.125F),
-        end = Offset(horizontalPadding + 15.dp.toPx(), size.height * 0.125F),
+        end = Offset(horizontalPadding + 20.dp.toPx(), size.height * 0.125F),
         strokeWidth = lineStrokeWidth,
         cap = StrokeCap.Round,
         pathEffect = pathEffect
@@ -254,7 +266,7 @@ fun IndicatorLine(modifier: Modifier = Modifier) {
       drawLine(
         color = colorsList[2],
         start = Offset(horizontalPadding, size.height * 0.375F),
-        end = Offset(horizontalPadding + 15.dp.toPx(), size.height * 0.375F),
+        end = Offset(horizontalPadding + 20.dp.toPx(), size.height * 0.375F),
         strokeWidth = lineStrokeWidth,
         cap = StrokeCap.Round,
         pathEffect = pathEffect
@@ -263,7 +275,7 @@ fun IndicatorLine(modifier: Modifier = Modifier) {
       drawLine(
         color = colorsList[3],
         start = Offset(horizontalPadding, size.height * 0.5F),
-        end = Offset(horizontalPadding + 30.dp.toPx(), size.height * 0.5F),
+        end = Offset(horizontalPadding + 40.dp.toPx(), size.height * 0.5F),
         strokeWidth = lineStrokeWidth,
         cap = StrokeCap.Round,
         pathEffect = pathEffect
@@ -272,7 +284,7 @@ fun IndicatorLine(modifier: Modifier = Modifier) {
       drawLine(
         color = colorsList[4],
         start = Offset(horizontalPadding, size.height * 0.625F),
-        end = Offset(horizontalPadding + 15.dp.toPx(), size.height * 0.625F),
+        end = Offset(horizontalPadding + 20.dp.toPx(), size.height * 0.625F),
         strokeWidth = lineStrokeWidth,
         cap = StrokeCap.Round,
         pathEffect = pathEffect
@@ -290,11 +302,115 @@ fun IndicatorLine(modifier: Modifier = Modifier) {
       drawLine(
         color = colorsList[6],
         start = Offset(horizontalPadding, size.height * 0.875F),
-        end = Offset(horizontalPadding + 15.dp.toPx(), size.height * 0.875F),
+        end = Offset(horizontalPadding + 20.dp.toPx(), size.height * 0.875F),
         strokeWidth = lineStrokeWidth,
         cap = StrokeCap.Round,
         pathEffect = pathEffect
       )
     }
   }
+}
+
+@Composable
+fun BoxScope.IndicatorLineAlternate(state: HydrationState) {
+  Column(
+    modifier = Modifier
+      .fillMaxHeight()
+      .wrapContentWidth(),
+    verticalArrangement = Arrangement.SpaceEvenly
+  ) {
+
+    val portion = state.goal / 8
+    for(i in 7 downTo 1) {
+      val amount = portion * i
+      val on = amount <= state.drank
+      val big = i == 4
+      IndicatorTick(on, big, amount.roundToInt())
+    }
+  }
+}
+
+@Preview
+@Composable
+fun IndicatorLineAlternatePreview() {
+  HydroHomieTheme {
+    Box(modifier = Modifier.fillMaxSize()) {
+      IndicatorLineAlternate(state = HydrationState(drank = 32.0))
+    }
+  }
+}
+
+@Composable
+fun IndicatorTick(on: Boolean = false, big: Boolean = false, value: Int = 0) {
+  val width = if (big) 40.dp else 20.dp
+  val transition = updateTransition(targetState = on, label = "IndicatorTick")
+  val shape = RoundedCornerShape(topEndPercent = 50, bottomEndPercent = 50)
+  val lineSize = 2.dp
+
+  val filledWidth by transition.animateDp(
+    transitionSpec = { tween(durationMillis = 500) },
+    label = "IndicatorTickWidth"
+  ) { toggle ->
+    when (toggle) {
+      true -> width
+      false -> 0.dp
+    }
+  }
+
+
+  val textColor by transition.animateColor(
+    transitionSpec = { tween(easing = LinearEasing) },
+    label = "IndicatorTickColor"
+  ) { toggle ->
+    when (toggle) {
+      true -> WispyWhite
+      false -> Color.Gray
+    }
+  }
+
+  Row(
+    modifier = Modifier.wrapContentSize(),
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.spacedBy(8.dp)
+  ) {
+    Box(
+      modifier = Modifier
+        .requiredWidth(width)
+        .wrapContentHeight()
+        .clip(shape)
+    ) {
+
+      Box(
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(lineSize)
+          .background(
+            color = Color.Gray,
+            shape = shape
+          )
+      )
+
+      Box(
+        modifier = Modifier
+          .width(filledWidth)
+          .height(lineSize)
+          .background(
+            color = NeonPink,
+            shape = shape
+          )
+      )
+    }
+
+    Text(text = "$value oz", fontSize = 14.sp, color = textColor)
+  }
+}
+
+@Preview
+@Composable
+fun IndicatorTickPreview() {
+  var toggle by remember { mutableStateOf(false) }
+  Box(modifier = Modifier
+    .wrapContentSize()
+    .clickable { toggle = !toggle })
+  IndicatorTick(on = toggle)
 }
