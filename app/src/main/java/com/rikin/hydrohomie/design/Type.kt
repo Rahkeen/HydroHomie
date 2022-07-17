@@ -40,8 +40,7 @@ val Typography = Typography(
   h4 = TextStyle(
     fontFamily = quicksand,
     fontWeight = FontWeight.Normal,
-    fontSize = 34.sp,
-    letterSpacing = 0.25.sp
+    fontSize = 36.sp
   ),
   caption = TextStyle(
     fontFamily = quicksand,
