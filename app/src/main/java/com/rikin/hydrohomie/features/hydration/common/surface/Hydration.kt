@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.MoreVert
@@ -30,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
+import com.rikin.hydrohomie.design.JuicyOrange1
 import com.rikin.hydrohomie.design.NeonLightBlue
 import com.rikin.hydrohomie.design.NeonLighterBlue
 import com.rikin.hydrohomie.design.NeonPink
@@ -37,6 +40,7 @@ import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SuperButton
 import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import kotlin.math.roundToInt
 
 @Composable
 fun Hydration(
@@ -50,12 +54,13 @@ fun Hydration(
       .background(color = MaterialTheme.colors.background)
   ) {
     WaterContainer(state = state)
-    ActionBar(actions = actions, navigation = navigation)
+    ActionBar(state = state, actions = actions, navigation = navigation)
   }
 }
 
 @Composable
 fun BoxScope.ActionBar(
+  state: HydrationState,
   actions: (AppAction) -> Unit,
   navigation: (String) -> Unit
 ) {
@@ -63,51 +68,70 @@ fun BoxScope.ActionBar(
     modifier = Modifier
       .wrapContentSize()
       .padding(end = 16.dp, bottom = 16.dp)
-      .background(
-        color = SpaceCadet.copy(alpha = 0.5F),
-        shape = RoundedCornerShape(22.dp)
-      )
-      .padding(8.dp)
       .align(Alignment.BottomEnd),
-    verticalArrangement = Arrangement.spacedBy(
-      space = 8.dp,
-      alignment = Alignment.CenterVertically
-    ),
-    horizontalAlignment = Alignment.CenterHorizontally
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.spacedBy(space = 8.dp)
   ) {
-    HydroIconButton(
-      backgroundColor = SpaceCadet,
-      iconTint = NeonLighterBlue,
-      icon = Icons.Rounded.Refresh,
-      iconDescription = "Clear",
-      action = {
-        actions(
-          AppAction.Reset
+    Box(
+      modifier = Modifier
+        .size(78.dp)
+        .background(
+          color = SpaceCadet,
+          shape = RoundedCornerShape(22.dp)
+        ),
+      contentAlignment = Alignment.Center
+    ) {
+      Text(
+        text = "${state.drank.roundToInt()}",
+        style = MaterialTheme.typography.body1,
+        color = JuicyOrange1
+      )
+    }
+    Column(
+      modifier = Modifier
+        .wrapContentSize()
+        .background(
+          color = SpaceCadet.copy(alpha = 0.5F),
+          shape = RoundedCornerShape(22.dp)
         )
-      }
-    )
-
-    HydroIconButton(
-      backgroundColor = SpaceCadet,
-      iconTint = NeonLightBlue,
-      icon = Icons.Rounded.Menu,
-      iconDescription = "Clear",
-      action = {
-        navigation("streaks")
-      }
-    )
-
-    HydroIconButton(
-      backgroundColor = SpaceCadet,
-      iconTint = NeonPink,
-      icon = Icons.Rounded.MoreVert,
-      iconDescription = "Settings",
-      action = {
-        navigation("settings")
-      }
-    )
-
-    SuperButton(action = { actions(AppAction.Drink) })
+        .padding(8.dp),
+      verticalArrangement = Arrangement.spacedBy(
+        space = 8.dp,
+        alignment = Alignment.CenterVertically
+      ),
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      HydroIconButton(
+        backgroundColor = SpaceCadet,
+        iconTint = NeonLighterBlue,
+        icon = Icons.Rounded.Refresh,
+        iconDescription = "Clear",
+        action = {
+          actions(
+            AppAction.Reset
+          )
+        }
+      )
+      HydroIconButton(
+        backgroundColor = SpaceCadet,
+        iconTint = NeonLightBlue,
+        icon = Icons.Rounded.Menu,
+        iconDescription = "Clear",
+        action = {
+          navigation("streaks")
+        }
+      )
+      HydroIconButton(
+        backgroundColor = SpaceCadet,
+        iconTint = NeonPink,
+        icon = Icons.Rounded.MoreVert,
+        iconDescription = "Settings",
+        action = {
+          navigation("settings")
+        }
+      )
+      SuperButton(action = { actions(AppAction.Drink) })
+    }
   }
 }
 
@@ -176,7 +200,11 @@ fun HydrationPreview() {
 fun ActionBarPreview() {
   HydroHomieTheme {
     Box {
-      ActionBar(actions = {}, navigation = {})
+      ActionBar(
+        state = HydrationState(),
+        actions = {},
+        navigation = {}
+      )
     }
   }
 }
