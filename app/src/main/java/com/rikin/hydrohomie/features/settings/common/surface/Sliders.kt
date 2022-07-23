@@ -58,7 +58,7 @@ fun SquigglySlider(
 ) {
 
   val waveHeight by animateFloatAsState(
-    targetValue = if (animateWave) 1 / 16f else 0f,
+    targetValue = if (animateWave) 1 / 8f else 0f,
     animationSpec = tween(500)
   )
 
@@ -87,15 +87,17 @@ fun SquigglySlider(
         width = it.width
       }
       .pointerInput(Unit) {
-        detectDragGestures { change, dragAmount ->
+        detectDragGestures { change, _ ->
 
           val position = (change.position.x) / width // position on a scale from 0 to 1
           val settingsValue = (position * high).coerceIn(low, high)
 
-          logcat { """
+          logcat {
+            """
             Slider: $position
             Settings: $settingsValue
-          """.trimIndent() }
+          """.trimIndent()
+          }
           onValueChanged(settingsValue)
         }
       }
@@ -103,7 +105,6 @@ fun SquigglySlider(
     contentAlignment = Alignment.Center
   ) {
     val path by remember { mutableStateOf(Path()) }
-    val primary = MaterialTheme.colors.primary
     Canvas(
       modifier = Modifier
         .clip(

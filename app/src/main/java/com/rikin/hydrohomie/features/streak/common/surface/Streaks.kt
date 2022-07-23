@@ -11,8 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.common.domain.Weekday
+import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import com.rikin.hydrohomie.features.streak.common.domain.StreakState
@@ -25,13 +25,13 @@ fun Streaks(state: StreakState) {
     modifier = Modifier
       .fillMaxSize()
       .background(color = MaterialTheme.colors.background),
-    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+    verticalArrangement = Arrangement.spacedBy(ElementPadding, Alignment.CenterVertically),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
     Row(
       modifier = Modifier.fillMaxWidth(),
       horizontalArrangement = Arrangement.spacedBy(
-        space = 8.dp,
+        space = ElementPadding,
         alignment = Alignment.CenterHorizontally
       ),
       verticalAlignment = Alignment.CenterVertically

@@ -17,7 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.rikin.hydrohomie.design.ComponentPadding
+import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.PlayaPurple
 import com.rikin.hydrohomie.design.SpaceCadet
@@ -36,9 +37,12 @@ fun GoalSlider(
 ) {
   val progress by animateFloatAsState(targetValue = (current / high).toFloat())
 
-  Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+  Column(
+    modifier = Modifier.padding(ComponentPadding),
+    verticalArrangement = Arrangement.spacedBy(ElementPadding)
+  ) {
     Text(
-      modifier = Modifier.padding(start = 8.dp),
+      modifier = Modifier.padding(start = ElementPadding),
       text = sliderName,
       style = Typography.caption,
       color = WispyWhite
@@ -46,7 +50,7 @@ fun GoalSlider(
     Row(
       modifier = Modifier
         .fillMaxWidth(),
-      Arrangement.spacedBy(16.dp),
+      Arrangement.spacedBy(ComponentPadding),
       verticalAlignment = Alignment.CenterVertically
     ) {
       SquigglySlider(

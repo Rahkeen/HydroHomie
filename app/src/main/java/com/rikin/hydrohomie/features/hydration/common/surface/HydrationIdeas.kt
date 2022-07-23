@@ -39,6 +39,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.JuicyOrange1
 import com.rikin.hydrohomie.design.JuicyOrange2
@@ -205,7 +206,7 @@ fun IndicatorTick(on: Boolean = false, big: Boolean = false, value: Int = 0) {
   Row(
     modifier = Modifier.wrapContentSize(),
     verticalAlignment = Alignment.CenterVertically,
-    horizontalArrangement = Arrangement.spacedBy(8.dp)
+    horizontalArrangement = Arrangement.spacedBy(ElementPadding)
   ) {
     Box(
       modifier = Modifier

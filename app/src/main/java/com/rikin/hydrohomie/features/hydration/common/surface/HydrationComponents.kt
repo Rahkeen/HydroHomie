@@ -30,9 +30,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.common.domain.AppAction
+import com.rikin.hydrohomie.design.ComponentPadding
+import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
 import com.rikin.hydrohomie.design.JuicyOrange1
+import com.rikin.hydrohomie.design.MediumCornerRadius
 import com.rikin.hydrohomie.design.NeonLightBlue
 import com.rikin.hydrohomie.design.NeonLighterBlue
 import com.rikin.hydrohomie.design.NeonPink
@@ -51,17 +54,17 @@ fun BoxScope.ActionBar(
   Column(
     modifier = Modifier
       .wrapContentSize()
-      .padding(end = 16.dp, bottom = 16.dp)
+      .padding(end = ComponentPadding, bottom = ComponentPadding)
       .align(Alignment.BottomEnd),
     horizontalAlignment = Alignment.CenterHorizontally,
-    verticalArrangement = Arrangement.spacedBy(space = 8.dp)
+    verticalArrangement = Arrangement.spacedBy(space = ElementPadding)
   ) {
     Box(
       modifier = Modifier
         .size(78.dp)
         .background(
           color = SpaceCadet,
-          shape = RoundedCornerShape(22.dp)
+          shape = MaterialTheme.shapes.large
         ),
       contentAlignment = Alignment.Center
     ) {
@@ -76,11 +79,11 @@ fun BoxScope.ActionBar(
         .wrapContentSize()
         .background(
           color = SpaceCadet.copy(alpha = 0.5F),
-          shape = RoundedCornerShape(22.dp)
+          shape = MaterialTheme.shapes.large
         )
-        .padding(8.dp),
+        .padding(ElementPadding),
       verticalArrangement = Arrangement.spacedBy(
-        space = 8.dp,
+        space = ElementPadding,
         alignment = Alignment.CenterVertically
       ),
       horizontalAlignment = Alignment.CenterHorizontally
@@ -145,7 +148,7 @@ fun WaterContainer(state: HydrationState) {
       label = "WaterCornerRadius"
     ) { currentState ->
       when {
-        currentState.drank > 0 && currentState.drank < currentState.goal -> 16.dp
+        currentState.drank > 0 && currentState.drank < currentState.goal -> MediumCornerRadius
         else -> 0.dp
       }
     }

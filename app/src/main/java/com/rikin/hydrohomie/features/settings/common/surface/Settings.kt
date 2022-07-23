@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +22,7 @@ import com.rikin.hydrohomie.app.common.domain.AppEnvironment
 import com.rikin.hydrohomie.app.common.domain.AppState
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.dates.FakeDates
+import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.NeonLightBlue
 import com.rikin.hydrohomie.design.NeonMagenta
@@ -37,15 +37,16 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
     modifier = Modifier
       .fillMaxSize()
       .background(color = MaterialTheme.colors.background),
-    verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
+    verticalArrangement = Arrangement.spacedBy(ElementPadding, Alignment.CenterVertically),
   ) {
 
+    // Profile Pic Placeholder
     Box(
       modifier = Modifier
-        .width(100.dp)
-        .height(100.dp)
+        .width(ProfilePicSize)
+        .height(ProfilePicSize)
         .align(Alignment.CenterHorizontally)
-        .background(brush = imageGradient, shape = RoundedCornerShape(16.dp)),
+        .background(brush = imageGradient, shape = MaterialTheme.shapes.medium),
       contentAlignment = Alignment.Center
     ) {
       Text("💩")
@@ -104,3 +105,5 @@ fun FunctionalSettingsPreview() {
     Settings(state = state, actions = viewModel::send)
   }
 }
+
+private val ProfilePicSize = 100.dp

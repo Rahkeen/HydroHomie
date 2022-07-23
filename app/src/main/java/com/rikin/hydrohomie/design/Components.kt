@@ -1,7 +1,6 @@
 package com.rikin.hydrohomie.design
 
 import androidx.compose.animation.animateColor
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
@@ -13,8 +12,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
@@ -26,7 +25,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun HydroIconButton(
@@ -41,15 +39,15 @@ fun HydroIconButton(
       .width(ButtonWidth)
       .height(ButtonHeight)
       .background(
-        shape = RoundedCornerShape(16.dp),
+        shape = MaterialTheme.shapes.medium,
         color = backgroundColor
       )
-      .clip(RoundedCornerShape(16.dp))
+      .clip(MaterialTheme.shapes.medium)
       .clickable { action() },
     contentAlignment = Alignment.Center
   ) {
     Icon(
-      modifier = Modifier.size(20.dp),
+      modifier = Modifier.size(IconSize),
       imageVector = icon,
       contentDescription = iconDescription,
       tint = iconTint
@@ -58,7 +56,7 @@ fun HydroIconButton(
 }
 
 @Composable
-fun SuperButton(action: () -> Unit, ) {
+fun SuperButton(action: () -> Unit) {
   val inifiniteTransition = rememberInfiniteTransition()
   val pinky by inifiniteTransition.animateColor(
     initialValue = NeonPink,
@@ -82,7 +80,7 @@ fun SuperButton(action: () -> Unit, ) {
       .width(ButtonWidth)
       .height(ButtonHeight)
       .background(
-        shape = RoundedCornerShape(16.dp),
+        shape = MaterialTheme.shapes.medium,
         brush = Brush.verticalGradient(
           colors = listOf(
             pinky,
@@ -90,12 +88,12 @@ fun SuperButton(action: () -> Unit, ) {
           )
         )
       )
-      .clip(RoundedCornerShape(16.dp))
+      .clip(MaterialTheme.shapes.medium)
       .clickable { action() },
     contentAlignment = Alignment.Center
   ) {
     Icon(
-      modifier = Modifier.size(20.dp),
+      modifier = Modifier.size(IconSize),
       imageVector = Icons.Rounded.Add,
       contentDescription = "",
       tint = Color.White
@@ -121,9 +119,6 @@ fun HydroIconButtonPreview() {
 @Composable
 fun SuperButtonPreview() {
   HydroHomieTheme {
-    SuperButton({} )
+    SuperButton({})
   }
 }
-
-val ButtonWidth = 60.dp
-val ButtonHeight = 60.dp

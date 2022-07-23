@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -27,8 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.rikin.hydrohomie.design.HydroHomieTheme
+import com.rikin.hydrohomie.design.IconSize
 import com.rikin.hydrohomie.design.NeonPink
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SpaceCadetDark
@@ -56,14 +55,14 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
     if (isToday) {
       Icon(
         modifier = Modifier
-          .size(24.dp)
+          .size(IconSize)
           .graphicsLayer { translationY = indicatorY.value },
         imageVector = Icons.Rounded.ArrowDropDown,
         tint = NeonPink,
         contentDescription = ""
       )
     } else {
-      Spacer(modifier = Modifier.size(24.dp))
+      Spacer(modifier = Modifier.size(IconSize))
     }
     Box(
       modifier = Modifier
@@ -71,7 +70,7 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
         .height(60.dp)
         .background(
           color = SpaceCadet,
-          shape = RoundedCornerShape(8.dp)
+          shape = MaterialTheme.shapes.small
         ),
       contentAlignment = Alignment.Center
     ) {
@@ -81,11 +80,11 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
           .fillMaxHeight(hydrationState.percent.toFloat())
           .background(
             brush = WaterGradient,
-            shape = RoundedCornerShape(8.dp)
+            shape = MaterialTheme.shapes.small
           )
           .align(Alignment.BottomCenter)
       )
-      Text(text = emoji, fontSize = 16.sp)
+      Text(text = emoji, style = MaterialTheme.typography.caption)
     }
     Text(text = dayLetter, style = MaterialTheme.typography.caption, color = NeonPink)
   }
