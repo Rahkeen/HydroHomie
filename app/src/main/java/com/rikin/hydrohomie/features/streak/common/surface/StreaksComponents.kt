@@ -32,6 +32,7 @@ import com.rikin.hydrohomie.design.NeonPink
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SpaceCadetDark
 import com.rikin.hydrohomie.design.WaterGradient
+import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 
 @Composable
@@ -86,7 +87,7 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
       )
       Text(text = emoji, style = MaterialTheme.typography.caption)
     }
-    Text(text = dayLetter, style = MaterialTheme.typography.caption, color = NeonPink)
+    Text(text = dayLetter, style = MaterialTheme.typography.caption, color = WispyWhite)
   }
 }
 

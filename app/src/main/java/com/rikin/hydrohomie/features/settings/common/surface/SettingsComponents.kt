@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.design.PlayaPurple
+import com.rikin.hydrohomie.design.NeonPink
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.Typography
 import com.rikin.hydrohomie.design.WispyWhite
@@ -32,7 +32,7 @@ fun GoalSlider(
   high: Double,
   current: Double,
   sliderName: String,
-  color: Color = PlayaPurple,
+  color: Color = NeonPink,
   onUpdate: (Double) -> Unit
 ) {
   val progress by animateFloatAsState(targetValue = (current / high).toFloat())

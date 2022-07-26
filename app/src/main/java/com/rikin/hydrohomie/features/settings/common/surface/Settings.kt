@@ -26,7 +26,7 @@ import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.NeonLightBlue
 import com.rikin.hydrohomie.design.NeonMagenta
-import com.rikin.hydrohomie.design.imageGradient
+import com.rikin.hydrohomie.design.ImageGradient
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import kotlin.math.round
@@ -46,7 +46,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
         .width(ProfilePicSize)
         .height(ProfilePicSize)
         .align(Alignment.CenterHorizontally)
-        .background(brush = imageGradient, shape = MaterialTheme.shapes.medium),
+        .background(brush = ImageGradient, shape = MaterialTheme.shapes.medium),
       contentAlignment = Alignment.Center
     ) {
       Text("💩")

@@ -34,7 +34,7 @@ import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
-import com.rikin.hydrohomie.design.JuicyOrange1
+import com.rikin.hydrohomie.design.JuicyOrange2
 import com.rikin.hydrohomie.design.MediumCornerRadius
 import com.rikin.hydrohomie.design.NeonLightBlue
 import com.rikin.hydrohomie.design.NeonLighterBlue
@@ -71,7 +71,7 @@ fun BoxScope.ActionBar(
       Text(
         text = "${state.drank.roundToInt()}",
         style = MaterialTheme.typography.body1,
-        color = JuicyOrange1
+        color = JuicyOrange2
       )
     }
     Column(
