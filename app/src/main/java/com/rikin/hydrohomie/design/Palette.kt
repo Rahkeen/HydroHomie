@@ -3,8 +3,8 @@ package com.rikin.hydrohomie.design
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-val SpaceCadet = Color(0xFF333972)
-val SpaceCadetDark = Color(0xFF21254A)
+val SpaceCadet = Color(0xFF353535)
+val SpaceCadetDark = Color(0xFF1F1F1F)
 
 val WispyWhite = Color(0xFFFFFBFE)
 
@@ -13,6 +13,42 @@ val JuicyOrangeEnd = Color(0xffFFC837)
 
 val WaterBlue = Color(0xFF2962ff)
 val OceanBlue = Color(0xff2F80ED)
+
+
+
+
+
+// Palette One
+val PopRed = Color(0xffff595e)
+val PopYellow = Color(0xffffca3a)
+val PopGreen = Color(0xff8ac926)
+val PopBlue = Color(0xff1982c4)
+val PopPurple = Color(0xff6a4c93)
+
+// Palete Two
+val RizzyYellow = Color(0xFFFFBE0B)
+
+val RizzyOrange = Color(0xFFFB5607)
+val RizzyGreen = Color(0xFF09FB56)
+val RizzyDarkPurple = Color(0xFF5609FB)
+
+
+val RizzyPink = Color(0xFFFF006E)
+val RizzyPurple = Color(0xFF8338EC)
+val RizzyBlue = Color(0xFF3A86FF)
+
+// Nordic Palette
+val NordicPurple = Color(0xFF7400b8)
+val NordicLightPurple = Color(0xFF6930c3)
+val NordicBlue = Color(0xFF5e60ce)
+val NordicLightBlue = Color(0xFF5390d9)
+val NordicLighterBlue = Color(0xFF4ea8de)
+
+val ThemeOne = PopRed
+val ThemeTwo = PopYellow
+val ThemeThree = PopGreen
+val ThemeFour = PopBlue
+val ThemeFive = PopPurple
 
 val NeonPink = Color(0xFFF72585)
 val NeonMagenta = Color(0xFFB5179E)

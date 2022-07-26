@@ -59,16 +59,16 @@ fun HydroIconButton(
 fun SuperButton(action: () -> Unit) {
   val inifiniteTransition = rememberInfiniteTransition()
   val pinky by inifiniteTransition.animateColor(
-    initialValue = NeonPink,
-    targetValue = NeonLighterBlue,
+    initialValue = ThemeFour,
+    targetValue = ThemeFive,
     animationSpec = infiniteRepeatable(
       animation = tween(durationMillis = 5000, easing = LinearEasing),
       repeatMode = RepeatMode.Reverse
     )
   )
   val purply by inifiniteTransition.animateColor(
-    initialValue = NeonDarkerPurple,
-    targetValue = NeonDarkBlue,
+    initialValue = ThemeFive,
+    targetValue = ThemeFour,
     animationSpec = infiniteRepeatable(
       animation = tween(durationMillis = 10000, easing = LinearEasing),
       repeatMode = RepeatMode.Reverse

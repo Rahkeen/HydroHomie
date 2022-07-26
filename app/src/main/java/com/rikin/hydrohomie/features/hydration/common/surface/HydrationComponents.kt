@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -34,14 +35,14 @@ import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.HydroIconButton
-import com.rikin.hydrohomie.design.JuicyOrange2
 import com.rikin.hydrohomie.design.MediumCornerRadius
-import com.rikin.hydrohomie.design.NeonLightBlue
-import com.rikin.hydrohomie.design.NeonLighterBlue
-import com.rikin.hydrohomie.design.NeonPink
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SuperButton
+import com.rikin.hydrohomie.design.ThemeOne
+import com.rikin.hydrohomie.design.ThemeThree
+import com.rikin.hydrohomie.design.ThemeTwo
 import com.rikin.hydrohomie.design.WaterGradient
+import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import kotlin.math.roundToInt
 
@@ -61,24 +62,24 @@ fun BoxScope.ActionBar(
   ) {
     Box(
       modifier = Modifier
-        .size(78.dp)
+        .size(68.dp)
         .background(
           color = SpaceCadet,
-          shape = MaterialTheme.shapes.large
+          shape = CircleShape
         ),
       contentAlignment = Alignment.Center
     ) {
       Text(
         text = "${state.drank.roundToInt()}",
-        style = MaterialTheme.typography.body1,
-        color = JuicyOrange2
+        style = MaterialTheme.typography.body2,
+        color = WispyWhite
       )
     }
     Column(
       modifier = Modifier
         .wrapContentSize()
         .background(
-          color = SpaceCadet.copy(alpha = 0.5F),
+          color = SpaceCadet,
           shape = MaterialTheme.shapes.large
         )
         .padding(ElementPadding),
@@ -89,8 +90,8 @@ fun BoxScope.ActionBar(
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
       HydroIconButton(
-        backgroundColor = SpaceCadet,
-        iconTint = NeonLighterBlue,
+        backgroundColor = ThemeOne.copy(alpha = 0.2F),
+        iconTint = ThemeOne,
         icon = Icons.Rounded.Refresh,
         iconDescription = "Clear",
         action = {
@@ -100,8 +101,8 @@ fun BoxScope.ActionBar(
         }
       )
       HydroIconButton(
-        backgroundColor = SpaceCadet,
-        iconTint = NeonLightBlue,
+        backgroundColor = ThemeTwo.copy(alpha = 0.2F),
+        iconTint = ThemeTwo ,
         icon = Icons.Rounded.Menu,
         iconDescription = "Clear",
         action = {
@@ -109,8 +110,8 @@ fun BoxScope.ActionBar(
         }
       )
       HydroIconButton(
-        backgroundColor = SpaceCadet,
-        iconTint = NeonPink,
+        backgroundColor = ThemeThree.copy(0.2F),
+        iconTint = ThemeThree,
         icon = Icons.Rounded.MoreVert,
         iconDescription = "Settings",
         action = {

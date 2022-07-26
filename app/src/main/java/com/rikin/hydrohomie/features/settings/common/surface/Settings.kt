@@ -24,9 +24,14 @@ import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.design.NeonLightBlue
-import com.rikin.hydrohomie.design.NeonMagenta
 import com.rikin.hydrohomie.design.ImageGradient
+import com.rikin.hydrohomie.design.JuicyOrangeEnd
+import com.rikin.hydrohomie.design.JuicyOrangeStart
+import com.rikin.hydrohomie.design.PopBlue
+import com.rikin.hydrohomie.design.PopPurple
+import com.rikin.hydrohomie.design.ThemeOne
+import com.rikin.hydrohomie.design.ThemeThree
+import com.rikin.hydrohomie.design.ThemeTwo
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import kotlin.math.round
@@ -56,7 +61,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       text = "@heyrikin",
       modifier = Modifier.align(Alignment.CenterHorizontally),
       style = MaterialTheme.typography.body1,
-      color = NeonLightBlue
+      color = ThemeOne
     )
 
     GoalSlider(
@@ -64,7 +69,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       high = 200.0,
       current = state.personalGoal,
       sliderName = "Goal",
-      color = NeonMagenta,
+      color = PopPurple,
       onUpdate = { actions(AppAction.UpdateGoal(goal = round(it))) }
     )
 
@@ -73,7 +78,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       high = 32.0,
       current = state.drinkAmount,
       sliderName = "Drink Size",
-      color = NeonLightBlue,
+      color = PopBlue,
       onUpdate = { actions(AppAction.UpdateDrinkSize(drinkSize = round(it))) }
     )
   }
