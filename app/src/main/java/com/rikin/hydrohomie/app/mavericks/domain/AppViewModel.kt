@@ -8,7 +8,6 @@ import com.airbnb.mvrx.ViewModelContext
 import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.app.common.domain.AppEnvironment
 import com.rikin.hydrohomie.app.common.domain.AppState
-import com.rikin.hydrohomie.app.common.domain.HYDRATION_LIMIT
 import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
 import com.rikin.hydrohomie.drinks.DrinkModel
@@ -33,16 +32,21 @@ class AppViewModel(
 
   init {
     viewModelScope.launch {
-      val drink = environment.drinkRepository.getDrink(environment.dates.today)
+      val currentWeek = environment.dates.currentWeek()
+
+      val dateToDrink = environment.drinkRepository.getDrinksForRange(
+        startDate = currentWeek[0],
+        endDate = currentWeek[6]
+      )
+
       setState {
         AppState(
           weekday = environment.dates.dayOfWeek.toWeekday(),
           hydrations = buildList {
-            repeat(HYDRATION_LIMIT) { index ->
-              if (index == environment.dates.dayOfWeek) {
+            currentWeek.forEach { date ->
+              val drink = dateToDrink[date]
+              if (drink != null) {
                 add(HydrationState(drank = drink.count, goal = drink.goal))
-              } else if (index < environment.dates.dayOfWeek) {
-                add(HydrationState(drank = 64.0))
               } else {
                 add(HydrationState())
               }
@@ -78,7 +82,8 @@ class AppViewModel(
                 day = environment.dates.today,
                 drink = DrinkModel(
                   count = state.hydrationState.drank,
-                  goal = state.hydrationState.goal
+                  goal = state.hydrationState.goal,
+                  date = environment.dates.today
                 )
               )
           }

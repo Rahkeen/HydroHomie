@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 
 interface DrinkRepository {
   suspend fun getDrink(day: String): DrinkModel
+  suspend fun getDrinksForRange(startDate: String, endDate: String): Map<String, DrinkModel>
   suspend fun updateDrink(day: String, drink: DrinkModel)
   suspend fun updateCount(day: String, count: Double)
   suspend fun updateGoal(day: String, goal: Double)
@@ -14,7 +15,8 @@ interface DrinkRepository {
 
 data class DrinkModel(
   val count: Double,
-  val goal: Double
+  val goal: Double,
+  val date: String
 )
 
 class RealDrinkRepository(private val store: FirebaseFirestore) : DrinkRepository {
@@ -28,7 +30,32 @@ class RealDrinkRepository(private val store: FirebaseFirestore) : DrinkRepositor
 
       val count = (document.data?.get("count") ?: 0.0) as Double
       val goal = (document.data?.get("goal") ?: 64.0) as Double
-      DrinkModel(count, goal)
+      val date = (document.data?.get("date") ?: "") as String
+      DrinkModel(count, goal, date)
+    }
+  }
+
+  override suspend fun getDrinksForRange(
+    startDate: String,
+    endDate: String
+  ): Map<String, DrinkModel> {
+    return withContext(Dispatchers.IO) {
+      val query = store
+        .collection("drinks")
+        .whereGreaterThanOrEqualTo("date", startDate)
+        .whereLessThanOrEqualTo("date", endDate)
+        .get()
+        .await()
+
+      query
+        .documents
+        .map { document ->
+          val count = (document.data?.get("count") ?: 0.0) as Double
+          val goal = (document.data?.get("goal") ?: 64.0) as Double
+          val date = (document.data?.get("date") ?: "") as String
+          DrinkModel(count, goal, date)
+        }
+        .associateBy { it.date }
     }
   }
 
@@ -71,7 +98,14 @@ class RealDrinkRepository(private val store: FirebaseFirestore) : DrinkRepositor
 
 class FakeDrinkRepository : DrinkRepository {
   override suspend fun getDrink(day: String): DrinkModel {
-    return DrinkModel(0.0, 64.0)
+    return DrinkModel(0.0, 64.0, "2023-01-08")
+  }
+
+  override suspend fun getDrinksForRange(
+    startDate: String,
+    endDate: String
+  ): Map<String, DrinkModel> {
+    return mapOf("2023-01-08" to DrinkModel(0.0, 64.0, "2023-01-08"))
   }
 
   override suspend fun updateDrink(day: String, drink: DrinkModel) {
