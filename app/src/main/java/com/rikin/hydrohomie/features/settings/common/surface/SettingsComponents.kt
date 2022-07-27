@@ -20,8 +20,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.design.NeonPink
 import com.rikin.hydrohomie.design.SpaceCadet
+import com.rikin.hydrohomie.design.ThemeSliderPrimary
 import com.rikin.hydrohomie.design.Typography
 import com.rikin.hydrohomie.design.WispyWhite
 import kotlin.math.roundToInt
@@ -32,7 +32,8 @@ fun GoalSlider(
   high: Double,
   current: Double,
   sliderName: String,
-  color: Color = NeonPink,
+  color: Color = ThemeSliderPrimary,
+  knobColor: Color = ThemeSliderPrimary,
   onUpdate: (Double) -> Unit
 ) {
   val progress by animateFloatAsState(targetValue = (current / high).toFloat())
@@ -69,7 +70,7 @@ fun GoalSlider(
         text = "${current.roundToInt()} oz",
         style = Typography.caption,
         textAlign = TextAlign.Start,
-        color = WispyWhite
+        color = color
       )
     }
   }

@@ -28,11 +28,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.IconSize
-import com.rikin.hydrohomie.design.NeonPink
-import com.rikin.hydrohomie.design.PopRed
-import com.rikin.hydrohomie.design.PopYellow
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SpaceCadetDark
+import com.rikin.hydrohomie.design.ThemeTwo
 import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
@@ -61,7 +59,7 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
           .size(IconSize)
           .graphicsLayer { translationY = indicatorY.value },
         imageVector = Icons.Rounded.ArrowDropDown,
-        tint = PopYellow,
+        tint = ThemeTwo,
         contentDescription = ""
       )
     } else {
