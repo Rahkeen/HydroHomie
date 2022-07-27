@@ -62,7 +62,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
 
     GoalSlider(
       low = 32.0,
-      high = 200.0,
+      high = 128.0,
       current = state.personalGoal,
       sliderName = "Goal",
       color = ThemeSliderPrimary,
@@ -71,7 +71,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
 
     GoalSlider(
       low = 4.0,
-      high = 32.0,
+      high = 64.0,
       current = state.drinkAmount,
       sliderName = "Drink Size",
       color = ThemeSliderSecondary,

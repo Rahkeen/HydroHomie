@@ -30,7 +30,7 @@ import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.IconSize
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SpaceCadetDark
-import com.rikin.hydrohomie.design.ThemeTwo
+import com.rikin.hydrohomie.design.ThemeOne
 import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
@@ -59,7 +59,7 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
           .size(IconSize)
           .graphicsLayer { translationY = indicatorY.value },
         imageVector = Icons.Rounded.ArrowDropDown,
-        tint = ThemeTwo,
+        tint = ThemeOne,
         contentDescription = ""
       )
     } else {

@@ -33,7 +33,6 @@ fun GoalSlider(
   current: Double,
   sliderName: String,
   color: Color = ThemeSliderPrimary,
-  knobColor: Color = ThemeSliderPrimary,
   onUpdate: (Double) -> Unit
 ) {
   val progress by animateFloatAsState(targetValue = (current / high).toFloat())
