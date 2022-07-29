@@ -2,14 +2,28 @@ package com.rikin.hydrohomie.features.streak.common.surface
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowForward
+import androidx.compose.material.icons.rounded.Build
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.List
+import androidx.compose.material.icons.rounded.Notifications
+import androidx.compose.material.icons.rounded.PlayArrow
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,7 +74,16 @@ fun Streaks(state: StreakState) {
       verticalArrangement = Arrangement.spacedBy(ElementPadding)
     ) {
       Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = "Streak", color = WispyWhite, style = MaterialTheme.typography.caption)
+        WithIcon(
+          icon = Icons.Rounded.List,
+          iconTint = ThemeOne
+        ) {
+          Text(
+            text = "Streak",
+            color = WispyWhite,
+            style = MaterialTheme.typography.caption
+          )
+        }
         Text(
           text = "${state.consecutiveDays} d",
           color = ThemeOne,
@@ -68,7 +91,16 @@ fun Streaks(state: StreakState) {
         )
       }
       Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = "Completed", color = WispyWhite, style = MaterialTheme.typography.caption)
+        WithIcon(
+          icon = Icons.Rounded.Done,
+          iconTint = ThemeTwo
+        ) {
+          Text(
+            text = "Completed",
+            color = WispyWhite,
+            style = MaterialTheme.typography.caption
+          )
+        }
         Text(
           text = "${state.completedDays} d",
           color = ThemeTwo,
@@ -76,7 +108,16 @@ fun Streaks(state: StreakState) {
         )
       }
       Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(text = "Total Drank", color = WispyWhite, style = MaterialTheme.typography.caption)
+        WithIcon(
+          icon = Icons.Rounded.Info,
+          iconTint = ThemeThree
+        ) {
+          Text(
+            text = "Total Drank",
+            color = WispyWhite,
+            style = MaterialTheme.typography.caption
+          )
+        }
         Text(
           text = "${state.totalDrank.toInt()} oz",
           color = ThemeThree,

@@ -122,8 +122,8 @@ fun WithIcon(
   content: @Composable () -> Unit
 ) {
   Row(
-    horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
-    verticalAlignment = Alignment.Bottom
+    horizontalArrangement = Arrangement.spacedBy(ElementPadding, Alignment.CenterHorizontally),
+    verticalAlignment = Alignment.CenterVertically,
   ) {
     Icon(
       modifier = Modifier.size(20.dp),
@@ -161,7 +161,7 @@ fun WithIconPreview() {
         Text(
           text = "Delete",
           modifier = Modifier.wrapContentSize(),
-          style = MaterialTheme.typography.caption
+          style = MaterialTheme.typography.body2
         )
       }
     }
