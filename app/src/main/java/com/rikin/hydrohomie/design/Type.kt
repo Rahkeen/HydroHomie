@@ -18,26 +18,31 @@ val Typography = Typography(
   h1 = TextStyle(
     fontFamily = quicksand,
     fontWeight = FontWeight.Normal,
-    fontSize = 48.sp
+    fontSize = 48.sp,
+    color = WispyWhite
   ),
   h2 = TextStyle(
     fontFamily = quicksand,
     fontWeight = FontWeight.Normal,
-    fontSize = 36.sp
+    fontSize = 36.sp,
+    color = WispyWhite
   ),
   body1 = TextStyle(
     fontFamily = quicksand,
     fontWeight = FontWeight.Normal,
-    fontSize = 26.sp
+    fontSize = 26.sp,
+    color = WispyWhite
   ),
   body2 = TextStyle(
     fontFamily = quicksand,
     fontWeight = FontWeight.Normal,
-    fontSize = 18.sp
+    fontSize = 18.sp,
+    color = WispyWhite
   ),
   caption = TextStyle(
     fontFamily = quicksand,
-    fontWeight = FontWeight.SemiBold,
-    fontSize = 16.sp
+    fontWeight = FontWeight.Normal,
+    fontSize = 16.sp,
+    color = WispyWhite
   )
 )

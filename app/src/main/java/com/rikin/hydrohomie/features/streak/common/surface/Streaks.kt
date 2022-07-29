@@ -4,9 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,6 +17,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.rikin.hydrohomie.app.common.domain.Weekday
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
+import com.rikin.hydrohomie.design.ThemeOne
+import com.rikin.hydrohomie.design.ThemeThree
+import com.rikin.hydrohomie.design.ThemeTwo
+import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 
@@ -41,6 +48,39 @@ fun Streaks(state: StreakState) {
           hydrationState = hydrationState,
           dayLetter = DAYS[index],
           isToday = index == state.currentDay.ordinal
+        )
+      }
+    }
+
+    Spacer(modifier = Modifier.height(ElementPadding))
+
+    Column(
+      modifier = Modifier.fillMaxWidth(0.5F),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.spacedBy(ElementPadding)
+    ) {
+      Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(text = "Streak", color = WispyWhite, style = MaterialTheme.typography.caption)
+        Text(
+          text = "${state.consecutiveDays} d",
+          color = ThemeOne,
+          style = MaterialTheme.typography.caption
+        )
+      }
+      Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(text = "Completed", color = WispyWhite, style = MaterialTheme.typography.caption)
+        Text(
+          text = "${state.completedDays} d",
+          color = ThemeTwo,
+          style = MaterialTheme.typography.caption
+        )
+      }
+      Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(text = "Total Drank", color = WispyWhite, style = MaterialTheme.typography.caption)
+        Text(
+          text = "${state.totalDrank.toInt()} oz",
+          color = ThemeThree,
+          style = MaterialTheme.typography.caption
         )
       }
     }

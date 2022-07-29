@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.common.domain.AppAction
+import com.rikin.hydrohomie.design.ButtonWidth
 import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
@@ -62,7 +63,7 @@ fun BoxScope.ActionBar(
   ) {
     Box(
       modifier = Modifier
-        .size(68.dp)
+        .size(ButtonWidth + ElementPadding)
         .background(
           color = SpaceCadet,
           shape = CircleShape
@@ -102,7 +103,7 @@ fun BoxScope.ActionBar(
       )
       HydroIconButton(
         backgroundColor = ThemeTwo.copy(alpha = 0.2F),
-        iconTint = ThemeTwo ,
+        iconTint = ThemeTwo,
         icon = Icons.Rounded.Menu,
         iconDescription = "Clear",
         action = {

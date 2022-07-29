@@ -7,27 +7,37 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.IconSize
+import com.rikin.hydrohomie.design.PopRed
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SpaceCadetDark
 import com.rikin.hydrohomie.design.ThemeOne
@@ -101,6 +111,59 @@ fun StreakCupPreview() {
         dayLetter = "M",
         isToday = true
       )
+    }
+  }
+}
+
+@Composable
+fun WithIcon(
+  icon: ImageVector,
+  iconTint: Color,
+  content: @Composable () -> Unit
+) {
+  Row(
+    horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
+    verticalAlignment = Alignment.Bottom
+  ) {
+    Icon(
+      modifier = Modifier.size(20.dp),
+      imageVector = icon,
+      tint = iconTint,
+      contentDescription = ""
+    )
+    content()
+  }
+}
+
+@Composable
+fun CircleIcon(icon: ImageVector, color: Color) {
+  Icon(
+    modifier = Modifier
+      .size(IconSize)
+      .drawBehind {
+        drawCircle(
+          color = color.copy(alpha = 0.3F),
+          radius = ((IconSize + ElementPadding).toPx()) / 2
+        )
+      },
+    imageVector = icon,
+    tint = color,
+    contentDescription = ""
+  )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WithIconPreview() {
+  HydroHomieTheme {
+    Surface {
+      WithIcon(icon = Icons.Rounded.Delete, iconTint = PopRed) {
+        Text(
+          text = "Delete",
+          modifier = Modifier.wrapContentSize(),
+          style = MaterialTheme.typography.caption
+        )
+      }
     }
   }
 }

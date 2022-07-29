@@ -70,7 +70,7 @@ fun SuperButton(action: () -> Unit) {
     initialValue = ThemeFive,
     targetValue = ThemeFour,
     animationSpec = infiniteRepeatable(
-      animation = tween(durationMillis = 10000, easing = LinearEasing),
+      animation = tween(durationMillis = 7500, easing = LinearEasing),
       repeatMode = RepeatMode.Reverse
     )
   )
