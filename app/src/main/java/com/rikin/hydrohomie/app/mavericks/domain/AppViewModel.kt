@@ -24,8 +24,9 @@ class AppViewModel(
   companion object : MavericksViewModelFactory<AppViewModel, AppState> {
     override fun create(viewModelContext: ViewModelContext, state: AppState): AppViewModel {
       val drinkRepository = viewModelContext.app<HydroHomieApplication>().drinkRepository
+      val settingsRepository = viewModelContext.app<HydroHomieApplication>().settingsRepository
       val dates = viewModelContext.app<HydroHomieApplication>().dates
-      val environment = AppEnvironment(drinkRepository, dates)
+      val environment = AppEnvironment(drinkRepository, settingsRepository, dates)
       return AppViewModel(state, environment)
     }
   }
@@ -39,13 +40,18 @@ class AppViewModel(
         endDate = currentWeek[6]
       )
 
+      val settings = environment.settingsRepository.getSettings()
+
       setState {
         AppState(
+          drinkAmount = settings.drinkSize,
           weekday = environment.dates.dayOfWeek.toWeekday(),
           hydrations = buildList {
-            currentWeek.forEach { date ->
+            currentWeek.forEachIndexed { index, date ->
               val drink = dateToDrink[date]
-              if (drink != null) {
+              if (index == environment.dates.dayOfWeek && drink != null) {
+                add(HydrationState(drank = drink.count, goal = settings.goal))
+              } else if (drink != null) {
                 add(HydrationState(drank = drink.count, goal = drink.goal))
               } else {
                 add(HydrationState())
@@ -114,6 +120,13 @@ class AppViewModel(
         setState {
           copy(drinkAmount = action.drinkSize)
         }
+        withState { state ->
+          viewModelScope.launch {
+            environment
+              .settingsRepository
+              .updateDrinkSize(state.drinkAmount)
+          }
+        }
       }
       is AppAction.UpdateGoal -> {
         setState {
@@ -126,6 +139,13 @@ class AppViewModel(
               }
             }
           )
+        }
+        withState { state ->
+          viewModelScope.launch {
+            environment
+              .settingsRepository
+              .updateGoal(state.hydrationState.goal)
+          }
         }
       }
     }

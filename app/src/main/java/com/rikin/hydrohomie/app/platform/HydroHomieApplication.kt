@@ -11,6 +11,8 @@ import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.dates.RealDates
 import com.rikin.hydrohomie.drinks.DrinkRepository
 import com.rikin.hydrohomie.drinks.RealDrinkRepository
+import com.rikin.hydrohomie.settings.RealSettingsRepository
+import com.rikin.hydrohomie.settings.SettingsRepository
 import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
@@ -20,6 +22,7 @@ import java.time.format.DateTimeFormatter
 class HydroHomieApplication : Application() {
 
   lateinit var drinkRepository: DrinkRepository
+  lateinit var settingsRepository: SettingsRepository
   lateinit var appWorkflow: AppWorkflow
   val dates: Dates = RealDates(formatter = DateTimeFormatter.ofPattern(DATE_PATTERN))
 
@@ -31,10 +34,12 @@ class HydroHomieApplication : Application() {
     AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
 
     drinkRepository = RealDrinkRepository(Firebase.firestore)
+    settingsRepository = RealSettingsRepository(Firebase.firestore)
     appWorkflow = AppWorkflow(
       environment = AppEnvironment(
         dates = dates,
-        drinkRepository = drinkRepository
+        drinkRepository = drinkRepository,
+        settingsRepository = settingsRepository,
       ),
     )
   }

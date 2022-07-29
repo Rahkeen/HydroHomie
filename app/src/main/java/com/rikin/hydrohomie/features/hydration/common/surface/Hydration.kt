@@ -18,6 +18,7 @@ import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.settings.FakeSettingsRepository
 
 @Composable
 fun Hydration(
@@ -56,6 +57,7 @@ fun FunctionalHydrationPreview() {
         initialState = AppState(),
         environment = AppEnvironment(
           drinkRepository = FakeDrinkRepository(),
+          settingsRepository = FakeSettingsRepository(),
           dates = FakeDates(),
         )
       )

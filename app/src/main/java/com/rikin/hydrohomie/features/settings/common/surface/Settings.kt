@@ -30,6 +30,7 @@ import com.rikin.hydrohomie.design.ThemeSliderPrimary
 import com.rikin.hydrohomie.design.ThemeSliderSecondary
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
+import com.rikin.hydrohomie.settings.FakeSettingsRepository
 import kotlin.math.round
 
 @Composable
@@ -97,6 +98,7 @@ fun FunctionalSettingsPreview() {
         initialState = AppState(),
         environment = AppEnvironment(
           drinkRepository = FakeDrinkRepository(),
+          settingsRepository = FakeSettingsRepository(),
           dates = FakeDates(),
         )
       )
