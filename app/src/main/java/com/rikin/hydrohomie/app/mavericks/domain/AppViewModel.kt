@@ -12,6 +12,7 @@ import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
 import com.rikin.hydrohomie.drinks.DrinkModel
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.settings.USER_ID
 import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
 import kotlinx.coroutines.launch
 import logcat.logcat
@@ -89,7 +90,8 @@ class AppViewModel(
                 drink = DrinkModel(
                   count = state.hydrationState.drank,
                   goal = state.hydrationState.goal,
-                  date = environment.dates.today
+                  date = environment.dates.today,
+                  userId = USER_ID
                 )
               )
           }

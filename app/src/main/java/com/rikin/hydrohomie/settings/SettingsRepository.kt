@@ -35,13 +35,13 @@ class RealSettingsRepository(private val store: FirebaseFirestore) : SettingsRep
     return withContext(Dispatchers.IO) {
       val document = store
         .collection("settings")
-        .document("rikin")
+        .document(USER_ID)
         .get()
         .await()
 
       val drinkSize = (document.data?.get("drink_size") ?: 0.0) as Double
       val goal = (document.data?.get("goal") ?: 0.0) as Double
-      val imageUrl = (document.data?.get("user_image_url") ?: 0.0) as String
+      val imageUrl = (document.data?.get("user_image_url") ?: "") as String
       SettingsModel(drinkSize, goal, imageUrl)
     }
   }
@@ -50,7 +50,7 @@ class RealSettingsRepository(private val store: FirebaseFirestore) : SettingsRep
     withContext(Dispatchers.IO) {
       store
         .collection("settings")
-        .document("rikin")
+        .document(USER_ID)
         .update("drink_size", drinkSize)
         .await()
     }
@@ -60,9 +60,11 @@ class RealSettingsRepository(private val store: FirebaseFirestore) : SettingsRep
     withContext(Dispatchers.IO) {
       store
         .collection("settings")
-        .document("rikin")
+        .document(USER_ID)
         .update("goal", goal)
         .await()
     }
   }
 }
+
+const val USER_ID = "rikin"
