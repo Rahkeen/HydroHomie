@@ -1,13 +1,16 @@
 package com.rikin.hydrohomie.app.jobs
 
 import android.app.Notification
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.rikin.hydrohomie.R
 import com.rikin.hydrohomie.app.platform.CHANNEL_ID
+import com.rikin.hydrohomie.app.platform.MainActivity
 import java.time.LocalDateTime
 
 class NotificationWorker(
@@ -26,11 +29,19 @@ class NotificationWorker(
   }
 
   private fun buildNotification(context: Context): Notification {
+    val pendingIntent = PendingIntent.getActivity(
+      context,
+      0,
+      Intent(context, MainActivity::class.java),
+      PendingIntent.FLAG_IMMUTABLE
+    )
     return NotificationCompat.Builder(context, CHANNEL_ID)
       .setSmallIcon(R.drawable.ic_drink_water)
       .setContentTitle("Time to drink")
       .setContentText("Chug chug chug chug")
+      .setAutoCancel(true)
       .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+      .setContentIntent(pendingIntent)
       .build()
   }
 }
