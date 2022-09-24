@@ -59,6 +59,9 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.4.1"
     implementation "androidx.core:core:1.8.0"
 
+    // Google Auth
+    implementation 'com.google.android.gms:play-services-auth:20.3.0'
+
     // WorkManager
     implementation "androidx.work:work-runtime-ktx:2.7.1"
 
