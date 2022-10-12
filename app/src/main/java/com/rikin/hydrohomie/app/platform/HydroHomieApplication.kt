@@ -4,23 +4,29 @@ import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import androidx.work.PeriodicWorkRequest
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.airbnb.mvrx.Mavericks
-import com.google.firebase.FirebaseApp
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.rikin.hydrohomie.app.common.domain.AppEnvironment
+import com.rikin.hydrohomie.app.data.AppDatabase
+import com.rikin.hydrohomie.app.data.DATABASE_NAME
 import com.rikin.hydrohomie.app.jobs.NotificationWorker
 import com.rikin.hydrohomie.app.workflow.domain.AppWorkflow
 import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.dates.RealDates
 import com.rikin.hydrohomie.drinks.DrinkRepository
-import com.rikin.hydrohomie.drinks.RealDrinkRepository
-import com.rikin.hydrohomie.settings.RealSettingsRepository
+import com.rikin.hydrohomie.drinks.LocalDrinkRepository
+import com.rikin.hydrohomie.settings.LocalSettings
+import com.rikin.hydrohomie.settings.LocalSettingsRepository
 import com.rikin.hydrohomie.settings.SettingsRepository
 import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import java.time.format.DateTimeFormatter
@@ -29,6 +35,9 @@ import java.util.concurrent.TimeUnit
 @WorkflowUiExperimentalApi
 class HydroHomieApplication : Application() {
 
+  private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+  private lateinit var appDatabase: AppDatabase
   lateinit var drinkRepository: DrinkRepository
   lateinit var settingsRepository: SettingsRepository
   lateinit var appWorkflow: AppWorkflow
@@ -38,11 +47,22 @@ class HydroHomieApplication : Application() {
     super.onCreate()
 
     Mavericks.initialize(this)
-    FirebaseApp.initializeApp(this)
     AndroidLogcatLogger.installOnDebuggableApp(this, minPriority = LogPriority.VERBOSE)
 
-    drinkRepository = RealDrinkRepository(Firebase.firestore)
-    settingsRepository = RealSettingsRepository(Firebase.firestore)
+    appDatabase = Room.databaseBuilder(
+      applicationContext,
+      AppDatabase::class.java,
+      DATABASE_NAME
+    ).addCallback(
+      object : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+          seedSettingsData()
+        }
+      }
+    ).build()
+
+    drinkRepository = LocalDrinkRepository(appDatabase.localDrinkDao())
+    settingsRepository = LocalSettingsRepository(appDatabase.localSettingsDao())
     appWorkflow = AppWorkflow(
       environment = AppEnvironment(
         dates = dates,
@@ -50,6 +70,7 @@ class HydroHomieApplication : Application() {
         settingsRepository = settingsRepository,
       ),
     )
+
     createNotificationChannel(this)
 
     WorkManager.getInstance(this).enqueue(
@@ -58,6 +79,17 @@ class HydroHomieApplication : Application() {
         TimeUnit.MINUTES
       ).build()
     )
+  }
+
+  private fun seedSettingsData() {
+    applicationScope.launch {
+      appDatabase.localSettingsDao().insertSettings(
+        LocalSettings(
+          drinkSize = 8,
+          goal = 8
+        )
+      )
+    }
   }
 }
 

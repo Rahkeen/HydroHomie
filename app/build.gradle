@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.gms.google-services'
+    id("com.google.devtools.ksp") version "1.7.0-1.0.6"
 }
 
 android {
@@ -80,9 +80,10 @@ dependencies {
     // logcat
     implementation 'com.squareup.logcat:logcat:0.1'
 
-    // Firebase
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.2.1'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1'
+    // Room
+    implementation "androidx.room:room-runtime:2.4.3"
+    implementation "androidx.room:room-ktx:2.4.3"
+    ksp "androidx.room:room-compiler:2.4.3"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

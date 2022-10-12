@@ -6,6 +6,8 @@ import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.drinks.DrinkRepository
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.settings.LocalSettingsRepository
+import com.rikin.hydrohomie.settings.SettingsRepository
 import com.squareup.workflow1.Worker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -23,7 +25,7 @@ class InitialLoadWorker(
           if (index == dates.dayOfWeek) {
             add(HydrationState(drank = drink.count, goal = drink.goal))
           } else if (index < dates.dayOfWeek) {
-            add(HydrationState(drank = 64.0))
+            add(HydrationState(drank = 64))
           } else {
             add(HydrationState())
           }

@@ -8,7 +8,7 @@ import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 
 data class AppState(
   val weekday: Weekday = Monday,
-  val drinkAmount: Double = 8.0,
+  val drinkAmount: Int = 8,
   val hydrations: List<HydrationState> = buildList {
     repeat(HYDRATION_LIMIT) {
       add(HydrationState(drinkAmount = drinkAmount))
@@ -29,8 +29,8 @@ data class AppState(
 sealed class AppAction {
   object Drink : AppAction()
   object Reset : AppAction()
-  data class UpdateGoal(val goal: Double) : AppAction()
-  data class UpdateDrinkSize(val drinkSize: Double) : AppAction()
+  data class UpdateGoal(val goal: Int) : AppAction()
+  data class UpdateDrinkSize(val drinkSize: Int) : AppAction()
 }
 
 enum class Weekday {

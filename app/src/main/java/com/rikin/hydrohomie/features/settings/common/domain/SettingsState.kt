@@ -1,7 +1,7 @@
 package com.rikin.hydrohomie.features.settings.common.domain
 
 data class SettingsState(
-  val drinkAmount: Double = 8.0,
-  val personalGoal: Double = 64.0,
+  val drinkAmount: Int = 8,
+  val personalGoal: Int = 64,
   val userImageUrl: String? = null
 )

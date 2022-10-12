@@ -160,7 +160,7 @@ fun BoxScope.IndicatorLineAlternate(state: HydrationState) {
       val amount = portion * i
       val on = amount <= state.drank
       val big = i == 1
-      IndicatorTick(on, big, amount.roundToInt())
+      IndicatorTick(on, big, amount)
     }
   }
 }
@@ -170,7 +170,7 @@ fun BoxScope.IndicatorLineAlternate(state: HydrationState) {
 fun IndicatorLineAlternatePreview() {
   HydroHomieTheme {
     Box(modifier = Modifier.fillMaxSize()) {
-      IndicatorLineAlternate(state = HydrationState(drank = 32.0))
+      IndicatorLineAlternate(state = HydrationState(drank = 32))
     }
   }
 }

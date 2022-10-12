@@ -136,13 +136,13 @@ fun StreaksPreview() {
       state = StreakState(
         currentDay = Weekday.Sunday,
         currentWeek = listOf(
-          HydrationState(drank = 64.0),
-          HydrationState(drank = 64.0),
-          HydrationState(drank = 64.0),
-          HydrationState(drank = 64.0),
-          HydrationState(drank = 64.0),
-          HydrationState(drank = 64.0),
-          HydrationState(drank = 0.0),
+          HydrationState(drank = 64),
+          HydrationState(drank = 64),
+          HydrationState(drank = 64),
+          HydrationState(drank = 64),
+          HydrationState(drank = 64),
+          HydrationState(drank = 64),
+          HydrationState(drank = 0),
         )
       )
     )

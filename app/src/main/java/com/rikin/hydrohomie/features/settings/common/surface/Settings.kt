@@ -32,6 +32,7 @@ import com.rikin.hydrohomie.drinks.FakeDrinkRepository
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import com.rikin.hydrohomie.settings.FakeSettingsRepository
 import kotlin.math.round
+import kotlin.math.roundToInt
 
 @Composable
 fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
@@ -62,21 +63,21 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
     )
 
     GoalSlider(
-      low = 32.0,
-      high = 128.0,
+      low = 32,
+      high = 128,
       current = state.personalGoal,
       sliderName = "Goal",
       color = ThemeSliderPrimary,
-      onUpdate = { actions(AppAction.UpdateGoal(goal = round(it))) }
+      onUpdate = { actions(AppAction.UpdateGoal(goal = it.roundToInt())) }
     )
 
     GoalSlider(
-      low = 4.0,
-      high = 64.0,
+      low = 4,
+      high = 64,
       current = state.drinkAmount,
       sliderName = "Drink Size",
       color = ThemeSliderSecondary,
-      onUpdate = { actions(AppAction.UpdateDrinkSize(drinkSize = round(it))) }
+      onUpdate = { actions(AppAction.UpdateDrinkSize(drinkSize = it.roundToInt())) }
     )
   }
 }

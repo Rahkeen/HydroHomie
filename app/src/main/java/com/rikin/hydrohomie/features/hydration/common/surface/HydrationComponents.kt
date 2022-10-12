@@ -45,7 +45,6 @@ import com.rikin.hydrohomie.design.ThemeTwo
 import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
-import kotlin.math.roundToInt
 
 @Composable
 fun BoxScope.ActionBar(
@@ -71,7 +70,7 @@ fun BoxScope.ActionBar(
       contentAlignment = Alignment.Center
     ) {
       Text(
-        text = "${state.drank.roundToInt()}",
+        text = "${state.drank}",
         style = MaterialTheme.typography.body2,
         color = WispyWhite
       )
@@ -128,7 +127,7 @@ fun BoxScope.ActionBar(
 fun WaterContainer(state: HydrationState) {
   Box(modifier = Modifier.fillMaxSize()) {
     val fillPercent by animateFloatAsState(
-      targetValue = (state.drank / state.goal).toFloat(),
+      targetValue = (state.drank.toFloat() / state.goal),
       animationSpec = tween(
         durationMillis = 300,
         easing = LinearEasing

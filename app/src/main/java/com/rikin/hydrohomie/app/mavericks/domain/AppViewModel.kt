@@ -12,7 +12,7 @@ import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
 import com.rikin.hydrohomie.drinks.DrinkModel
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
-import com.rikin.hydrohomie.settings.USER_ID
+import com.rikin.hydrohomie.settings.LocalSettings
 import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
 import kotlinx.coroutines.launch
 import logcat.logcat
@@ -88,34 +88,39 @@ class AppViewModel(
               .updateDrink(
                 day = environment.dates.today,
                 drink = DrinkModel(
-                  count = state.hydrationState.drank,
-                  goal = state.hydrationState.goal,
                   date = environment.dates.today,
-                  userId = USER_ID
+                  count = state.hydrationState.drank,
+                  goal = state.hydrationState.goal
                 )
               )
           }
         }
       }
       is AppAction.Reset -> {
-        viewModelScope.launch {
-          environment
-            .drinkRepository
-            .updateCount(
-              day = environment.dates.today,
-              count = 0.0
-            )
-        }
         setState {
           copy(
             hydrations = List(hydrations.size) { index ->
               if (index == weekday.ordinal) {
-                hydrations[index].copy(drank = 0.0)
+                hydrations[index].copy(drank = 0)
               } else {
                 hydrations[index]
               }
             }
           )
+        }
+        withState { state ->
+          viewModelScope.launch {
+            environment
+              .drinkRepository
+              .updateDrink(
+                day = environment.dates.today,
+                drink = DrinkModel(
+                  date = environment.dates.today,
+                  count = state.hydrationState.drank,
+                  goal = state.hydrationState.goal
+                )
+              )
+          }
         }
       }
       is AppAction.UpdateDrinkSize -> {
@@ -126,7 +131,12 @@ class AppViewModel(
           viewModelScope.launch {
             environment
               .settingsRepository
-              .updateDrinkSize(state.drinkAmount)
+              .updateSettings(
+                LocalSettings(
+                  drinkSize = state.settingsState.drinkAmount,
+                  goal = state.settingsState.personalGoal,
+                )
+              )
           }
         }
       }
@@ -146,7 +156,12 @@ class AppViewModel(
           viewModelScope.launch {
             environment
               .settingsRepository
-              .updateGoal(state.hydrationState.goal)
+              .updateSettings(
+                LocalSettings(
+                  drinkSize = state.settingsState.drinkAmount,
+                  goal = state.settingsState.personalGoal,
+                )
+              )
           }
         }
       }

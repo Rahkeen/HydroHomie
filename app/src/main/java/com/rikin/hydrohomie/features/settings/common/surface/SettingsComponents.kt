@@ -28,14 +28,14 @@ import kotlin.math.roundToInt
 
 @Composable
 fun GoalSlider(
-  low: Double,
-  high: Double,
-  current: Double,
+  low: Int,
+  high: Int,
+  current: Int,
   sliderName: String,
   color: Color = ThemeSliderPrimary,
-  onUpdate: (Double) -> Unit
+  onUpdate: (Float) -> Unit
 ) {
-  val progress by animateFloatAsState(targetValue = (current / high).toFloat())
+  val progress by animateFloatAsState(targetValue = (current.toFloat() / high))
 
   Column(
     modifier = Modifier.padding(ComponentPadding),
@@ -62,11 +62,11 @@ fun GoalSlider(
         high = high.toFloat(),
         color = color,
         animateWave = true,
-        onValueChanged = { onUpdate(it.toDouble()) }
+        onValueChanged = { onUpdate(it) }
       )
       Text(
         modifier = Modifier.weight(1F),
-        text = "${current.roundToInt()} oz",
+        text = "$current oz",
         style = Typography.caption,
         textAlign = TextAlign.Start,
         color = color
@@ -81,9 +81,9 @@ fun GoalSliderPreview() {
   HydroHomieTheme {
     Box(modifier = Modifier.background(color = SpaceCadet)) {
       GoalSlider(
-        low = 30.0,
-        high = 200.0,
-        current = 64.0,
+        low = 30,
+        high = 200,
+        current = 64,
         sliderName = "Goal",
         onUpdate = {}
       )

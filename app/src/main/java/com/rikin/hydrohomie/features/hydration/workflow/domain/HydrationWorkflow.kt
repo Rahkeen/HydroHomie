@@ -32,7 +32,7 @@ object HydrationWorkflow :
         setOutput(UpdateState(state))
       }
       AppAction.Reset -> {
-        state = state.copy(drank = 0.0)
+        state = state.copy(drank = 0)
         setOutput(UpdateState(state))
       }
       is AppAction.UpdateDrinkSize -> {}

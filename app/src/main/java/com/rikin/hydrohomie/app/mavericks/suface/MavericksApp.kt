@@ -31,9 +31,6 @@ fun MavericksApp() {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "hydration") {
-      composable("login") {
-        Login()
-      }
       composable("hydration") {
         val viewModel: AppViewModel = mavericksActivityViewModel()
         val state by viewModel.collectAsState { it.hydrationState }
