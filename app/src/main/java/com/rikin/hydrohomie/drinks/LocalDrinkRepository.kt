@@ -9,46 +9,33 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 
 class LocalDrinkRepository(private val localDrinkDao: LocalDrinkDao): DrinkRepository {
-  override suspend fun getDrink(day: String): DrinkModel {
-    return localDrinkDao.getDrink(day).toDrinkModel()
+  override suspend fun getDrink(day: String): LocalDrink {
+    return localDrinkDao.getDrink(day)
   }
 
   override suspend fun getDrinksForRange(
     startDate: String,
     endDate: String
-  ): Map<String, DrinkModel> {
-    return localDrinkDao.getDrinksForRange(startDate, endDate)
-      .map { it.toDrinkModel() }
+  ): Map<String, LocalDrink> {
+    return localDrinkDao
+      .getDrinksForRange(startDate, endDate)
       .associateBy { it.date }
   }
 
-  override suspend fun updateDrink(day: String, drink: DrinkModel) {
-    return localDrinkDao.insertDrink(drink.toDrink())
+  override suspend fun updateDrink(day: String, drink: LocalDrink) {
+    return localDrinkDao.insertDrink(drink)
   }
 }
 
 @Entity
 data class LocalDrink(
-  @PrimaryKey @ColumnInfo(name = "date") val date: String,
-  @ColumnInfo(name = "count") val count: Int,
-  @ColumnInfo(name = "goal") val goal: Int
+  @PrimaryKey @ColumnInfo(name = "date")
+  val date: String,
+  @ColumnInfo(name = "count")
+  val count: Int,
+  @ColumnInfo(name = "goal")
+  val goal: Int
 )
-
-fun LocalDrink.toDrinkModel(): DrinkModel {
-  return DrinkModel(
-    date = this.date,
-    count = this.count,
-    goal = this.goal
-  )
-}
-
-fun DrinkModel.toDrink(): LocalDrink {
-  return LocalDrink(
-    date = this.date,
-    count = this.count,
-    goal = this.goal,
-  )
-}
 
 @Dao
 interface LocalDrinkDao {

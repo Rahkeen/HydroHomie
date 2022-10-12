@@ -10,17 +10,14 @@ import androidx.room.Query
 import androidx.room.Update
 
 class LocalSettingsRepository(private val settingsDao: LocalSettingsDao): SettingsRepository {
-  override suspend fun getSettings(): LocalSettings {
-    return settingsDao.getSettings()
-  }
+  override suspend fun getSettings(): LocalSettings =
+    settingsDao.getSettings()
 
-  override suspend fun insertSettings(localSettings: LocalSettings) {
-    return settingsDao.insertSettings(localSettings)
-  }
+  override suspend fun insertSettings(localSettings: LocalSettings) =
+    settingsDao.insertSettings(localSettings)
 
-  override suspend fun updateSettings(localSettings: LocalSettings) {
-    return settingsDao.updateSettings(localSettings)
-  }
+  override suspend fun updateSettings(localSettings: LocalSettings) =
+    settingsDao.updateSettings(localSettings)
 }
 
 @Entity

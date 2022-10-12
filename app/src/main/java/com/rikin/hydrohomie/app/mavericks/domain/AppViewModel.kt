@@ -10,7 +10,7 @@ import com.rikin.hydrohomie.app.common.domain.AppEnvironment
 import com.rikin.hydrohomie.app.common.domain.AppState
 import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
-import com.rikin.hydrohomie.drinks.DrinkModel
+import com.rikin.hydrohomie.drinks.LocalDrink
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import com.rikin.hydrohomie.settings.LocalSettings
 import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
@@ -87,7 +87,7 @@ class AppViewModel(
               .drinkRepository
               .updateDrink(
                 day = environment.dates.today,
-                drink = DrinkModel(
+                drink = LocalDrink(
                   date = environment.dates.today,
                   count = state.hydrationState.drank,
                   goal = state.hydrationState.goal
@@ -114,7 +114,7 @@ class AppViewModel(
               .drinkRepository
               .updateDrink(
                 day = environment.dates.today,
-                drink = DrinkModel(
+                drink = LocalDrink(
                   date = environment.dates.today,
                   count = state.hydrationState.drank,
                   goal = state.hydrationState.goal
