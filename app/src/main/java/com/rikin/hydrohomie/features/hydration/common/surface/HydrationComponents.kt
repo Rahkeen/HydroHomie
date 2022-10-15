@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.common.domain.AppAction
+import com.rikin.hydrohomie.app.mavericks.suface.NavTarget
 import com.rikin.hydrohomie.design.ButtonWidth
 import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
@@ -50,7 +51,7 @@ import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 fun BoxScope.ActionBar(
   state: HydrationState,
   actions: (AppAction) -> Unit,
-  navigation: (String) -> Unit
+  navigation: (NavTarget) -> Unit
 ) {
   Column(
     modifier = Modifier
@@ -104,9 +105,9 @@ fun BoxScope.ActionBar(
         backgroundColor = ThemeTwo.copy(alpha = 0.2F),
         iconTint = ThemeTwo,
         icon = Icons.Rounded.Menu,
-        iconDescription = "Clear",
+        iconDescription = "Streaks",
         action = {
-          navigation("streaks")
+          navigation(NavTarget.StreaksTarget)
         }
       )
       HydroIconButton(
@@ -115,7 +116,7 @@ fun BoxScope.ActionBar(
         icon = Icons.Rounded.MoreVert,
         iconDescription = "Settings",
         action = {
-          navigation("settings")
+          navigation(NavTarget.SettingsTarget)
         }
       )
       SuperButton(action = { actions(AppAction.Drink) })

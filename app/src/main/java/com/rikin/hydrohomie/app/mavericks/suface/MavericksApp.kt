@@ -1,20 +1,35 @@
 package com.rikin.hydrohomie.app.mavericks.suface
 
+import android.os.Parcelable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.airbnb.mvrx.compose.collectAsState
 import com.airbnb.mvrx.compose.mavericksActivityViewModel
+import com.bumble.appyx.core.composable.Children
+import com.bumble.appyx.core.integration.NodeHost
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.node.ParentNode
+import com.bumble.appyx.core.node.node
+import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackSlider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
+import com.rikin.hydrohomie.app.platform.LocalIntegrationPoint
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.common.surface.Hydration
 import com.rikin.hydrohomie.features.settings.common.surface.Settings
 import com.rikin.hydrohomie.features.streak.common.surface.Streaks
+import kotlinx.parcelize.Parcelize
 
 @Composable
 fun MavericksApp() {
@@ -27,26 +42,81 @@ fun MavericksApp() {
   }
 
   HydroHomieTheme {
-    val navController = rememberNavController()
-
-    NavHost(navController = navController, startDestination = "hydration") {
-      composable("hydration") {
-        val viewModel: AppViewModel = mavericksActivityViewModel()
-        val state by viewModel.collectAsState { it.hydrationState }
-        Hydration(state = state, actions = viewModel::send, navigation = navController::navigate)
-      }
-
-      composable("streaks") {
-        val viewModel: AppViewModel = mavericksActivityViewModel()
-        val state by viewModel.collectAsState { it.streakState }
-        Streaks(state = state)
-      }
-
-      composable("settings") {
-        val viewModel: AppViewModel = mavericksActivityViewModel()
-        val state by viewModel.collectAsState { it.settingsState }
-        Settings(state = state, actions = viewModel::send)
+    Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+      NodeHost(integrationPoint = LocalIntegrationPoint.current) {
+        RootNode(it)
       }
     }
   }
 }
+
+class RootNode(
+  buildContext: BuildContext,
+  private val backStack: BackStack<NavTarget> = BackStack(
+    initialElement = NavTarget.HydrationTarget,
+    savedStateMap = buildContext.savedStateMap,
+  )
+) : ParentNode<NavTarget>(
+  buildContext = buildContext,
+  navModel = backStack
+) {
+
+  @Composable
+  override fun View(modifier: Modifier) {
+    Children(
+      modifier = modifier,
+      navModel = backStack,
+      transitionHandler = rememberBackstackSlider(
+        transitionSpec = {
+          spring(dampingRatio = Spring.DampingRatioLowBouncy, stiffness = Spring.StiffnessLow)
+        }
+      )
+    )
+  }
+
+  override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
+    return when (navTarget) {
+      NavTarget.HydrationTarget -> {
+        node(buildContext) {
+          val viewModel: AppViewModel = mavericksActivityViewModel()
+          val state by viewModel.collectAsState { it.hydrationState }
+          Hydration(
+            state = state,
+            actions = viewModel::send,
+            navigation = backStack::push
+          )
+        }
+      }
+
+      NavTarget.SettingsTarget -> {
+        node(buildContext) {
+          val viewModel: AppViewModel = mavericksActivityViewModel()
+          val state by viewModel.collectAsState { it.streakState }
+          Streaks(state = state)
+        }
+      }
+
+      NavTarget.StreaksTarget -> {
+        node(buildContext) {
+          val viewModel: AppViewModel = mavericksActivityViewModel()
+          val state by viewModel.collectAsState { it.settingsState }
+          Settings(state = state, actions = viewModel::send)
+        }
+      }
+    }
+  }
+}
+
+sealed class NavTarget : Parcelable {
+
+  @Parcelize
+  object HydrationTarget : NavTarget()
+
+  @Parcelize
+  object StreaksTarget : NavTarget()
+
+  @Parcelize
+  object SettingsTarget : NavTarget()
+}
+
+

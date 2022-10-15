@@ -1,5 +1,6 @@
 package com.rikin.hydrohomie.features.hydration.workflow.surface
 
+import com.rikin.hydrohomie.app.mavericks.suface.NavTarget
 import com.rikin.hydrohomie.app.workflow.domain.AppTransition
 import com.rikin.hydrohomie.features.hydration.common.surface.Hydration
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationRendering
@@ -13,11 +14,12 @@ val HydrationBinding = composeViewFactory<HydrationRendering> { rendering, _ ->
     actions = rendering.actions,
     navigation = { location ->
       when (location) {
-        "streaks" -> {
-          rendering.transitions(AppTransition.ToStreaks)
-        }
-        "settings" -> {
+        NavTarget.HydrationTarget -> {}
+        NavTarget.SettingsTarget -> {
           rendering.transitions(AppTransition.ToSettings)
+        }
+        NavTarget.StreaksTarget -> {
+          rendering.transitions(AppTransition.ToStreaks)
         }
       }
     }

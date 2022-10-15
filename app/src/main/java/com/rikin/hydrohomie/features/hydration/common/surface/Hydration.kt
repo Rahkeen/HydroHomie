@@ -14,6 +14,7 @@ import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.app.common.domain.AppEnvironment
 import com.rikin.hydrohomie.app.common.domain.AppState
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
+import com.rikin.hydrohomie.app.mavericks.suface.NavTarget
 import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
@@ -24,7 +25,7 @@ import com.rikin.hydrohomie.settings.FakeSettingsRepository
 fun Hydration(
   state: HydrationState,
   actions: (AppAction) -> Unit,
-  navigation: (String) -> Unit,
+  navigation: (NavTarget) -> Unit,
 ) {
   Box(
     modifier = Modifier

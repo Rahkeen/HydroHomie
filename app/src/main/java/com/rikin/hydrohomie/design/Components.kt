@@ -95,7 +95,7 @@ fun SuperButton(action: () -> Unit) {
     Icon(
       modifier = Modifier.size(IconSize),
       imageVector = Icons.Rounded.Add,
-      contentDescription = "",
+      contentDescription = "Drink",
       tint = Color.White
     )
   }
