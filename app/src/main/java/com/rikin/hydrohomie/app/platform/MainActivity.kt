@@ -22,22 +22,8 @@ class MainActivity : ComponentActivity() {
     WindowCompat.setDecorFitsSystemWindows(window, false)
 
     setContent {
-      CompositionLocalProvider(LocalGoogleClient provides getGoogleLoginAuth()) {
-        MavericksApp()
-      }
+      MavericksApp()
     }
-  }
-
-  private fun getGoogleLoginAuth(): GoogleSignInClient {
-    val gso = GoogleSignInOptions.Builder(DEFAULT_SIGN_IN)
-      .requestEmail()
-      .requestIdToken(OAUTH_ID)
-      .requestId()
-      .requestProfile()
-      .build()
-
-    return GoogleSignIn.getClient(this, gso)
   }
 }
 
-private const val OAUTH_ID = "797341136272-pgccmk1adtm06hi65hnnndi2elj623h0.apps.googleusercontent.com"
