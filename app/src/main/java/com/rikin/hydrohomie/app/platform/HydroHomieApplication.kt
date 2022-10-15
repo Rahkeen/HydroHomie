@@ -7,6 +7,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.airbnb.mvrx.Mavericks
@@ -73,7 +74,9 @@ class HydroHomieApplication : Application() {
 
     createNotificationChannel(this)
 
-    WorkManager.getInstance(this).enqueue(
+    WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+      "Drink Water",
+      ExistingPeriodicWorkPolicy.KEEP,
       PeriodicWorkRequestBuilder<NotificationWorker>(
         15,
         TimeUnit.MINUTES

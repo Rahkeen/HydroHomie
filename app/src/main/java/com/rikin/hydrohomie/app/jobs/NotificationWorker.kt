@@ -23,7 +23,10 @@ class NotificationWorker(
     if (hour in 9..22) {
       NotificationManagerCompat
         .from(applicationContext)
-        .notify(DRINK_NOTIF_ID, buildNotification(applicationContext))
+        .notify(
+          DRINK_NOTIF_ID,
+          buildNotification(applicationContext)
+        )
     }
     return Result.success()
   }
@@ -36,9 +39,9 @@ class NotificationWorker(
       PendingIntent.FLAG_IMMUTABLE
     )
     return NotificationCompat.Builder(context, CHANNEL_ID)
-      .setSmallIcon(R.drawable.ic_drink_water)
-      .setContentTitle("Time to drink")
-      .setContentText("Chug chug chug chug")
+      .setSmallIcon(R.drawable.ic_nalgene)
+      .setContentTitle("💧Drink some water 💧")
+      .setContentText("You looking kinda thirsty.")
       .setAutoCancel(true)
       .setPriority(NotificationCompat.PRIORITY_DEFAULT)
       .setContentIntent(pendingIntent)
