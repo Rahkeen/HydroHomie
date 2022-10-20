@@ -21,9 +21,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Menu
-import androidx.compose.material.icons.rounded.MoreVert
-import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -93,7 +93,7 @@ fun BoxScope.ActionBar(
       HydroIconButton(
         backgroundColor = ThemeOne.copy(alpha = 0.2F),
         iconTint = ThemeOne,
-        icon = Icons.Rounded.Refresh,
+        icon = Icons.Rounded.Delete,
         iconDescription = "Clear",
         action = {
           actions(
@@ -104,7 +104,7 @@ fun BoxScope.ActionBar(
       HydroIconButton(
         backgroundColor = ThemeTwo.copy(alpha = 0.2F),
         iconTint = ThemeTwo,
-        icon = Icons.Rounded.Menu,
+        icon = Icons.Rounded.Star,
         iconDescription = "Streaks",
         action = {
           navigation(NavTarget.StreaksTarget)
@@ -113,7 +113,7 @@ fun BoxScope.ActionBar(
       HydroIconButton(
         backgroundColor = ThemeThree.copy(0.2F),
         iconTint = ThemeThree,
-        icon = Icons.Rounded.MoreVert,
+        icon = Icons.Rounded.Settings,
         iconDescription = "Settings",
         action = {
           navigation(NavTarget.SettingsTarget)

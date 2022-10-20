@@ -56,7 +56,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
     }
 
     Text(
-      text = "@heyrikin",
+      text = "@yourname",
       modifier = Modifier.align(Alignment.CenterHorizontally),
       style = MaterialTheme.typography.body1,
       color = ThemeGamertag

@@ -24,6 +24,9 @@ import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackSlider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
+import com.rikin.hydrohomie.app.mavericks.suface.NavTarget.HydrationTarget
+import com.rikin.hydrohomie.app.mavericks.suface.NavTarget.SettingsTarget
+import com.rikin.hydrohomie.app.mavericks.suface.NavTarget.StreaksTarget
 import com.rikin.hydrohomie.app.platform.LocalIntegrationPoint
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.common.surface.Hydration
@@ -53,7 +56,7 @@ fun MavericksApp() {
 class RootNode(
   buildContext: BuildContext,
   private val backStack: BackStack<NavTarget> = BackStack(
-    initialElement = NavTarget.HydrationTarget,
+    initialElement = HydrationTarget,
     savedStateMap = buildContext.savedStateMap,
   )
 ) : ParentNode<NavTarget>(
@@ -76,7 +79,7 @@ class RootNode(
 
   override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
     return when (navTarget) {
-      NavTarget.HydrationTarget -> {
+      HydrationTarget -> {
         node(buildContext) {
           val viewModel: AppViewModel = mavericksActivityViewModel()
           val state by viewModel.collectAsState { it.hydrationState }
@@ -88,7 +91,7 @@ class RootNode(
         }
       }
 
-      NavTarget.SettingsTarget -> {
+      StreaksTarget -> {
         node(buildContext) {
           val viewModel: AppViewModel = mavericksActivityViewModel()
           val state by viewModel.collectAsState { it.streakState }
@@ -96,7 +99,7 @@ class RootNode(
         }
       }
 
-      NavTarget.StreaksTarget -> {
+      SettingsTarget -> {
         node(buildContext) {
           val viewModel: AppViewModel = mavericksActivityViewModel()
           val state by viewModel.collectAsState { it.settingsState }
