@@ -21,9 +21,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.DateRange
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material.icons.rounded.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,6 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.app.mavericks.suface.NavTarget
+import com.rikin.hydrohomie.design.AnimatedDeleteButton
 import com.rikin.hydrohomie.design.ButtonWidth
 import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
@@ -90,11 +90,10 @@ fun BoxScope.ActionBar(
       ),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
-      HydroIconButton(
-        backgroundColor = ThemeOne.copy(alpha = 0.2F),
+
+      AnimatedDeleteButton(
+        backgroundColor = ThemeOne.copy(alpha = 0.2f),
         iconTint = ThemeOne,
-        icon = Icons.Rounded.Delete,
-        iconDescription = "Clear",
         action = {
           actions(
             AppAction.Reset
@@ -104,7 +103,7 @@ fun BoxScope.ActionBar(
       HydroIconButton(
         backgroundColor = ThemeTwo.copy(alpha = 0.2F),
         iconTint = ThemeTwo,
-        icon = Icons.Rounded.Star,
+        icon = Icons.Rounded.DateRange,
         iconDescription = "Streaks",
         action = {
           navigation(NavTarget.StreaksTarget)
