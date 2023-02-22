@@ -88,12 +88,12 @@ class AppWorkflow(
       is SettingsOutput.UpdateState -> {
         val appState = with(state.appState) {
           copy(
-            drinkAmount = output.state.drinkAmount,
+            drinkAmount = output.state.defaultDrinkSize,
             hydrations = List(hydrations.size) { index ->
               if (index == weekday.ordinal) {
                 hydrations[index].copy(
                   goal = output.state.personalGoal,
-                  drinkAmount = output.state.drinkAmount
+                  drinkAmount = output.state.defaultDrinkSize
                 )
               } else {
                 hydrations[index]

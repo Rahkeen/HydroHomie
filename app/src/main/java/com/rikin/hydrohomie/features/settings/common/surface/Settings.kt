@@ -34,7 +34,6 @@ import com.rikin.hydrohomie.design.ThemeSliderSecondary
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import com.rikin.hydrohomie.settings.FakeSettingsRepository
-import kotlin.math.round
 import kotlin.math.roundToInt
 
 @Composable
@@ -80,7 +79,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
     GoalSlider(
       low = 4,
       high = 64,
-      current = state.drinkAmount,
+      current = state.defaultDrinkSize,
       sliderName = "Drink Size",
       color = ThemeSliderSecondary,
       onUpdate = { actions(AppAction.UpdateDrinkSize(drinkSize = it.roundToInt())) }

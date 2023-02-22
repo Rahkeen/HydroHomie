@@ -133,7 +133,7 @@ class AppViewModel(
               .settingsRepository
               .updateSettings(
                 LocalSettings(
-                  drinkSize = state.settingsState.drinkAmount,
+                  drinkSize = state.settingsState.defaultDrinkSize,
                   goal = state.settingsState.personalGoal,
                 )
               )
@@ -158,7 +158,7 @@ class AppViewModel(
               .settingsRepository
               .updateSettings(
                 LocalSettings(
-                  drinkSize = state.settingsState.drinkAmount,
+                  drinkSize = state.settingsState.defaultDrinkSize,
                   goal = state.settingsState.personalGoal,
                 )
               )

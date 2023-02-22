@@ -3,6 +3,7 @@ package com.rikin.hydrohomie.app.common.domain
 import com.airbnb.mvrx.MavericksState
 import com.rikin.hydrohomie.app.common.domain.Weekday.Monday
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.features.settings.common.domain.DrinkSizes
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 
@@ -13,15 +14,19 @@ data class AppState(
     repeat(HYDRATION_LIMIT) {
       add(HydrationState(drinkAmount = drinkAmount))
     }
-  }
+  },
 ) : MavericksState {
+  private val drinkSizes = DrinkSizes.map { state ->
+    state.copy(selected = state.amount == drinkAmount)
+  }
+
   val hydrationState = hydrations[weekday.ordinal]
   val streakState = StreakState(
     currentWeek = hydrations,
     currentDay = weekday
   )
   val settingsState = SettingsState(
-    drinkAmount = drinkAmount,
+    drinkSizes = drinkSizes,
     personalGoal = hydrationState.goal
   )
 }
