@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
@@ -109,6 +110,22 @@ fun GoalSliderPreview() {
         current = 64,
         sliderName = "Goal",
         onUpdate = {}
+      )
+    }
+  }
+}
+
+@Composable
+fun DrinkSizeSelectionGroup(drinks: List<DrinkSizeState>, action: (DrinkSizeState) -> Unit) {
+  Row(
+    modifier = Modifier.fillMaxWidth(),
+    horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    drinks.forEach { state ->
+      DrinkSizeSelection(
+        state = state,
+        select = action
       )
     }
   }
@@ -193,18 +210,7 @@ fun DrinkSizeSelectionPlayground() {
         .background(color = SpaceCadetDark),
       contentAlignment = Alignment.Center
     ) {
-      Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
-        verticalAlignment = Alignment.CenterVertically
-      ) {
-        drinks.forEach { state ->
-          DrinkSizeSelection(
-            state = state,
-            select = ::selectDrinkSize
-          )
-        }
-      }
+      DrinkSizeSelectionGroup(drinks = drinks, action = ::selectDrinkSize)
     }
   }
 }

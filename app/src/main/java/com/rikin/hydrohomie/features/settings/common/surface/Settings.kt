@@ -76,16 +76,12 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       onUpdate = { actions(AppAction.UpdateGoal(goal = it.roundToInt())) }
     )
 
-    GoalSlider(
-      low = 4,
-      high = 64,
-      current = state.defaultDrinkSize,
-      sliderName = "Drink Size",
-      color = ThemeSliderSecondary,
-      onUpdate = { actions(AppAction.UpdateDrinkSize(drinkSize = it.roundToInt())) }
-    )
+    DrinkSizeSelectionGroup(
+      drinks = state.drinkSizes,
+      action = { actions(AppAction.UpdateDrinkSize(it.amount)) })
   }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun SettingsPreview() {
