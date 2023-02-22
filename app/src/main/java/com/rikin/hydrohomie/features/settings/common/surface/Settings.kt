@@ -1,5 +1,6 @@
 package com.rikin.hydrohomie.features.settings.common.surface
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,9 +15,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.mvrx.compose.collectAsState
+import com.rikin.hydrohomie.R
 import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.app.common.domain.AppEnvironment
 import com.rikin.hydrohomie.app.common.domain.AppState
@@ -52,11 +55,14 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
         .background(brush = ImageGradient, shape = MaterialTheme.shapes.medium),
       contentAlignment = Alignment.Center
     ) {
-      Text("💩")
+      Image(
+        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+        contentDescription = "main icon"
+      )
     }
 
     Text(
-      text = "@yourname",
+      text = "@hydrohomie",
       modifier = Modifier.align(Alignment.CenterHorizontally),
       style = MaterialTheme.typography.body1,
       color = ThemeGamertag
@@ -81,7 +87,6 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
     )
   }
 }
-
 @Preview(showBackground = true)
 @Composable
 fun SettingsPreview() {

@@ -20,18 +20,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.DateRange
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rikin.hydrohomie.R
 import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.app.mavericks.suface.NavTarget
-import com.rikin.hydrohomie.design.AnimatedDeleteButton
 import com.rikin.hydrohomie.design.ButtonWidth
 import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
@@ -91,19 +89,19 @@ fun BoxScope.ActionBar(
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-      AnimatedDeleteButton(
+      HydroIconButton(
         backgroundColor = ThemeOne.copy(alpha = 0.2f),
         iconTint = ThemeOne,
+        painter = painterResource(id = R.drawable.ic_arrow_uturn_down),
+        iconDescription = "Undo",
         action = {
-          actions(
-            AppAction.Reset
-          )
+          actions(AppAction.Reset)
         }
       )
       HydroIconButton(
         backgroundColor = ThemeTwo.copy(alpha = 0.2F),
         iconTint = ThemeTwo,
-        icon = Icons.Rounded.DateRange,
+        painter = painterResource(id = R.drawable.ic_fire),
         iconDescription = "Streaks",
         action = {
           navigation(NavTarget.StreaksTarget)
@@ -112,7 +110,7 @@ fun BoxScope.ActionBar(
       HydroIconButton(
         backgroundColor = ThemeThree.copy(0.2F),
         iconTint = ThemeThree,
-        icon = Icons.Rounded.Settings,
+        painter = painterResource(id = R.drawable.ic_adjustments_horizontal),
         iconDescription = "Settings",
         action = {
           navigation(NavTarget.SettingsTarget)

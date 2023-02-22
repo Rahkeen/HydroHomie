@@ -2,6 +2,8 @@ package com.rikin.hydrohomie.design
 
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
@@ -10,6 +12,7 @@ import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -29,17 +32,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.DefaultFillType
 import androidx.compose.ui.graphics.vector.Group
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.Path
 import androidx.compose.ui.graphics.vector.PathData
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.rikin.hydrohomie.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -68,6 +75,35 @@ fun HydroIconButton(
       imageVector = icon,
       contentDescription = iconDescription,
       tint = iconTint
+    )
+  }
+}
+
+@Composable
+fun HydroIconButton(
+  backgroundColor: Color,
+  iconTint: Color,
+  painter: Painter,
+  iconDescription: String,
+  action: () -> Unit,
+) {
+  Box(
+    modifier = Modifier
+      .width(ButtonWidth)
+      .height(ButtonHeight)
+      .background(
+        shape = MaterialTheme.shapes.medium,
+        color = backgroundColor
+      )
+      .clip(MaterialTheme.shapes.medium)
+      .clickable { action() },
+    contentAlignment = Alignment.Center
+  ) {
+    Image(
+      modifier = Modifier.size(IconSize),
+      painter = painter,
+      contentDescription = iconDescription,
+      colorFilter = ColorFilter.tint(color = iconTint)
     )
   }
 }
@@ -243,7 +279,7 @@ fun SuperButton(action: () -> Unit) {
     initialValue = ThemeFour,
     targetValue = ThemeFive,
     animationSpec = infiniteRepeatable(
-      animation = tween(durationMillis = 5000, easing = LinearEasing),
+      animation = tween(durationMillis = 5000, easing = EaseInOut),
       repeatMode = RepeatMode.Reverse
     )
   )
@@ -251,7 +287,7 @@ fun SuperButton(action: () -> Unit) {
     initialValue = ThemeFive,
     targetValue = ThemeFour,
     animationSpec = infiniteRepeatable(
-      animation = tween(durationMillis = 7500, easing = LinearEasing),
+      animation = tween(durationMillis = 7500, easing = EaseInOut),
       repeatMode = RepeatMode.Reverse
     )
   )
@@ -273,11 +309,11 @@ fun SuperButton(action: () -> Unit) {
       .clickable { action() },
     contentAlignment = Alignment.Center
   ) {
-    Icon(
+    Image(
       modifier = Modifier.size(IconSize),
-      imageVector = Icons.Rounded.Add,
+      painter = painterResource(id = R.drawable.ic_plus_small),
       contentDescription = "Drink",
-      tint = Color.White
+      colorFilter = ColorFilter.tint(Color.White)
     )
   }
 }
