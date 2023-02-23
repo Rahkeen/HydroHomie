@@ -17,5 +17,5 @@ data class DrinkSizeState(
   val amount: Int,
   val selected: Boolean
 ) {
-  val label = "${amount}oz"
+  val label = "$amount oz"
 }

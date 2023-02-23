@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.airbnb.mvrx.compose.collectAsState
 import com.rikin.hydrohomie.R
 import com.rikin.hydrohomie.app.common.domain.AppAction
@@ -28,9 +27,9 @@ import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.ImageGradient
+import com.rikin.hydrohomie.design.ProfilePicSize
 import com.rikin.hydrohomie.design.ThemeGamertag
 import com.rikin.hydrohomie.design.ThemeSliderPrimary
-import com.rikin.hydrohomie.design.ThemeSliderSecondary
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import com.rikin.hydrohomie.settings.FakeSettingsRepository
@@ -109,5 +108,3 @@ fun FunctionalSettingsPreview() {
     Settings(state = state, actions = viewModel::send)
   }
 }
-
-private val ProfilePicSize = 100.dp

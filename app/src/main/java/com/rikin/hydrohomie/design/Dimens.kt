@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.dp
 val ButtonWidth = 60.dp
 val ButtonHeight = 60.dp
 val IconSize = 24.dp
+val ProfilePicSize = 100.dp
 
 val MediumCornerRadius = 16.dp
 
