@@ -10,25 +10,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowForward
-import androidx.compose.material.icons.rounded.Build
-import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.Done
-import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.List
-import androidx.compose.material.icons.rounded.Notifications
-import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.rikin.hydrohomie.R
 import com.rikin.hydrohomie.app.common.domain.Weekday
+import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.ThemeOne
@@ -42,87 +35,105 @@ val DAYS = listOf("M", "T", "W", "T", "F", "S", "S")
 
 @Composable
 fun Streaks(state: StreakState) {
-  Column(
+  Box(
     modifier = Modifier
       .fillMaxSize()
       .background(color = MaterialTheme.colors.background),
-    verticalArrangement = Arrangement.spacedBy(ElementPadding, Alignment.CenterVertically),
-    horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Row(
-      modifier = Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.spacedBy(
-        space = ElementPadding,
-        alignment = Alignment.CenterHorizontally
-      ),
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      state.currentWeek.forEachIndexed { index, hydrationState ->
-        StreakCup(
-          hydrationState = hydrationState,
-          dayLetter = DAYS[index],
-          isToday = index == state.currentDay.ordinal
-        )
-      }
-    }
-
-    Spacer(modifier = Modifier.height(ElementPadding))
-
     Column(
-      modifier = Modifier.fillMaxWidth(0.5F),
-      horizontalAlignment = Alignment.CenterHorizontally,
-      verticalArrangement = Arrangement.spacedBy(ElementPadding)
+      modifier = Modifier
+        .fillMaxSize()
+        .background(color = MaterialTheme.colors.background),
+      verticalArrangement = Arrangement.spacedBy(ElementPadding, Alignment.CenterVertically),
+      horizontalAlignment = Alignment.CenterHorizontally
     ) {
-      Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        WithIcon(
-          icon = Icons.Rounded.List,
-          iconTint = ThemeOne
-        ) {
-          Text(
-            text = "Streak",
-            color = WispyWhite,
-            style = MaterialTheme.typography.caption
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(
+          space = ElementPadding,
+          alignment = Alignment.CenterHorizontally
+        ),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        state.currentWeek.forEachIndexed { index, hydrationState ->
+          StreakCup(
+            hydrationState = hydrationState,
+            dayLetter = DAYS[index],
+            isToday = index == state.currentDay.ordinal
           )
         }
-        Text(
-          text = "${state.consecutiveDays} d",
-          color = ThemeOne,
-          style = MaterialTheme.typography.caption
-        )
       }
-      Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        WithIcon(
-          icon = Icons.Rounded.Done,
-          iconTint = ThemeTwo
+
+      Spacer(modifier = Modifier.height(ComponentPadding))
+
+      Column(
+        modifier = Modifier.fillMaxWidth(0.6F),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(ElementPadding)
+      ) {
+        Row(
+          modifier = Modifier.fillMaxWidth(),
+          horizontalArrangement = Arrangement.SpaceBetween,
+          verticalAlignment = Alignment.CenterVertically
         ) {
+          WithIcon(
+            painter = painterResource(id = R.drawable.ic_bolt),
+            iconTint = ThemeTwo
+          ) {
+            Text(
+              text = "Streak",
+              color = WispyWhite,
+              style = MaterialTheme.typography.caption
+            )
+          }
           Text(
-            text = "Completed",
-            color = WispyWhite,
+            text = "${state.consecutiveDays} d",
+            color = ThemeTwo,
             style = MaterialTheme.typography.caption
           )
         }
-        Text(
-          text = "${state.completedDays} d",
-          color = ThemeTwo,
-          style = MaterialTheme.typography.caption
-        )
-      }
-      Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        WithIcon(
-          icon = Icons.Rounded.Info,
-          iconTint = ThemeThree
+        Row(
+          modifier = Modifier.fillMaxWidth(),
+          horizontalArrangement = Arrangement.SpaceBetween,
+          verticalAlignment = Alignment.CenterVertically,
         ) {
+          WithIcon(
+            painter = painterResource(id = R.drawable.ic_clipboard),
+            iconTint = ThemeOne
+          ) {
+            Text(
+              text = "Completed",
+              color = WispyWhite,
+              style = MaterialTheme.typography.caption
+            )
+          }
           Text(
-            text = "Total Drank",
-            color = WispyWhite,
+            text = "${state.completedDays} d",
+            color = ThemeOne,
             style = MaterialTheme.typography.caption
           )
         }
-        Text(
-          text = "${state.totalDrank.toInt()} oz",
-          color = ThemeThree,
-          style = MaterialTheme.typography.caption
-        )
+        Row(
+          modifier = Modifier.fillMaxWidth(),
+          horizontalArrangement = Arrangement.SpaceBetween,
+          verticalAlignment = Alignment.CenterVertically,
+        ) {
+          WithIcon(
+            painter = painterResource(id = R.drawable.ic_arrow_trending_up),
+            iconTint = ThemeThree
+          ) {
+            Text(
+              text = "Total Drank",
+              color = WispyWhite,
+              style = MaterialTheme.typography.caption
+            )
+          }
+          Text(
+            text = "${state.totalDrank} oz",
+            color = ThemeThree,
+            style = MaterialTheme.typography.caption
+          )
+        }
       }
     }
   }
@@ -136,9 +147,9 @@ fun StreaksPreview() {
       state = StreakState(
         currentDay = Weekday.Sunday,
         currentWeek = listOf(
-          HydrationState(drank = 64),
-          HydrationState(drank = 64),
-          HydrationState(drank = 64),
+          HydrationState(drank = 32),
+          HydrationState(drank = 48),
+          HydrationState(drank = 36),
           HydrationState(drank = 64),
           HydrationState(drank = 64),
           HydrationState(drank = 64),

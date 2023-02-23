@@ -137,7 +137,7 @@ fun SquigglySlider(
           stepper += (inc * 4)
         }
 
-        drawPath(path = path, color = color, style = Stroke(12f))
+        drawPath(path = path, color = color, style = Stroke(10f))
       }
     )
 

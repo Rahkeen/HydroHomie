@@ -101,7 +101,7 @@ fun BoxScope.ActionBar(
       HydroIconButton(
         backgroundColor = ThemeTwo.copy(alpha = 0.2F),
         iconTint = ThemeTwo,
-        painter = painterResource(id = R.drawable.ic_fire),
+        painter = painterResource(id = R.drawable.ic_calendar_days),
         iconDescription = "Streaks",
         action = {
           navigation(NavTarget.StreaksTarget)
