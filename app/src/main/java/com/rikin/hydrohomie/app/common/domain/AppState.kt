@@ -16,8 +16,18 @@ data class AppState(
     }
   },
 ) : MavericksState {
-  private val drinkSizes = DrinkSizes.map { state ->
-    state.copy(selected = state.amount == drinkAmount)
+  private val drinkSizes = if (drinkAmount in STANDARD_SIZES) {
+    DrinkSizes.map { state ->
+      state.copy(selected = state.amount == drinkAmount)
+    }
+  } else {
+    DrinkSizes.map { state ->
+     if (state.custom) {
+       state.copy(selected = true, amount = drinkAmount)
+     } else {
+       state.copy(selected = false)
+     }
+    }
   }
 
   val hydrationState = hydrations[weekday.ordinal]
@@ -27,9 +37,12 @@ data class AppState(
   )
   val settingsState = SettingsState(
     drinkSizes = drinkSizes,
-    personalGoal = hydrationState.goal
+    personalGoal = hydrationState.goal,
+    defaultDrinkSize = drinkAmount
   )
 }
+
+private val STANDARD_SIZES = setOf(8, 16, 32)
 
 sealed class AppAction {
   object Drink : AppAction()

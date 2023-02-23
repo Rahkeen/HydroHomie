@@ -2,6 +2,7 @@
 
 package com.rikin.hydrohomie.app.mavericks.domain
 
+import android.util.Log
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -124,6 +125,7 @@ class AppViewModel(
         }
       }
       is AppAction.UpdateDrinkSize -> {
+        Log.d("Update Drink Size", "${action.drinkSize}")
         setState {
           copy(drinkAmount = action.drinkSize)
         }
