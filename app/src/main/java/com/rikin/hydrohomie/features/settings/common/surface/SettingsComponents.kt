@@ -3,7 +3,6 @@ package com.rikin.hydrohomie.features.settings.common.surface
 import android.graphics.Path
 import android.util.Log
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
@@ -11,7 +10,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.forEachGesture
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,13 +49,12 @@ import androidx.compose.ui.unit.sp
 import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.design.NeonLightBlue
-import com.rikin.hydrohomie.design.NeonPink
+import com.rikin.hydrohomie.design.OceanBlue
+import com.rikin.hydrohomie.design.PopRed
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SpaceCadetDark
 import com.rikin.hydrohomie.design.ThemeSliderPrimary
 import com.rikin.hydrohomie.design.Typography
-import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.settings.common.domain.DrinkSizeState
 import kotlin.math.roundToInt
@@ -137,7 +134,7 @@ fun DrinkSizeSelectionGroup(drinks: List<DrinkSizeState>, action: (DrinkSizeStat
     )
     Row(
       modifier = Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.SpaceBetween,
+      horizontalArrangement = Arrangement.SpaceEvenly,
       verticalAlignment = Alignment.CenterVertically
     ) {
       drinks.forEach { state ->
@@ -182,6 +179,8 @@ fun DrinkSizeSelection(
   val width = 75.dp
   val height = 125.dp
 
+  val color = OceanBlue
+
   HydroHomieTheme {
     Box(
       modifier = Modifier
@@ -193,7 +192,7 @@ fun DrinkSizeSelection(
         modifier = Modifier
           .width(width)
           .height(height)
-          .background(color = NeonLightBlue),
+          .background(color = color),
         contentAlignment = Alignment.Center
       ) {
         Text(state.label, color = Color.White, fontSize = 16.sp)
@@ -210,10 +209,10 @@ fun DrinkSizeSelection(
             .width(width)
             .height(height)
             .background(color = SpaceCadet)
-            .border(width = 1.dp, shape = RoundedCornerShape(16.dp), brush = WaterGradient),
+            .border(width = 1.dp, shape = RoundedCornerShape(16.dp), color = color),
           contentAlignment = Alignment.Center
         ) {
-          Text(state.label, color = NeonLightBlue, fontSize = 16.sp)
+          Text(state.label, color = color, fontSize = 16.sp)
         }
       }
     }
@@ -241,7 +240,7 @@ fun CustomDrinkSizeSelection(
   val width = 75.dp
   val height = 125.dp
 
-  val color = NeonPink
+  val color = PopRed
 
   Box(
     modifier = Modifier

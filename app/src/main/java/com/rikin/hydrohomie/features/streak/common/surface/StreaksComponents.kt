@@ -14,6 +14,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -108,6 +109,11 @@ fun StreakCup(hydrationState: HydrationState, dayLetter: String, isToday: Boolea
         .height(60.dp)
         .background(
           color = SpaceCadet,
+          shape = MaterialTheme.shapes.small
+        )
+        .border(
+          width = 1.dp,
+          brush = WaterGradient,
           shape = MaterialTheme.shapes.small
         ),
       contentAlignment = Alignment.Center
