@@ -69,3 +69,14 @@ val WaterGradient = Brush.verticalGradient(
     OceanBlue
   )
 )
+
+val RainbowGradient = Brush.sweepGradient(
+  colors = listOf(
+    PopRed,
+    PopYellow,
+    PopGreen,
+    PopBlue,
+    PopPurple,
+    PopRed
+  )
+)

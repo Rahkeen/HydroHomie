@@ -10,9 +10,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -61,7 +63,7 @@ fun BoxScope.ActionBar(
   ) {
     Box(
       modifier = Modifier
-        .size(ButtonWidth + ElementPadding)
+        .size(ButtonWidth)
         .background(
           color = SpaceCadet,
           shape = CircleShape
@@ -76,12 +78,7 @@ fun BoxScope.ActionBar(
     }
     Column(
       modifier = Modifier
-        .wrapContentSize()
-        .background(
-          color = SpaceCadet,
-          shape = MaterialTheme.shapes.large
-        )
-        .padding(ElementPadding),
+        .wrapContentSize(),
       verticalArrangement = Arrangement.spacedBy(
         space = ElementPadding,
         alignment = Alignment.CenterVertically
@@ -90,7 +87,7 @@ fun BoxScope.ActionBar(
     ) {
 
       HydroIconButton(
-        backgroundColor = ThemeOne.copy(alpha = 0.2f),
+        backgroundColor = SpaceCadet,
         iconTint = ThemeOne,
         painter = painterResource(id = R.drawable.ic_arrow_uturn_down),
         iconDescription = "Undo",
@@ -99,7 +96,7 @@ fun BoxScope.ActionBar(
         }
       )
       HydroIconButton(
-        backgroundColor = ThemeTwo.copy(alpha = 0.2F),
+        backgroundColor = SpaceCadet,
         iconTint = ThemeTwo,
         painter = painterResource(id = R.drawable.ic_calendar_days),
         iconDescription = "Streaks",
@@ -108,7 +105,7 @@ fun BoxScope.ActionBar(
         }
       )
       HydroIconButton(
-        backgroundColor = ThemeThree.copy(0.2F),
+        backgroundColor = SpaceCadet,
         iconTint = ThemeThree,
         painter = painterResource(id = R.drawable.ic_adjustments_horizontal),
         iconDescription = "Settings",
@@ -116,6 +113,7 @@ fun BoxScope.ActionBar(
           navigation(NavTarget.SettingsTarget)
         }
       )
+      Spacer(modifier = Modifier.height(32.dp))
       SuperButton(action = { actions(AppAction.Drink) })
     }
   }
