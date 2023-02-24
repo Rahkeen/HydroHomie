@@ -114,7 +114,7 @@ fun BoxScope.ActionBar(
         }
       )
       Spacer(modifier = Modifier.height(32.dp))
-      SuperButton(action = { actions(AppAction.Drink) })
+      SuperButton(state = state, action = { actions(AppAction.Drink) })
     }
   }
 }

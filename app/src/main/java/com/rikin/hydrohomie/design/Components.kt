@@ -1,5 +1,6 @@
 package com.rikin.hydrohomie.design
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.Spring
@@ -15,6 +16,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,6 +36,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
@@ -51,6 +54,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.R
+import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -278,9 +282,12 @@ fun AnimatedDeleteButton(
 }
 
 @Composable
-fun SuperButton(action: () -> Unit) {
+fun SuperButton(state: HydrationState, action: () -> Unit) {
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
+
+  val shape = RoundedCornerShape(20.dp)
+  val size = 80.dp
 
   val buttonScale by animateFloatAsState(
     targetValue = if (pressed) 0.9f else 1f,
@@ -290,23 +297,50 @@ fun SuperButton(action: () -> Unit) {
     )
   )
 
-  val scale by animateFloatAsState(
-    targetValue = if (pressed) 1.5f else 1f,
+  val shadowScale by animateFloatAsState(
+    targetValue = if (pressed) 1.3f else 1f,
     animationSpec = tween(durationMillis = 1000, easing = EaseInOut)
   )
-  val alpha by animateFloatAsState(
+  val shadowAlpha by animateFloatAsState(
     targetValue = if (pressed) 0.9f else 0f,
     animationSpec = tween(durationMillis = 1000, easing = EaseInOut)
   )
-  val blur by animateDpAsState(
+  val shadowBlur by animateDpAsState(
     targetValue = if (pressed) 24.dp else 8.dp,
     animationSpec = tween(durationMillis = 1000, easing = EaseInOut)
   )
 
+  val red by animateColorAsState(
+    targetValue = if (state.drank > 0) WispyWhite else MaterialRed,
+    animationSpec = tween(300, easing = EaseInOut)
+  )
+  val yellow by animateColorAsState(
+    targetValue = if (state.drank > 0) WispyWhite else MaterialYellow,
+    animationSpec = tween(300, easing = EaseInOut)
+  )
+  val green by animateColorAsState(
+    targetValue = if (state.drank > 0) WispyWhite else MaterialGreen,
+    animationSpec = tween(300, easing = EaseInOut)
+  )
+  val blue by animateColorAsState(
+    targetValue = if (state.drank > 0) WispyWhite else MaterialBlue,
+    animationSpec = tween(300, easing = EaseInOut)
+  )
+  val purple by animateColorAsState(
+    targetValue = if (state.drank > 0) WispyWhite else MaterialPurple,
+    animationSpec = tween(300, easing = EaseInOut)
+  )
 
-  val shape = RoundedCornerShape(20.dp)
-  val size = 80.dp
-  val gradient = RainbowGradient
+  val gradient = Brush.sweepGradient(
+    colors = listOf(
+      red,
+      yellow,
+      green,
+      blue,
+      purple,
+      red
+    )
+  )
 
   Box(
     modifier = Modifier
@@ -321,14 +355,14 @@ fun SuperButton(action: () -> Unit) {
   ) {
     Box(
       modifier = Modifier
-        .graphicsLayer(scaleX = scale, scaleY = scale)
+        .graphicsLayer(scaleX = shadowScale, scaleY = shadowScale)
         .size(size)
-        .blur(radius = blur, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+        .blur(radius = shadowBlur, edgeTreatment = BlurredEdgeTreatment.Unbounded)
         .drawBehind {
           drawRoundRect(
             brush = gradient,
             cornerRadius = CornerRadius(20.dp.toPx()),
-            alpha = alpha,
+            alpha = shadowAlpha,
           )
         },
     )
@@ -347,7 +381,7 @@ fun SuperButton(action: () -> Unit) {
         modifier = Modifier.size(40.dp),
         painter = painterResource(id = R.drawable.ic_plus_small),
         contentDescription = "Drink",
-        colorFilter = ColorFilter.tint(Color.White)
+        colorFilter = ColorFilter.tint(WispyWhite)
       )
     }
   }
@@ -355,22 +389,10 @@ fun SuperButton(action: () -> Unit) {
 
 @Preview
 @Composable
-fun HydroIconButtonPreview() {
-  HydroHomieTheme {
-    HydroIconButton(
-      backgroundColor = NeonPurple,
-      iconTint = NeonPink,
-      icon = Icons.Rounded.Add,
-      iconDescription = "Add",
-      action = {}
-    )
-  }
-}
-
-@Preview
-@Composable
 fun SuperButtonPreview() {
   HydroHomieTheme {
-    SuperButton({})
+    Box(modifier = Modifier.fillMaxSize().background(color = SpaceCadetDark), contentAlignment = Alignment.Center) {
+      SuperButton(state = HydrationState(), {})
+    }
   }
 }
