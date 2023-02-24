@@ -63,7 +63,6 @@ fun IndicatorLine(modifier: Modifier = Modifier) {
         .fillMaxHeight()
     ) {
       val horizontalPadding = 0F
-      val verticalPadding = 64.dp.toPx()
       val lineStrokeWidth = 4.dp.toPx()
       val pathEffect = null
       val colorsList = listOf(
@@ -74,9 +73,6 @@ fun IndicatorLine(modifier: Modifier = Modifier) {
         JuicyOrange7,
         JuicyOrange8,
         JuicyOrange9
-      )
-      val rulerBrush = Brush.verticalGradient(
-        colors = colorsList
       )
 
       // ruler lines

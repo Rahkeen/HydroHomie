@@ -8,17 +8,8 @@ data class StreakState(
   val currentDay: Weekday
 ) {
 
-  val consecutiveDays = consecutiveDaysDrank()
+  val consecutiveDays = currentWeek.count { it.drank > 0 }
   val completedDays = currentWeek.count { it.drank == it.goal }
   val totalDrank = currentWeek.sumOf { it.drank }
-
-
-  private fun consecutiveDaysDrank(): Int {
-    var days = 0
-    currentWeek
-      .subList(0, currentDay.ordinal)
-      .forEach { if (it.drank > 0) days++ else days = 0 }
-    return days
-  }
 }
 

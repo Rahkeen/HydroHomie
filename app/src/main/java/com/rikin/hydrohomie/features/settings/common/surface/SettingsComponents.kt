@@ -3,6 +3,7 @@ package com.rikin.hydrohomie.features.settings.common.surface
 import android.graphics.Path
 import android.util.Log
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
@@ -10,6 +11,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.forEachGesture
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -48,12 +51,12 @@ import androidx.compose.ui.unit.sp
 import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.design.PopPurple
+import com.rikin.hydrohomie.design.NeonLightBlue
+import com.rikin.hydrohomie.design.NeonPink
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SpaceCadetDark
 import com.rikin.hydrohomie.design.ThemeSliderPrimary
 import com.rikin.hydrohomie.design.Typography
-import com.rikin.hydrohomie.design.WaterBlue
 import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.settings.common.domain.DrinkSizeState
@@ -71,7 +74,6 @@ fun GoalSlider(
   val progress by animateFloatAsState(targetValue = (current.toFloat() / high))
 
   Column(
-    modifier = Modifier.padding(ComponentPadding),
     verticalArrangement = Arrangement.spacedBy(ElementPadding)
   ) {
     Text(
@@ -83,12 +85,11 @@ fun GoalSlider(
     Row(
       modifier = Modifier
         .fillMaxWidth(),
-      Arrangement.spacedBy(ComponentPadding),
       verticalAlignment = Alignment.CenterVertically
     ) {
       SquigglySlider(
         modifier = Modifier
-          .weight(5F)
+          .weight(1F)
           .wrapContentHeight(),
         value = progress,
         low = low.toFloat(),
@@ -98,7 +99,7 @@ fun GoalSlider(
         onValueChanged = { onUpdate(it) }
       )
       Text(
-        modifier = Modifier.weight(1F),
+        modifier = Modifier.wrapContentSize().padding(start = ComponentPadding),
         text = "$current oz",
         style = Typography.caption,
         textAlign = TextAlign.Start,
@@ -127,7 +128,6 @@ fun GoalSliderPreview() {
 @Composable
 fun DrinkSizeSelectionGroup(drinks: List<DrinkSizeState>, action: (DrinkSizeState) -> Unit) {
   Column(
-    modifier = Modifier.padding(ComponentPadding),
     verticalArrangement = Arrangement.spacedBy(ComponentPadding),
   ) {
     Text(
@@ -137,7 +137,7 @@ fun DrinkSizeSelectionGroup(drinks: List<DrinkSizeState>, action: (DrinkSizeStat
     )
     Row(
       modifier = Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.Start),
+      horizontalArrangement = Arrangement.SpaceBetween,
       verticalAlignment = Alignment.CenterVertically
     ) {
       drinks.forEach { state ->
@@ -193,10 +193,10 @@ fun DrinkSizeSelection(
         modifier = Modifier
           .width(width)
           .height(height)
-          .background(brush = WaterGradient),
+          .background(color = NeonLightBlue),
         contentAlignment = Alignment.Center
       ) {
-        Text(state.label, color = Color.White, fontSize = 20.sp)
+        Text(state.label, color = Color.White, fontSize = 16.sp)
       }
 
       Box(
@@ -209,11 +209,11 @@ fun DrinkSizeSelection(
           modifier = Modifier
             .width(width)
             .height(height)
-            .background(color = Color.LightGray)
-            .border(width = 2.dp, shape = RoundedCornerShape(16.dp), brush = WaterGradient),
+            .background(color = SpaceCadet)
+            .border(width = 1.dp, shape = RoundedCornerShape(16.dp), brush = WaterGradient),
           contentAlignment = Alignment.Center
         ) {
-          Text(state.label, color = WaterBlue, fontSize = 20.sp)
+          Text(state.label, color = NeonLightBlue, fontSize = 16.sp)
         }
       }
     }
@@ -225,8 +225,9 @@ fun CustomDrinkSizeSelection(
   state: DrinkSizeState,
   update: (DrinkSizeState) -> Unit
 ) {
+  val max = 128f
   var progress by remember {
-    mutableStateOf((120f - state.amount) / 120f)
+    mutableStateOf((max - state.amount) / max)
   }
   val scale by animateFloatAsState(
     targetValue = if (state.selected) 1.1f else 1f,
@@ -236,11 +237,11 @@ fun CustomDrinkSizeSelection(
     )
   )
 
-  val amount =  ((1 - progress) * 120).roundToInt()
+  val amount = ((1 - progress) * max).roundToInt()
   val width = 75.dp
   val height = 125.dp
-  val color = PopPurple
 
+  val color = NeonPink
 
   Box(
     modifier = Modifier
@@ -260,7 +261,7 @@ fun CustomDrinkSizeSelection(
               Log.d("Custom Button", "Dragged")
               progress = normalizedY
             } while (event.changes.none { it.changedToUp() })
-            update(state.copy(amount = ((1 - progress) * 120).roundToInt()))
+            update(state.copy(amount = ((1 - progress) * max).roundToInt()))
           }
         }
       }
@@ -272,7 +273,7 @@ fun CustomDrinkSizeSelection(
         .background(color = color),
       contentAlignment = Alignment.Center
     ) {
-      Text("$amount oz", color = Color.White, fontSize = 20.sp)
+      Text("$amount oz", color = Color.White, fontSize = 16.sp)
     }
 
     Box(
@@ -282,11 +283,11 @@ fun CustomDrinkSizeSelection(
         modifier = Modifier
           .width(width)
           .height(height)
-          .background(color = Color.LightGray)
-          .border(width = 2.dp, shape = RoundedCornerShape(16.dp), color = color),
+          .background(color = SpaceCadet)
+          .border(width = 1.dp, shape = RoundedCornerShape(16.dp), color = color),
         contentAlignment = Alignment.Center
       ) {
-        Text("$amount oz", color = color, fontSize = 20.sp)
+        Text("$amount oz", color = color, fontSize = 16.sp)
       }
     }
   }

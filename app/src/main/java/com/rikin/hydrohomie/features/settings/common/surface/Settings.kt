@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -24,6 +25,7 @@ import com.rikin.hydrohomie.app.common.domain.AppEnvironment
 import com.rikin.hydrohomie.app.common.domain.AppState
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.dates.FakeDates
+import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.ImageGradient
@@ -40,8 +42,10 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
   Column(
     modifier = Modifier
       .fillMaxSize()
-      .background(color = MaterialTheme.colors.background),
-    verticalArrangement = Arrangement.spacedBy(ElementPadding, Alignment.CenterVertically),
+      .background(color = MaterialTheme.colors.background)
+      .padding(ComponentPadding),
+    verticalArrangement = Arrangement.spacedBy(ComponentPadding, Alignment.CenterVertically),
+    horizontalAlignment = Alignment.CenterHorizontally,
   ) {
 
     // Profile Pic Placeholder
@@ -49,7 +53,6 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       modifier = Modifier
         .width(ProfilePicSize)
         .height(ProfilePicSize)
-        .align(Alignment.CenterHorizontally)
         .background(brush = ImageGradient, shape = MaterialTheme.shapes.medium),
       contentAlignment = Alignment.Center
     ) {
@@ -61,7 +64,6 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
 
     Text(
       text = "@hydrohomie",
-      modifier = Modifier.align(Alignment.CenterHorizontally),
       style = MaterialTheme.typography.body1,
       color = ThemeGamertag
     )

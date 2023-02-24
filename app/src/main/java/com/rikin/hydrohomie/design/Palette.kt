@@ -54,8 +54,7 @@ val ThemeFour = PopBlue
 val ThemeFive = PopPurple
 
 val ThemeGamertag = PopYellow
-val ThemeSliderPrimary = PopRed
-val ThemeSliderSecondary = PopGreen
+val ThemeSliderPrimary = PopGreen
 
 val ImageGradient = Brush.verticalGradient(
   colors = listOf(
