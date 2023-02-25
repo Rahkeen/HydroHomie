@@ -14,6 +14,7 @@ val WaterBlue = Color(0xFF2962ff)
 val OceanBlue = Color(0xff2F80ED)
 
 val PopRed = Color(0xffff595e)
+val PopRedLight = Color(0xFFFF8C90)
 val PopYellow = Color(0xffffca3a)
 val PopGreen = Color(0xff8ac926)
 val PopBlue = Color(0xff1982c4)
@@ -48,6 +49,7 @@ val JuicyOrange9 = Color(0xFFFFDD00)
 val JuicyOrange10 = Color(0xFFFFEA00)
 
 val ThemeOne = PopRed
+val ThemeOneBackground = PopRedLight
 val ThemeTwo = PopYellow
 val ThemeThree = PopGreen
 val ThemeFour = PopBlue

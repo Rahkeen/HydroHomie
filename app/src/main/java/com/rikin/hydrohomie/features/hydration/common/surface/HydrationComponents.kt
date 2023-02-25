@@ -16,12 +16,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,19 +28,17 @@ import androidx.compose.ui.unit.dp
 import com.rikin.hydrohomie.R
 import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.app.mavericks.suface.NavTarget
-import com.rikin.hydrohomie.design.ButtonWidth
 import com.rikin.hydrohomie.design.ComponentPadding
+import com.rikin.hydrohomie.design.DrinkDisplay
 import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
-import com.rikin.hydrohomie.design.HydroIconButton
+import com.rikin.hydrohomie.design.IconDeleteButton
 import com.rikin.hydrohomie.design.MediumCornerRadius
-import com.rikin.hydrohomie.design.SpaceCadet
+import com.rikin.hydrohomie.design.NavButton
 import com.rikin.hydrohomie.design.SuperButton
-import com.rikin.hydrohomie.design.ThemeOne
 import com.rikin.hydrohomie.design.ThemeThree
 import com.rikin.hydrohomie.design.ThemeTwo
 import com.rikin.hydrohomie.design.WaterGradient
-import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 
 @Composable
@@ -61,42 +55,18 @@ fun BoxScope.ActionBar(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.spacedBy(space = ElementPadding)
   ) {
-    Box(
-      modifier = Modifier
-        .size(ButtonWidth)
-        .background(
-          color = SpaceCadet,
-          shape = CircleShape
-        ),
-      contentAlignment = Alignment.Center
-    ) {
-      Text(
-        text = "${state.drank}",
-        style = MaterialTheme.typography.body2,
-        color = WispyWhite
-      )
-    }
+
     Column(
       modifier = Modifier
         .wrapContentSize(),
       verticalArrangement = Arrangement.spacedBy(
-        space = ElementPadding,
+        space = 16.dp,
         alignment = Alignment.CenterVertically
       ),
       horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-      HydroIconButton(
-        backgroundColor = SpaceCadet,
-        iconTint = ThemeOne,
-        painter = painterResource(id = R.drawable.ic_arrow_uturn_down),
-        iconDescription = "Undo",
-        action = {
-          actions(AppAction.Reset)
-        }
-      )
-      HydroIconButton(
-        backgroundColor = SpaceCadet,
+      NavButton(
         iconTint = ThemeTwo,
         painter = painterResource(id = R.drawable.ic_calendar_days),
         iconDescription = "Streaks",
@@ -104,8 +74,7 @@ fun BoxScope.ActionBar(
           navigation(NavTarget.StreaksTarget)
         }
       )
-      HydroIconButton(
-        backgroundColor = SpaceCadet,
+      NavButton(
         iconTint = ThemeThree,
         painter = painterResource(id = R.drawable.ic_adjustments_horizontal),
         iconDescription = "Settings",
@@ -113,7 +82,9 @@ fun BoxScope.ActionBar(
           navigation(NavTarget.SettingsTarget)
         }
       )
-      Spacer(modifier = Modifier.height(32.dp))
+      Spacer(modifier = Modifier.height(64.dp))
+      DrinkDisplay(state = state)
+      IconDeleteButton(action = { actions(AppAction.Reset) })
       SuperButton(state = state, action = { actions(AppAction.Drink) })
     }
   }

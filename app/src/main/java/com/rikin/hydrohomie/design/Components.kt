@@ -3,10 +3,15 @@ package com.rikin.hydrohomie.design
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -15,16 +20,20 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.ArrowForward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -48,11 +57,12 @@ import androidx.compose.ui.graphics.vector.DefaultFillType
 import androidx.compose.ui.graphics.vector.Group
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.Path
-import androidx.compose.ui.graphics.vector.PathData
+import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rikin.hydrohomie.R
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import kotlinx.coroutines.delay
@@ -88,71 +98,112 @@ fun HydroIconButton(
 }
 
 @Composable
-fun HydroIconButton(
-  backgroundColor: Color,
+fun NavButton(
   iconTint: Color,
   painter: Painter,
   iconDescription: String,
   action: () -> Unit,
 ) {
+  val interactionSource = remember {
+    MutableInteractionSource()
+  }
+  val pressed by interactionSource.collectIsPressedAsState()
+  val infinite = rememberInfiniteTransition()
+
+  val multiplier = remember { listOf(-1, 1).random() }
+  val rotationStart = remember { (2..4).random() * multiplier }
+  val rotationEnd = remember { -rotationStart }
+  val duration = remember { listOf(1500, 2000, 2500).random() }
+
+  val rotation by infinite.animateFloat(
+    initialValue = rotationStart.toFloat(),
+    targetValue = rotationEnd.toFloat(),
+    animationSpec = infiniteRepeatable(
+      animation = tween(duration, easing = LinearEasing),
+      repeatMode = RepeatMode.Reverse
+    )
+  )
+
+  val navArrowTranslation by infinite.animateFloat(
+    initialValue = 0f,
+    targetValue = 8f,
+    animationSpec = infiniteRepeatable(
+      animation = tween(1500, easing = LinearEasing),
+      repeatMode = RepeatMode.Reverse
+    )
+  )
+
+  val scale by animateFloatAsState(
+    targetValue = if (pressed) 0.9f else 1f,
+    animationSpec = spring(
+      dampingRatio = Spring.DampingRatioMediumBouncy,
+      stiffness = Spring.StiffnessLow
+    )
+  )
+
   Box(
     modifier = Modifier
-      .width(ButtonWidth)
-      .height(ButtonHeight)
-      .background(
-        shape = MaterialTheme.shapes.medium,
-        color = backgroundColor
-      )
-      .border(width = 1.dp, color = iconTint, shape = MaterialTheme.shapes.medium)
-      .clip(MaterialTheme.shapes.medium)
-      .clickable { action() },
+      .graphicsLayer(scaleX = scale, scaleY = scale, rotationZ = rotation)
+      .width(40.dp)
+      .height(40.dp)
+      .clickable(interactionSource = interactionSource, indication = null) { action() },
     contentAlignment = Alignment.Center
   ) {
     Image(
-      modifier = Modifier.size(IconSize),
+      modifier = Modifier.size(30.dp),
       painter = painter,
       contentDescription = iconDescription,
       colorFilter = ColorFilter.tint(color = iconTint)
     )
+    Box(
+      modifier = Modifier
+        .graphicsLayer(translationX = navArrowTranslation)
+        .size(10.dp)
+        .background(color = iconTint, shape = RoundedCornerShape(3.dp))
+        .align(Alignment.BottomEnd),
+      contentAlignment = Alignment.Center
+    ) {
+      Icon(
+        modifier = Modifier.size(8.dp),
+        imageVector = Icons.Rounded.ArrowForward,
+        tint = SpaceCadetDark,
+        contentDescription = "Nav Button"
+      )
+    }
   }
 }
 
-@Composable
-fun AnimatedDeleteButton(
-  backgroundColor: Color,
-  iconTint: Color,
-  action: () -> Unit,
-) {
-  val lidPathData = PathData {
-    moveTo(18.0f, 4.0f)
-    horizontalLineToRelative(-2.5f)
-    lineToRelative(-0.71f, -0.71f)
-    curveToRelative(-0.18f, -0.18f, -0.44f, -0.29f, -0.7f, -0.29f)
-    horizontalLineTo(9.91f)
-    curveToRelative(-0.26f, 0.0f, -0.52f, 0.11f, -0.7f, 0.29f)
-    lineTo(8.5f, 4.0f)
-    horizontalLineTo(6.0f)
-    curveToRelative(-0.55f, 0.0f, -1.0f, 0.45f, -1.0f, 1.0f)
-    reflectiveCurveToRelative(0.45f, 1.0f, 1.0f, 1.0f)
-    horizontalLineToRelative(12.0f)
-    curveToRelative(0.55f, 0.0f, 1.0f, -0.45f, 1.0f, -1.0f)
-    reflectiveCurveToRelative(-0.45f, -1.0f, -1.0f, -1.0f)
-    close()
-  }
 
-  val canPathData = PathData {
-    // base of trash can
-    moveTo(6.0f, 19.0f)
-    curveToRelative(0.0f, 1.1f, 0.9f, 2.0f, 2.0f, 2.0f)
-    horizontalLineToRelative(8.0f)
-    curveToRelative(1.1f, 0.0f, 2.0f, -0.9f, 2.0f, -2.0f)
-    verticalLineTo(9.0f)
-    curveToRelative(0.0f, -1.1f, -0.9f, -2.0f, -2.0f, -2.0f)
-    horizontalLineTo(8.0f)
-    curveToRelative(-1.1f, 0.0f, -2.0f, 0.9f, -2.0f, 2.0f)
-    verticalLineToRelative(10.0f)
-    close()
+@Composable
+fun IconDeleteButton(action: () -> Unit) {
+  val interactionSource = remember {
+    MutableInteractionSource()
   }
+  val pressed by interactionSource.collectIsPressedAsState()
+  val infinite = rememberInfiniteTransition()
+  val scope = rememberCoroutineScope()
+
+  val multiplier = remember { listOf(-1, 1).random() }
+  val rotationStart = remember { (4..8).random() * multiplier }
+  val rotationEnd = remember { -rotationStart }
+  val duration = remember { listOf(1500, 2000, 2500).random() }
+
+  val scale by animateFloatAsState(
+    targetValue = if (pressed) 0.9f else 1f,
+    animationSpec = spring(
+      dampingRatio = Spring.DampingRatioLowBouncy,
+      stiffness = Spring.StiffnessLow
+    )
+  )
+
+  val rotation by infinite.animateFloat(
+    initialValue = rotationStart.toFloat(),
+    targetValue = rotationEnd.toFloat(),
+    animationSpec = infiniteRepeatable(
+      animation = tween(durationMillis = duration, easing = LinearEasing),
+      repeatMode = RepeatMode.Reverse
+    )
+  )
 
   val lidTranslationY = remember {
     Animatable(0f)
@@ -166,7 +217,12 @@ fun AnimatedDeleteButton(
     Animatable(0f)
   }
 
-  val scope = rememberCoroutineScope()
+  val lidPathData =
+    PathParser().parsePathString("M21,5c0,0.55 -0.45,1 -1,1H4C3.45,6 3,5.55 3,5s0.45,-1 1,-1h7V3c0,-0.55 0.45,-1 1,-1s1,0.45 1,1v1h7C20.55,4 21,4.45 21,5z")
+      .toNodes()
+  val canPathData =
+    PathParser().parsePathString("M4.52,7.5l1.34,12.08C6.01,20.96 7.19,22 8.59,22h6.82c1.4,0 2.58,-1.04 2.73,-2.42L19.48,7.5H4.52zM11,18c0,0.55 -0.45,1 -1,1s-1,-0.45 -1,-1v-6c0,-0.55 0.45,-1 1,-1s1,0.45 1,1V18zM15,18c0,0.55 -0.45,1 -1,1s-1,-0.45 -1,-1v-6c0,-0.55 0.45,-1 1,-1s1,0.45 1,1V18z")
+      .toNodes()
 
   val iconVector = rememberVectorPainter(
     defaultWidth = 24.dp,
@@ -179,19 +235,17 @@ fun AnimatedDeleteButton(
       name = "LidVector",
       translationY = lidTranslationY.value
     ) {
-      Group(name = "Lid") {
-        Path(
-          pathData = lidPathData,
-          fill = SolidColor(PopRed),
-          fillAlpha = 1f,
-          stroke = null,
-          strokeAlpha = 1f,
-          strokeLineCap = StrokeCap.Butt,
-          strokeLineJoin = StrokeJoin.Bevel,
-          strokeLineMiter = 1f,
-          pathFillType = DefaultFillType
-        )
-      }
+      Path(
+        pathData = lidPathData,
+        fill = SolidColor(PopRed),
+        fillAlpha = 1f,
+        stroke = null,
+        strokeAlpha = 1f,
+        strokeLineCap = StrokeCap.Butt,
+        strokeLineJoin = StrokeJoin.Bevel,
+        strokeLineMiter = 1f,
+        pathFillType = DefaultFillType
+      )
     }
 
     Group(
@@ -201,31 +255,29 @@ fun AnimatedDeleteButton(
       translationY = canTranslationY.value,
       rotation = canRotation.value
     ) {
-      Group(name = "Can") {
-        Path(
-          pathData = canPathData,
-          fill = SolidColor(PopRed),
-          fillAlpha = 1f,
-          stroke = null,
-          strokeAlpha = 1f,
-          strokeLineCap = StrokeCap.Butt,
-          strokeLineJoin = StrokeJoin.Bevel,
-          strokeLineMiter = 1f,
-          pathFillType = DefaultFillType
-        )
-      }
+      Path(
+        pathData = canPathData,
+        fill = SolidColor(PopRed),
+        fillAlpha = 1f,
+        stroke = null,
+        strokeAlpha = 1f,
+        strokeLineCap = StrokeCap.Butt,
+        strokeLineJoin = StrokeJoin.Bevel,
+        strokeLineMiter = 1f,
+        pathFillType = DefaultFillType
+      )
     }
   }
+
   Box(
     modifier = Modifier
-      .width(ButtonWidth)
-      .height(ButtonHeight)
-      .background(
-        shape = MaterialTheme.shapes.medium,
-        color = backgroundColor
-      )
-      .clip(MaterialTheme.shapes.medium)
-      .clickable {
+      .graphicsLayer(scaleX = scale, scaleY = scale, rotationZ = rotation)
+      .size(40.dp)
+      .clip(shape = RoundedCornerShape(16.dp))
+      .clickable(
+        interactionSource = interactionSource,
+        indication = null
+      ) {
         action()
         scope.launch {
           lidTranslationY.animateTo(
@@ -269,14 +321,15 @@ fun AnimatedDeleteButton(
             )
           )
         }
+
       },
     contentAlignment = Alignment.Center
   ) {
-    Icon(
-      modifier = Modifier.size(IconSize),
+    Image(
+      modifier = Modifier.size(30.dp),
       painter = iconVector,
-      contentDescription = "Delete",
-      tint = iconTint
+      colorFilter = ColorFilter.tint(color = PopRed),
+      contentDescription = "Reset"
     )
   }
 }
@@ -387,12 +440,47 @@ fun SuperButton(state: HydrationState, action: () -> Unit) {
   }
 }
 
+@Composable
+fun DrinkDisplay(state: HydrationState) {
+  val infiniteTransition = rememberInfiniteTransition()
+  val rotation by infiniteTransition.animateFloat(
+    initialValue = -4f,
+    targetValue = 4f,
+    animationSpec = infiniteRepeatable(
+      animation = tween(durationMillis = 1500, easing = LinearEasing),
+      repeatMode = RepeatMode.Reverse
+    )
+  )
+  Box(
+    modifier = Modifier
+      .graphicsLayer(rotationZ = rotation)
+      .wrapContentSize(),
+    contentAlignment = Alignment.Center
+  ) {
+    Text(text = "${state.drank} oz", fontSize = 20.sp, color = WispyWhite)
+  }
+}
+
 @Preview
 @Composable
 fun SuperButtonPreview() {
   HydroHomieTheme {
-    Box(modifier = Modifier.fillMaxSize().background(color = SpaceCadetDark), contentAlignment = Alignment.Center) {
+    Column(
+      modifier = Modifier
+        .fillMaxSize()
+        .background(color = SpaceCadetDark),
+      verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      NavButton(
+        iconTint = PopYellow,
+        painter = painterResource(id = R.drawable.ic_adjustments_horizontal),
+        iconDescription = "Settings",
+        action = {}
+      )
       SuperButton(state = HydrationState(), {})
+      IconDeleteButton {}
+      DrinkDisplay(state = HydrationState(drank = 16))
     }
   }
 }
