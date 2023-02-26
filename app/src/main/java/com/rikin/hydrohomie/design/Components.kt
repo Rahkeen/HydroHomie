@@ -126,7 +126,7 @@ fun NavButton(
 
   val navArrowTranslation by infinite.animateFloat(
     initialValue = 0f,
-    targetValue = 8f,
+    targetValue = 10f,
     animationSpec = infiniteRepeatable(
       animation = tween(1500, easing = LinearEasing),
       repeatMode = RepeatMode.Reverse
@@ -339,28 +339,29 @@ fun SuperButton(state: HydrationState, action: () -> Unit) {
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
 
-  val shape = RoundedCornerShape(20.dp)
-  val size = 80.dp
+  val shape = remember { RoundedCornerShape(20.dp) }
+  val size = remember { 80.dp }
+  val duration = 300
 
   val buttonScale by animateFloatAsState(
     targetValue = if (pressed) 0.9f else 1f,
     animationSpec = spring(
-      dampingRatio = Spring.DampingRatioLowBouncy,
+      dampingRatio = Spring.DampingRatioNoBouncy,
       stiffness = Spring.StiffnessLow
     )
   )
 
   val shadowScale by animateFloatAsState(
     targetValue = if (pressed) 1.3f else 1f,
-    animationSpec = tween(durationMillis = 1000, easing = EaseInOut)
+    animationSpec = tween(durationMillis = duration, easing = EaseInOut)
   )
   val shadowAlpha by animateFloatAsState(
     targetValue = if (pressed) 0.9f else 0f,
-    animationSpec = tween(durationMillis = 1000, easing = EaseInOut)
+    animationSpec = tween(durationMillis = duration, easing = EaseInOut)
   )
   val shadowBlur by animateDpAsState(
     targetValue = if (pressed) 24.dp else 8.dp,
-    animationSpec = tween(durationMillis = 1000, easing = EaseInOut)
+    animationSpec = tween(durationMillis = duration, easing = EaseInOut)
   )
 
   val red by animateColorAsState(
