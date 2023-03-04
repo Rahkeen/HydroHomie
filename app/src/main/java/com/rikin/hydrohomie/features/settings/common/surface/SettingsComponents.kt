@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -80,26 +78,63 @@ fun GoalSlider(
       color = WispyWhite
     )
     Row(
-      modifier = Modifier
-        .fillMaxWidth(),
+      modifier = Modifier.fillMaxWidth(),
       verticalAlignment = Alignment.CenterVertically
     ) {
-      SquigglySlider(
-        modifier = Modifier
-          .weight(1F)
-          .wrapContentHeight(),
-        value = progress,
-        low = low.toFloat(),
-        high = high.toFloat(),
-        color = color,
-        animateWave = true,
-        onValueChanged = { onUpdate(it) }
+      NewSquigglySlider(
+        modifier = Modifier.weight(0.8f),
+        state = progress,
+        update = { percent ->
+          val amount =
+          onUpdate(percent)
+        }
       )
       Text(
-        modifier = Modifier.wrapContentSize().padding(start = ComponentPadding),
+        modifier = Modifier
+          .weight(0.2f)
+          .padding(start = ComponentPadding),
         text = "$current oz",
         style = Typography.caption,
         textAlign = TextAlign.Start,
+        color = color
+      )
+    }
+  }
+}
+
+@Composable
+fun NewGoalSlider(
+  low: Int,
+  high: Int,
+  progress: Float,
+  label: String,
+  color: Color = ThemeSliderPrimary,
+  update: (Float) -> Unit
+) {
+  val display = remember(progress) { (progress * (high - low)).toInt() }
+
+  Column(
+    verticalArrangement = Arrangement.spacedBy(ElementPadding)
+  ) {
+    Text(
+      modifier = Modifier.padding(start = ElementPadding),
+      text = label,
+      style = MaterialTheme.typography.caption,
+      color = WispyWhite
+    )
+    Row(
+      horizontalArrangement = Arrangement.spacedBy(8.dp),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      NewSquigglySlider(
+        modifier = Modifier.weight(0.85f),
+        state = progress,
+        update = update
+      )
+      Text(
+        modifier = Modifier.weight(0.15f),
+        text = "$display oz",
+        style = MaterialTheme.typography.caption,
         color = color
       )
     }
@@ -117,6 +152,21 @@ fun GoalSliderPreview() {
         current = 64,
         sliderName = "Goal",
         onUpdate = {}
+      )
+    }
+  }
+}
+@Preview(showBackground = true)
+@Composable
+fun NewGoalSliderPreview() {
+  HydroHomieTheme {
+    Box(modifier = Modifier.background(color = SpaceCadet)) {
+      NewGoalSlider(
+        low = 0,
+        high = 200,
+        progress = 0.5f,
+        label = "Goal",
+        update = {}
       )
     }
   }

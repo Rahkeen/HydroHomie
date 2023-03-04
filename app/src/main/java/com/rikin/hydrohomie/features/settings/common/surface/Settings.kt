@@ -26,7 +26,6 @@ import com.rikin.hydrohomie.app.common.domain.AppState
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.design.ComponentPadding
-import com.rikin.hydrohomie.design.ElementPadding
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.ImageGradient
 import com.rikin.hydrohomie.design.ProfilePicSize
@@ -68,13 +67,16 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       color = ThemeGamertag
     )
 
-    GoalSlider(
-      low = 32,
+    NewGoalSlider(
+      low = 0,
       high = 128,
-      current = state.personalGoal,
-      sliderName = "Goal",
+      progress = state.personalGoal / 128f,
+      label = "Goal",
       color = ThemeSliderPrimary,
-      onUpdate = { actions(AppAction.UpdateGoal(goal = it.roundToInt())) }
+      update = { percent ->
+        val amount = (percent * 128).roundToInt()
+        actions(AppAction.UpdateGoal(goal = amount))
+      }
     )
 
     DrinkSizeSelectionGroup(
