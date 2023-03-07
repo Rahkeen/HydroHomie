@@ -28,7 +28,9 @@ data class LocalSettings(
   val drinkSize: Int = 8,
   val goal: Int = 64,
   @ColumnInfo(name = "user_image_url")
-  val userImageUrl: String = ""
+  val userImageUrl: String = "",
+  @ColumnInfo(name = "notifications_enabled", defaultValue = "false")
+  val notificationsEnabled: Boolean = false
 )
 
 

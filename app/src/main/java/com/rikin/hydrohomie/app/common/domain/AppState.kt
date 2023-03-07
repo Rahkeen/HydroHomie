@@ -9,6 +9,7 @@ import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 data class AppState(
   val weekday: Weekday = Monday,
   val defaultDrinkAmount: Int = 8,
+  val notificationsEnabled: Boolean = false,
   val hydrations: List<HydrationState> = buildList {
     repeat(HYDRATION_LIMIT) {
       add(
@@ -29,7 +30,8 @@ data class AppState(
   )
   val settingsState = SettingsState(
     personalGoal = hydrationState.goal,
-    defaultDrinkSize = defaultDrinkAmount
+    defaultDrinkSize = defaultDrinkAmount,
+    notificationsEnabled = notificationsEnabled
   )
 }
 
