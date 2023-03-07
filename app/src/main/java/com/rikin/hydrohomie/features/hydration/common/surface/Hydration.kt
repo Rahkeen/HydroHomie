@@ -32,7 +32,7 @@ fun Hydration(
       .fillMaxSize()
       .background(color = MaterialTheme.colors.background)
   ) {
-    WaterContainer(state = state)
+    NewWaterContainer(state = state)
     ActionBar(state = state, actions = actions, navigation = navigation)
   }
 }

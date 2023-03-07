@@ -86,7 +86,7 @@ fun GoalSlider(
         state = progress,
         update = { percent ->
           val amount =
-          onUpdate(percent)
+            onUpdate(percent)
         }
       )
       Text(
@@ -156,6 +156,7 @@ fun GoalSliderPreview() {
     }
   }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun NewGoalSliderPreview() {

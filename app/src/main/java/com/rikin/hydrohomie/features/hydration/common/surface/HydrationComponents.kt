@@ -1,27 +1,50 @@
 package com.rikin.hydrohomie.features.hydration.common.surface
 
+import android.util.Log
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDp
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,11 +58,17 @@ import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.IconDeleteButton
 import com.rikin.hydrohomie.design.MediumCornerRadius
 import com.rikin.hydrohomie.design.NavButton
+import com.rikin.hydrohomie.design.OceanBlue
+import com.rikin.hydrohomie.design.SpaceCadetDark
 import com.rikin.hydrohomie.design.SuperButton
 import com.rikin.hydrohomie.design.ThemeThree
 import com.rikin.hydrohomie.design.ThemeTwo
 import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.features.settings.common.surface.pi
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
+import kotlin.math.sin
 
 @Composable
 fun BoxScope.ActionBar(
@@ -137,6 +166,73 @@ fun WaterContainer(state: HydrationState) {
   }
 }
 
+@Composable
+fun NewWaterContainer(state: HydrationState) {
+  val infiniteTransition = rememberInfiniteTransition()
+  val wave by infiniteTransition.animateFloat(
+    initialValue = 0f,
+    targetValue = 1f,
+    animationSpec = infiniteRepeatable(
+      animation = tween(durationMillis = 4000, easing = LinearEasing),
+      repeatMode = RepeatMode.Restart
+    )
+  )
+  val percent by animateFloatAsState(
+    targetValue = state.percent * 1000f,
+    animationSpec = spring(
+      dampingRatio = Spring.DampingRatioNoBouncy,
+      stiffness = Spring.StiffnessVeryLow
+    )
+  )
+  val amplitude by animateDpAsState(
+    targetValue = when (state.percent) {
+      0f -> 0.dp
+      1f -> 0.dp
+      else -> 8.dp
+    },
+    animationSpec = tween(
+      durationMillis = 1000, easing = EaseInOut
+    )
+  )
+
+  Box(modifier = Modifier
+    .fillMaxSize()
+    .drawBehind {
+      val wavelength = size.width
+      val stretch = 2.pi() / wavelength
+      val xShift = wave * 2.pi()
+      val yShift = size.height - size.height * (percent / 1000f)
+
+      val segmentLength = wavelength / 30f
+      val numSegments = (size.width / segmentLength).roundToInt()
+
+      fun computeY(x: Float): Float {
+        return amplitude.toPx() * sin(stretch * x - xShift) + yShift
+      }
+
+      var pointX = 0f
+      val path = Path().apply {
+        for (segment in 0..numSegments) {
+          val pointY = computeY(pointX)
+          when (segment) {
+            0 -> moveTo(pointX, pointY)
+            else -> lineTo(pointX, pointY)
+          }
+          pointX += segmentLength
+        }
+        lineTo(size.width, size.height)
+        lineTo(0f, size.height)
+        close()
+      }
+
+      drawPath(
+        path = path,
+        brush = WaterGradient,
+      )
+    }
+  )
+}
+
 @Preview
 @Composable
 fun ActionBarPreview() {
@@ -146,6 +242,99 @@ fun ActionBarPreview() {
         state = HydrationState(),
         actions = {},
         navigation = {}
+      )
+    }
+  }
+}
+
+@Preview
+@Composable
+fun WaterContainerPreview() {
+  Box(
+    modifier = Modifier
+      .fillMaxSize()
+      .background(color = SpaceCadetDark),
+    contentAlignment = Alignment.Center
+  ) {
+    NewWaterContainer(state = HydrationState(drank = 8))
+  }
+}
+
+@Preview
+@Composable
+fun SpringAnimationTest() {
+  val scope = rememberCoroutineScope()
+  var toggle by remember {
+    mutableStateOf(false)
+  }
+  val percent by animateFloatAsState(
+    targetValue = if (toggle) 0.5f else 0f,
+    animationSpec = spring(
+      dampingRatio = Spring.DampingRatioHighBouncy,
+      stiffness = Spring.StiffnessVeryLow
+    )
+  )
+  val percentScaled by animateFloatAsState(
+    targetValue = if (toggle) 500f else 0f,
+    animationSpec = spring(
+      dampingRatio = Spring.DampingRatioHighBouncy,
+      stiffness = Spring.StiffnessVeryLow
+    )
+  )
+
+  val boxWidth = remember { 150.dp }
+  val boxHeight = remember { 300.dp }
+
+  Column(
+    modifier = Modifier
+      .fillMaxSize()
+      .background(color = SpaceCadetDark),
+    verticalArrangement = Arrangement.Center
+  ) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+      Box(
+        modifier = Modifier
+          .width(boxWidth)
+          .height(boxHeight)
+          .background(
+            color = Color.LightGray,
+            shape = RoundedCornerShape(16.dp)
+          )
+          .clip(RoundedCornerShape(16.dp))
+          .clickable {
+            toggle = !toggle
+          }
+          .drawBehind {
+            val width = size.width
+            val height = size.height * percent * -1
+            drawRoundRect(
+              color = OceanBlue,
+              topLeft = Offset(0f, size.height),
+              size = Size(width, height)
+            )
+          }
+      )
+      Box(
+        modifier = Modifier
+          .width(boxWidth)
+          .height(boxHeight)
+          .background(
+            color = Color.LightGray,
+            shape = RoundedCornerShape(16.dp)
+          )
+          .clip(RoundedCornerShape(16.dp))
+          .clickable {
+            toggle = !toggle
+          }
+          .drawBehind {
+            val width = size.width
+            val height = size.height * (percentScaled / 1000f) * -1
+            drawRoundRect(
+              color = OceanBlue,
+              topLeft = Offset(0f, size.height),
+              size = Size(width, height)
+            )
+          }
       )
     }
   }
