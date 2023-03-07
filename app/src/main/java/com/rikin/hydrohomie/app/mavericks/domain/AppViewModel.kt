@@ -46,7 +46,7 @@ class AppViewModel(
 
       setState {
         AppState(
-          drinkAmount = settings.drinkSize,
+          defaultDrinkAmount = settings.drinkSize,
           weekday = environment.dates.dayOfWeek.toWeekday(),
           hydrations = buildList {
             currentWeek.forEachIndexed { index, date ->
@@ -74,7 +74,7 @@ class AppViewModel(
             hydrations = List(hydrations.size) { index ->
               if (index == weekday.ordinal) {
                 hydrations[index].copy(
-                  drank = (hydrations[index].drank + drinkAmount).coerceAtMost(hydrationState.goal)
+                  drank = (hydrations[index].drank + defaultDrinkAmount).coerceAtMost(hydrationState.goal)
                 )
               } else {
                 hydrations[index]
@@ -127,7 +127,7 @@ class AppViewModel(
       is AppAction.UpdateDrinkSize -> {
         Log.d("Update Drink Size", "${action.drinkSize}")
         setState {
-          copy(drinkAmount = action.drinkSize)
+          copy(defaultDrinkAmount = action.drinkSize)
         }
         withState { state ->
           viewModelScope.launch {

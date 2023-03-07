@@ -3,38 +3,24 @@ package com.rikin.hydrohomie.app.common.domain
 import com.airbnb.mvrx.MavericksState
 import com.rikin.hydrohomie.app.common.domain.Weekday.Monday
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
-import com.rikin.hydrohomie.features.settings.common.domain.DrinkSizes
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 
 data class AppState(
   val weekday: Weekday = Monday,
-  val drinkAmount: Int = 8,
+  val defaultDrinkAmount: Int = 8,
   val hydrations: List<HydrationState> = buildList {
     repeat(HYDRATION_LIMIT) {
       add(
         HydrationState(
           drank = 0,
           goal = 64,
-          drinkAmount = drinkAmount
+          drinkAmount = defaultDrinkAmount
         )
       )
     }
   },
 ) : MavericksState {
-  private val drinkSizes = if (drinkAmount in STANDARD_SIZES) {
-    DrinkSizes.map { state ->
-      state.copy(selected = state.amount == drinkAmount)
-    }
-  } else {
-    DrinkSizes.map { state ->
-      if (state.custom) {
-        state.copy(selected = true, amount = drinkAmount)
-      } else {
-        state.copy(selected = false)
-      }
-    }
-  }
 
   val hydrationState = hydrations[weekday.ordinal]
   val streakState = StreakState(
@@ -42,13 +28,11 @@ data class AppState(
     currentDay = weekday
   )
   val settingsState = SettingsState(
-    drinkSizes = drinkSizes,
     personalGoal = hydrationState.goal,
-    defaultDrinkSize = drinkAmount
+    defaultDrinkSize = defaultDrinkAmount
   )
 }
 
-private val STANDARD_SIZES = setOf(8, 16, 32)
 
 sealed class AppAction {
   object Drink : AppAction()

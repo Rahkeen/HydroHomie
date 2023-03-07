@@ -2,7 +2,6 @@ package com.rikin.hydrohomie.features.settings.workflow.domain
 
 import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.app.common.domain.AppState
-import com.rikin.hydrohomie.features.settings.common.domain.DrinkSizes
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import com.rikin.hydrohomie.features.settings.workflow.domain.SettingsOutput.UpdateState
 import com.squareup.workflow1.Snapshot
@@ -20,9 +19,7 @@ object SettingsWorkflow :
       AppAction.Drink -> Unit
       AppAction.Reset -> Unit
       is AppAction.UpdateDrinkSize -> {
-        state = state.copy(
-          drinkSizes = DrinkSizes.map { it.copy(selected = it.amount == action.drinkSize) }
-        )
+        state = state.copy(defaultDrinkSize = action.drinkSize)
         setOutput(UpdateState(state))
       }
       is AppAction.UpdateGoal -> {

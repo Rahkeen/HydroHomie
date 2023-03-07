@@ -84,7 +84,7 @@ fun Streaks(state: StreakState) {
             )
           }
           Text(
-            text = "${state.consecutiveDays} d",
+            text = "${state.currentStreak} d",
             color = ThemeTwo,
             style = MaterialTheme.typography.caption
           )
