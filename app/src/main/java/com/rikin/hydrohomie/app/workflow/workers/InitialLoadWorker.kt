@@ -25,9 +25,9 @@ class InitialLoadWorker(
           if (index == dates.dayOfWeek) {
             add(HydrationState(drank = drink.count, goal = drink.goal))
           } else if (index < dates.dayOfWeek) {
-            add(HydrationState(drank = 64))
+            add(HydrationState(drank = 8, goal = drink.goal))
           } else {
-            add(HydrationState())
+            add(HydrationState(drank = 0, goal = drink.goal))
           }
         }
       }

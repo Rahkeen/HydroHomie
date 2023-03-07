@@ -140,7 +140,7 @@ fun StreakCupPreview() {
   HydroHomieTheme {
     Box(modifier = Modifier.background(SpaceCadetDark)) {
       StreakCup(
-        hydrationState = HydrationState(),
+        hydrationState = HydrationState(drank = 32, goal = 64),
         dayLetter = "M",
         isToday = true
       )

@@ -42,7 +42,7 @@ fun Hydration(
 fun HydrationPreview() {
   HydroHomieTheme {
     Hydration(
-      state = HydrationState(drank = 16),
+      state = HydrationState(drank = 16, goal = 64),
       actions = {},
       navigation = {}
     )

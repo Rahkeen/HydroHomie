@@ -12,7 +12,13 @@ data class AppState(
   val drinkAmount: Int = 8,
   val hydrations: List<HydrationState> = buildList {
     repeat(HYDRATION_LIMIT) {
-      add(HydrationState(drinkAmount = drinkAmount))
+      add(
+        HydrationState(
+          drank = 0,
+          goal = 64,
+          drinkAmount = drinkAmount
+        )
+      )
     }
   },
 ) : MavericksState {
@@ -22,11 +28,11 @@ data class AppState(
     }
   } else {
     DrinkSizes.map { state ->
-     if (state.custom) {
-       state.copy(selected = true, amount = drinkAmount)
-     } else {
-       state.copy(selected = false)
-     }
+      if (state.custom) {
+        state.copy(selected = true, amount = drinkAmount)
+      } else {
+        state.copy(selected = false)
+      }
     }
   }
 

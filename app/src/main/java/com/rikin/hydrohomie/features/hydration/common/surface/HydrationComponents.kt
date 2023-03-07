@@ -239,7 +239,7 @@ fun ActionBarPreview() {
   HydroHomieTheme {
     Box {
       ActionBar(
-        state = HydrationState(),
+        state = HydrationState(drank = 32, goal = 64),
         actions = {},
         navigation = {}
       )
@@ -256,7 +256,7 @@ fun WaterContainerPreview() {
       .background(color = SpaceCadetDark),
     contentAlignment = Alignment.Center
   ) {
-    NewWaterContainer(state = HydrationState(drank = 8))
+    NewWaterContainer(state = HydrationState(drank = 8, goal = 64))
   }
 }
 

@@ -166,7 +166,7 @@ fun BoxScope.IndicatorLineAlternate(state: HydrationState) {
 fun IndicatorLineAlternatePreview() {
   HydroHomieTheme {
     Box(modifier = Modifier.fillMaxSize()) {
-      IndicatorLineAlternate(state = HydrationState(drank = 32))
+      IndicatorLineAlternate(state = HydrationState(drank = 32, goal = 64))
     }
   }
 }

@@ -479,9 +479,9 @@ fun SuperButtonPreview() {
         iconDescription = "Settings",
         action = {}
       )
-      SuperButton(state = HydrationState(), {})
+      SuperButton(state = HydrationState(drank = 8, goal = 64), {})
       IconDeleteButton {}
-      DrinkDisplay(state = HydrationState(drank = 16))
+      DrinkDisplay(state = HydrationState(drank = 16, goal = 64))
     }
   }
 }
