@@ -89,7 +89,7 @@ class HydroHomieApplication : Application() {
       appDatabase.localSettingsDao().insertSettings(
         LocalSettings(
           drinkSize = 8,
-          goal = 8
+          goal = 64
         )
       )
     }

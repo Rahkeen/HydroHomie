@@ -52,11 +52,11 @@ class AppViewModel(
             currentWeek.forEachIndexed { index, date ->
               val drink = dateToDrink[date]
               if (index == environment.dates.dayOfWeek && drink != null) {
-                add(HydrationState(drank = drink.count, goal = settings.goal))
+                add(HydrationState(drank = drink.count, goal = settings.goal, drinkAmount = settings.drinkSize))
               } else if (drink != null) {
                 add(HydrationState(drank = drink.count, goal = drink.goal))
               } else {
-                add(HydrationState())
+                add(HydrationState(drank = 0, goal = settings.goal))
               }
             }
           }

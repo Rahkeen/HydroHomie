@@ -89,7 +89,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
 @Composable
 fun SettingsPreview() {
   HydroHomieTheme {
-    Settings(state = SettingsState(), actions = {})
+    Settings(state = SettingsState(personalGoal = 64, defaultDrinkSize = 16), actions = {})
   }
 }
 

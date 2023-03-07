@@ -1,9 +1,9 @@
 package com.rikin.hydrohomie.features.settings.common.domain
 
 data class SettingsState(
-  val personalGoal: Int = 64,
+  val personalGoal: Int,
+  val defaultDrinkSize: Int,
   val drinkSizes: List<DrinkSizeState> = DrinkSizes,
-  val defaultDrinkSize: Int = 8,
 )
 
 val DrinkSizes = listOf(
