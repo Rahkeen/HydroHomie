@@ -2,7 +2,6 @@
 
 package com.rikin.hydrohomie.app.mavericks.domain
 
-import android.util.Log
 import com.airbnb.mvrx.MavericksViewModel
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
@@ -13,6 +12,9 @@ import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
 import com.rikin.hydrohomie.drinks.LocalDrink
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus.Disabled
+import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus.Enabled
+import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus.PermissionDenied
 import com.rikin.hydrohomie.settings.LocalSettings
 import com.squareup.workflow1.ui.WorkflowUiExperimentalApi
 import kotlinx.coroutines.launch
@@ -24,6 +26,7 @@ class AppViewModel(
 ) : MavericksViewModel<AppState>(initialState) {
 
   companion object : MavericksViewModelFactory<AppViewModel, AppState> {
+    @OptIn(WorkflowUiExperimentalApi::class)
     override fun create(viewModelContext: ViewModelContext, state: AppState): AppViewModel {
       val drinkRepository = viewModelContext.app<HydroHomieApplication>().drinkRepository
       val settingsRepository = viewModelContext.app<HydroHomieApplication>().settingsRepository
@@ -44,11 +47,17 @@ class AppViewModel(
       )
 
       val settings = environment.settingsRepository.getSettings()
+      val notificationStatus = if (settings.notificationsEnabled) {
+        Enabled
+      } else {
+        Disabled
+      }
 
       setState {
         AppState(
           defaultDrinkAmount = settings.drinkSize,
           weekday = environment.dates.dayOfWeek.toWeekday(),
+          notificationStatus = notificationStatus,
           hydrations = buildList {
             currentWeek.forEachIndexed { index, date ->
               val drink = dateToDrink[date]
@@ -134,7 +143,6 @@ class AppViewModel(
       }
 
       is AppAction.UpdateDrinkSize -> {
-        Log.d("Update Drink Size", "${action.drinkSize}")
         setState {
           copy(defaultDrinkAmount = action.drinkSize)
         }
@@ -179,12 +187,16 @@ class AppViewModel(
       }
 
       is AppAction.UpdateNotifications -> {
-        setState { copy(notificationsEnabled = action.enabled) }
+        setState { copy(notificationStatus = action.status) }
         withState { state ->
-          if (state.notificationsEnabled) {
-            environment.notifier.start()
-          } else {
-            environment.notifier.cancel()
+          when (state.notificationStatus) {
+            Enabled -> {
+              environment.notifier.start()
+            }
+
+            Disabled, PermissionDenied -> {
+              environment.notifier.cancel()
+            }
           }
 
           viewModelScope.launch {
@@ -194,7 +206,7 @@ class AppViewModel(
                 localSettings = LocalSettings(
                   drinkSize = state.settingsState.defaultDrinkSize,
                   goal = state.settingsState.personalGoal,
-                  notificationsEnabled = state.notificationsEnabled
+                  notificationsEnabled = state.notificationStatus.enabled
                 )
               )
           }

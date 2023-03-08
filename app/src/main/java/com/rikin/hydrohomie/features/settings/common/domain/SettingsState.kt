@@ -4,7 +4,7 @@ package com.rikin.hydrohomie.features.settings.common.domain
 data class SettingsState(
   val personalGoal: Int,
   val defaultDrinkSize: Int,
-  val notificationsEnabled: Boolean
+  val notificationStatus: NotificationStatus
 ) {
   val drinkSizes: List<DrinkSizeState> = if (defaultDrinkSize in StandardSizes) {
     DrinkSizes.map { state ->
@@ -19,6 +19,12 @@ data class SettingsState(
       }
     }
   }
+}
+
+enum class NotificationStatus(val enabled: Boolean) {
+  PermissionDenied(false),
+  Enabled(true),
+  Disabled(false)
 }
 
 data class DrinkSizeState(

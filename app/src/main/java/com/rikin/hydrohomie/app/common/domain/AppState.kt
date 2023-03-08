@@ -3,13 +3,14 @@ package com.rikin.hydrohomie.app.common.domain
 import com.airbnb.mvrx.MavericksState
 import com.rikin.hydrohomie.app.common.domain.Weekday.Monday
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 
 data class AppState(
   val weekday: Weekday = Monday,
   val defaultDrinkAmount: Int = 8,
-  val notificationsEnabled: Boolean = false,
+  val notificationStatus: NotificationStatus = NotificationStatus.Disabled,
   val hydrations: List<HydrationState> = buildList {
     repeat(HYDRATION_LIMIT) {
       add(
@@ -31,7 +32,7 @@ data class AppState(
   val settingsState = SettingsState(
     personalGoal = hydrationState.goal,
     defaultDrinkSize = defaultDrinkAmount,
-    notificationsEnabled = notificationsEnabled
+    notificationStatus = notificationStatus
   )
 }
 
@@ -41,7 +42,7 @@ sealed class AppAction {
   object Reset : AppAction()
   data class UpdateGoal(val goal: Int) : AppAction()
   data class UpdateDrinkSize(val drinkSize: Int) : AppAction()
-  data class UpdateNotifications(val enabled: Boolean): AppAction()
+  data class UpdateNotifications(val status: NotificationStatus): AppAction()
 }
 
 enum class Weekday {

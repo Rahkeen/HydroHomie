@@ -1,5 +1,10 @@
 package com.rikin.hydrohomie.features.settings.common.surface
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,10 +27,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import com.airbnb.mvrx.compose.collectAsState
 import com.rikin.hydrohomie.R
 import com.rikin.hydrohomie.app.common.domain.AppAction
@@ -43,7 +50,12 @@ import com.rikin.hydrohomie.design.ProfilePicSize
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.ThemeGamertag
 import com.rikin.hydrohomie.design.ThemeSliderPrimary
+import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.drinks.FakeDrinkRepository
+import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus
+import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus.Disabled
+import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus.Enabled
+import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus.PermissionDenied
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import com.rikin.hydrohomie.settings.FakeSettingsRepository
 import kotlin.math.roundToInt
@@ -93,33 +105,99 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
 
     DrinkSizeSelectionGroup(
       drinks = state.drinkSizes,
-      action = { actions(AppAction.UpdateDrinkSize(it.amount)) })
+      action = { actions(AppAction.UpdateDrinkSize(it.amount)) }
+    )
 
-    Row(
-      modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = ElementPadding),
-      horizontalArrangement = Arrangement.SpaceBetween,
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      Column {
-        Text(text = "Notifications", style = MaterialTheme.typography.caption)
-        Text(
-          text = "~4 per day",
-          fontSize = 12.sp,
-          color = PopYellow
-        )
+    NotificationSettings(state = state.notificationStatus, actions = actions)
+  }
+}
+
+@Composable
+fun NotificationSettings(state: NotificationStatus, actions: (AppAction) -> Unit) {
+  val context = LocalContext.current
+
+  var hasPermission by remember {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+      val granted = ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.POST_NOTIFICATIONS
+      ) == PackageManager.PERMISSION_GRANTED
+
+      mutableStateOf(granted)
+    } else {
+      mutableStateOf(true)
+    }
+  }
+
+  val permissionLauncher = rememberLauncherForActivityResult(
+    contract = ActivityResultContracts.RequestPermission(),
+    onResult = { isGranted ->
+      hasPermission = isGranted
+
+      val status = if (isGranted) {
+        Enabled
+      } else {
+        PermissionDenied
       }
-      Checkbox(
-        checked = state.notificationsEnabled,
-        onCheckedChange = { actions(AppAction.UpdateNotifications(it)) },
-        colors = CheckboxDefaults.colors(
-          checkedColor = PopYellow,
-          uncheckedColor = PopYellow,
-          checkmarkColor = SpaceCadet
-        )
+
+      actions(
+        AppAction.UpdateNotifications(status)
       )
     }
+  )
+
+  fun secondaryText(state: NotificationStatus): String {
+    return when (state) {
+      PermissionDenied -> {
+        "Permission Denied"
+      }
+
+      Enabled, Disabled -> {
+        "~4 per day"
+      }
+    }
+  }
+
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(horizontal = ElementPadding),
+    horizontalArrangement = Arrangement.SpaceBetween,
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Column {
+      Text(
+        text = "Notifications",
+        style = MaterialTheme.typography.caption,
+        color = WispyWhite
+      )
+      Text(
+        text = secondaryText(state),
+        fontSize = 12.sp,
+        color = PopYellow
+      )
+    }
+    Checkbox(
+      checked = state.enabled,
+      onCheckedChange = { checked ->
+        if (!hasPermission && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          permissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+          val status = if (checked) {
+            Enabled
+          } else {
+            Disabled
+          }
+          actions(AppAction.UpdateNotifications(status))
+        }
+      },
+      colors = CheckboxDefaults.colors(
+        checkedColor = PopYellow,
+        uncheckedColor = PopYellow,
+        checkmarkColor = SpaceCadet,
+        disabledColor = SpaceCadet
+      )
+    )
   }
 }
 
@@ -130,7 +208,7 @@ fun SettingsPreview() {
     Settings(state = SettingsState(
       personalGoal = 64,
       defaultDrinkSize = 16,
-      notificationsEnabled = false
+      notificationStatus = Disabled
     ), actions = {})
   }
 }
