@@ -31,6 +31,7 @@ import com.rikin.hydrohomie.R
 import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.app.common.domain.AppEnvironment
 import com.rikin.hydrohomie.app.common.domain.AppState
+import com.rikin.hydrohomie.app.jobs.FakeNotifier
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.dates.FakeDates
 import com.rikin.hydrohomie.design.ComponentPadding
@@ -145,6 +146,7 @@ fun FunctionalSettingsPreview() {
           drinkRepository = FakeDrinkRepository(),
           settingsRepository = FakeSettingsRepository(),
           dates = FakeDates(),
+          notifier = FakeNotifier()
         )
       )
     }

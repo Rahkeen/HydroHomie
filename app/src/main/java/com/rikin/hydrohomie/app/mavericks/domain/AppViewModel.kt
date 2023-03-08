@@ -28,7 +28,8 @@ class AppViewModel(
       val drinkRepository = viewModelContext.app<HydroHomieApplication>().drinkRepository
       val settingsRepository = viewModelContext.app<HydroHomieApplication>().settingsRepository
       val dates = viewModelContext.app<HydroHomieApplication>().dates
-      val environment = AppEnvironment(drinkRepository, settingsRepository, dates)
+      val notifier = viewModelContext.app<HydroHomieApplication>().notifier
+      val environment = AppEnvironment(drinkRepository, settingsRepository, dates, notifier)
       return AppViewModel(state, environment)
     }
   }
@@ -180,6 +181,12 @@ class AppViewModel(
       is AppAction.UpdateNotifications -> {
         setState { copy(notificationsEnabled = action.enabled) }
         withState { state ->
+          if (state.notificationsEnabled) {
+            environment.notifier.start()
+          } else {
+            environment.notifier.cancel()
+          }
+
           viewModelScope.launch {
             environment
               .settingsRepository

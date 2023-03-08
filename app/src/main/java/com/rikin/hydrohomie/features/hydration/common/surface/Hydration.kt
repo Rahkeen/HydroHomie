@@ -13,6 +13,7 @@ import com.airbnb.mvrx.compose.collectAsState
 import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.app.common.domain.AppEnvironment
 import com.rikin.hydrohomie.app.common.domain.AppState
+import com.rikin.hydrohomie.app.jobs.FakeNotifier
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.app.mavericks.suface.NavTarget
 import com.rikin.hydrohomie.dates.FakeDates
@@ -60,6 +61,7 @@ fun FunctionalHydrationPreview() {
           drinkRepository = FakeDrinkRepository(),
           settingsRepository = FakeSettingsRepository(),
           dates = FakeDates(),
+          notifier = FakeNotifier()
         )
       )
     }
