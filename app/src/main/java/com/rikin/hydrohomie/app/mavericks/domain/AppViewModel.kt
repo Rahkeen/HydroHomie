@@ -52,7 +52,13 @@ class AppViewModel(
             currentWeek.forEachIndexed { index, date ->
               val drink = dateToDrink[date]
               if (index == environment.dates.dayOfWeek && drink != null) {
-                add(HydrationState(drank = drink.count, goal = settings.goal, drinkAmount = settings.drinkSize))
+                add(
+                  HydrationState(
+                    drank = drink.count,
+                    goal = settings.goal,
+                    drinkAmount = settings.drinkSize
+                  )
+                )
               } else if (drink != null) {
                 add(HydrationState(drank = drink.count, goal = drink.goal))
               } else {
@@ -97,6 +103,7 @@ class AppViewModel(
           }
         }
       }
+
       is AppAction.Reset -> {
         setState {
           copy(
@@ -124,6 +131,7 @@ class AppViewModel(
           }
         }
       }
+
       is AppAction.UpdateDrinkSize -> {
         Log.d("Update Drink Size", "${action.drinkSize}")
         setState {
@@ -142,6 +150,7 @@ class AppViewModel(
           }
         }
       }
+
       is AppAction.UpdateGoal -> {
         setState {
           copy(
@@ -162,6 +171,23 @@ class AppViewModel(
                 LocalSettings(
                   drinkSize = state.settingsState.defaultDrinkSize,
                   goal = state.settingsState.personalGoal,
+                )
+              )
+          }
+        }
+      }
+
+      is AppAction.UpdateNotifications -> {
+        setState { copy(notificationsEnabled = action.enabled) }
+        withState { state ->
+          viewModelScope.launch {
+            environment
+              .settingsRepository
+              .updateSettings(
+                localSettings = LocalSettings(
+                  drinkSize = state.settingsState.defaultDrinkSize,
+                  goal = state.settingsState.personalGoal,
+                  notificationsEnabled = state.notificationsEnabled
                 )
               )
           }

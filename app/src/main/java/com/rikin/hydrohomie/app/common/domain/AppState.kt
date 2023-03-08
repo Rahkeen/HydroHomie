@@ -41,6 +41,7 @@ sealed class AppAction {
   object Reset : AppAction()
   data class UpdateGoal(val goal: Int) : AppAction()
   data class UpdateDrinkSize(val drinkSize: Int) : AppAction()
+  data class UpdateNotifications(val enabled: Boolean): AppAction()
 }
 
 enum class Weekday {

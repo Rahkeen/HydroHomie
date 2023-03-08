@@ -37,6 +37,7 @@ object HydrationWorkflow :
       }
       is AppAction.UpdateDrinkSize -> {}
       is AppAction.UpdateGoal -> {}
+      is AppAction.UpdateNotifications -> TODO()
     }
   }
 

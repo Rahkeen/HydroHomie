@@ -26,6 +26,8 @@ object SettingsWorkflow :
         state = state.copy(personalGoal = action.goal)
         setOutput(UpdateState(state))
       }
+
+      is AppAction.UpdateNotifications -> TODO()
     }
   }
 
