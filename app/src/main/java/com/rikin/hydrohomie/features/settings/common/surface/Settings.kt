@@ -71,25 +71,7 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
 
-    // Profile Pic Placeholder
-    Box(
-      modifier = Modifier
-        .width(ProfilePicSize)
-        .height(ProfilePicSize)
-        .background(brush = ImageGradient, shape = MaterialTheme.shapes.medium),
-      contentAlignment = Alignment.Center
-    ) {
-      Image(
-        painter = painterResource(id = R.drawable.ic_launcher_foreground),
-        contentDescription = "main icon"
-      )
-    }
-
-    Text(
-      text = "@hydrohomie",
-      style = MaterialTheme.typography.body1,
-      color = ThemeGamertag
-    )
+    SettingsHeader()
 
     NewGoalSlider(
       low = 0,
@@ -108,7 +90,37 @@ fun Settings(state: SettingsState, actions: (AppAction) -> Unit) {
       action = { actions(AppAction.UpdateDrinkSize(it.amount)) }
     )
 
-    NotificationSettings(state = state.notificationStatus, actions = actions)
+    NotificationSettings(
+      state = state.notificationStatus,
+      actions = actions
+    )
+  }
+}
+
+@Composable
+private fun SettingsHeader() {
+  Column(
+    modifier = Modifier.fillMaxWidth(),
+    verticalArrangement = Arrangement.spacedBy(ElementPadding, Alignment.CenterVertically),
+    horizontalAlignment = Alignment.CenterHorizontally
+  ) {
+    Box(
+      modifier = Modifier
+        .width(ProfilePicSize)
+        .height(ProfilePicSize)
+        .background(brush = ImageGradient, shape = MaterialTheme.shapes.medium),
+      contentAlignment = Alignment.Center
+    ) {
+      Image(
+        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+        contentDescription = "main icon"
+      )
+    }
+    Text(
+      text = "@hydrohomie",
+      style = MaterialTheme.typography.body1,
+      color = ThemeGamertag
+    )
   }
 }
 
