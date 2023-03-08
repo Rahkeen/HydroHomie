@@ -263,7 +263,6 @@ fun WaterContainerPreview() {
 @Preview
 @Composable
 fun SpringAnimationTest() {
-  val scope = rememberCoroutineScope()
   var toggle by remember {
     mutableStateOf(false)
   }
@@ -271,7 +270,8 @@ fun SpringAnimationTest() {
     targetValue = if (toggle) 0.5f else 0f,
     animationSpec = spring(
       dampingRatio = Spring.DampingRatioHighBouncy,
-      stiffness = Spring.StiffnessVeryLow
+      stiffness = Spring.StiffnessVeryLow,
+      visibilityThreshold = 0.001f
     )
   )
   val percentScaled by animateFloatAsState(

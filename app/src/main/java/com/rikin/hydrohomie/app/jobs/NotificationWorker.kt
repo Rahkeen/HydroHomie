@@ -24,6 +24,7 @@ interface Notifier {
 }
 
 class RealNotifier(private val appContext: Context) : Notifier {
+
   init {
     createReminderChannel()
   }
@@ -52,7 +53,6 @@ class RealNotifier(private val appContext: Context) : Notifier {
     val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
       description = descriptionText
     }
-    // Register the channel with the system
     val notificationManager = appContext.getSystemService(NotificationManager::class.java)
     notificationManager.createNotificationChannel(channel)
   }
