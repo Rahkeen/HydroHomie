@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -125,7 +126,11 @@ private fun SettingsHeader() {
 }
 
 @Composable
-fun NotificationSettings(state: NotificationStatus, actions: (AppAction) -> Unit) {
+fun NotificationSettings(
+  state: NotificationStatus,
+  onboarding: Boolean = false,
+  actions: (AppAction) -> Unit
+) {
   val context = LocalContext.current
 
   var hasPermission by remember {
@@ -170,8 +175,11 @@ fun NotificationSettings(state: NotificationStatus, actions: (AppAction) -> Unit
     }
   }
 
+  val scale = remember(onboarding) { if (onboarding) 0.75f else 1f }
+
   Row(
     modifier = Modifier
+      .graphicsLayer(scaleX = scale, scaleY = scale)
       .fillMaxWidth()
       .padding(horizontal = ElementPadding),
     horizontalArrangement = Arrangement.SpaceBetween,
