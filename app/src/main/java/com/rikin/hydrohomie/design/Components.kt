@@ -48,6 +48,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
@@ -61,6 +62,8 @@ import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rikin.hydrohomie.R
@@ -69,38 +72,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun HydroIconButton(
-  backgroundColor: Color,
-  iconTint: Color,
-  icon: ImageVector,
-  iconDescription: String,
-  action: () -> Unit,
-) {
-  Box(
-    modifier = Modifier
-      .width(ButtonWidth)
-      .height(ButtonHeight)
-      .background(
-        shape = MaterialTheme.shapes.medium,
-        color = backgroundColor
-      )
-      .clip(MaterialTheme.shapes.medium)
-      .clickable { action() },
-    contentAlignment = Alignment.Center
-  ) {
-    Icon(
-      modifier = Modifier.size(IconSize),
-      imageVector = icon,
-      contentDescription = iconDescription,
-      tint = iconTint
-    )
-  }
-}
-
-@Composable
 fun NavButton(
   iconTint: Color,
   painter: Painter,
+  buttonSize: Dp = 40.dp,
+  iconSize: Dp = 30.dp,
+  navIconButtonSize: Dp = 10.dp,
+  navIconSize: Dp = 8.dp,
   iconDescription: String,
   action: () -> Unit,
 ) {
@@ -144,13 +122,12 @@ fun NavButton(
   Box(
     modifier = Modifier
       .graphicsLayer(scaleX = scale, scaleY = scale, rotationZ = rotation)
-      .width(40.dp)
-      .height(40.dp)
+      .size(buttonSize)
       .clickable(interactionSource = interactionSource, indication = null) { action() },
     contentAlignment = Alignment.Center
   ) {
     Image(
-      modifier = Modifier.size(30.dp),
+      modifier = Modifier.size(iconSize),
       painter = painter,
       contentDescription = iconDescription,
       colorFilter = ColorFilter.tint(color = iconTint)
@@ -158,13 +135,13 @@ fun NavButton(
     Box(
       modifier = Modifier
         .graphicsLayer(translationX = navArrowTranslation)
-        .size(10.dp)
+        .size(navIconButtonSize)
         .background(color = iconTint, shape = RoundedCornerShape(3.dp))
         .align(Alignment.BottomEnd),
       contentAlignment = Alignment.Center
     ) {
       Icon(
-        modifier = Modifier.size(8.dp),
+        modifier = Modifier.size(navIconSize  ),
         imageVector = Icons.Rounded.ArrowForward,
         tint = SpaceCadetDark,
         contentDescription = "Nav Button"
@@ -175,7 +152,7 @@ fun NavButton(
 
 
 @Composable
-fun IconDeleteButton(action: () -> Unit) {
+fun IconDeleteButton(buttonSize: Dp = 40.dp, iconSize: Dp = 30.dp, action: () -> Unit) {
   val interactionSource = remember {
     MutableInteractionSource()
   }
@@ -272,7 +249,7 @@ fun IconDeleteButton(action: () -> Unit) {
   Box(
     modifier = Modifier
       .graphicsLayer(scaleX = scale, scaleY = scale, rotationZ = rotation)
-      .size(40.dp)
+      .size(buttonSize)
       .clip(shape = RoundedCornerShape(16.dp))
       .clickable(
         interactionSource = interactionSource,
@@ -326,7 +303,7 @@ fun IconDeleteButton(action: () -> Unit) {
     contentAlignment = Alignment.Center
   ) {
     Image(
-      modifier = Modifier.size(30.dp),
+      modifier = Modifier.size(iconSize),
       painter = iconVector,
       colorFilter = ColorFilter.tint(color = PopRed),
       contentDescription = "Reset"
@@ -335,13 +312,18 @@ fun IconDeleteButton(action: () -> Unit) {
 }
 
 @Composable
-fun SuperButton(state: HydrationState, action: () -> Unit) {
+fun SuperButton(
+  state: HydrationState,
+  size: Dp = 80.dp,
+  iconSize: Dp = 40.dp,
+  shape: Shape = RoundedCornerShape(20.dp),
+  borderWidth: Dp = 2.dp,
+  action: () -> Unit
+) {
   val interactionSource = remember { MutableInteractionSource() }
   val pressed by interactionSource.collectIsPressedAsState()
 
-  val shape = remember { RoundedCornerShape(20.dp) }
-  val size = remember { 80.dp }
-  val duration = 300
+  val duration = remember { 300 }
 
   val buttonScale by animateFloatAsState(
     targetValue = if (pressed) 0.9f else 1f,
@@ -427,12 +409,12 @@ fun SuperButton(state: HydrationState, action: () -> Unit) {
           shape = shape,
           color = SpaceCadet
         )
-        .border(width = 2.dp, brush = gradient, shape = shape)
+        .border(width = borderWidth, brush = gradient, shape = shape)
         .clip(shape),
       contentAlignment = Alignment.Center
     ) {
       Image(
-        modifier = Modifier.size(40.dp),
+        modifier = Modifier.size(iconSize),
         painter = painterResource(id = R.drawable.ic_plus_small),
         contentDescription = "Drink",
         colorFilter = ColorFilter.tint(WispyWhite)
@@ -442,7 +424,7 @@ fun SuperButton(state: HydrationState, action: () -> Unit) {
 }
 
 @Composable
-fun DrinkDisplay(state: HydrationState) {
+fun DrinkDisplay(fontSize: TextUnit = 20.sp, state: HydrationState) {
   val infiniteTransition = rememberInfiniteTransition()
   val rotation by infiniteTransition.animateFloat(
     initialValue = -4f,
@@ -458,7 +440,7 @@ fun DrinkDisplay(state: HydrationState) {
       .wrapContentSize(),
     contentAlignment = Alignment.Center
   ) {
-    Text(text = "${state.drank} oz", fontSize = 20.sp, color = WispyWhite)
+    Text(text = "${state.drank} oz", fontSize = fontSize, color = WispyWhite)
   }
 }
 
@@ -479,7 +461,7 @@ fun SuperButtonPreview() {
         iconDescription = "Settings",
         action = {}
       )
-      SuperButton(state = HydrationState(drank = 8, goal = 64), {})
+      SuperButton(state = HydrationState(drank = 0, goal = 64), action = {})
       IconDeleteButton {}
       DrinkDisplay(state = HydrationState(drank = 16, goal = 64))
     }

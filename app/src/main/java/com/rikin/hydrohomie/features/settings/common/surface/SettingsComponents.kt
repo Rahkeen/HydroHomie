@@ -107,6 +107,7 @@ fun NewGoalSlider(
   low: Int,
   high: Int,
   progress: Float,
+  scale: Float = 1f,
   label: String,
   color: Color = ThemeSliderPrimary,
   update: (Float) -> Unit
@@ -114,6 +115,7 @@ fun NewGoalSlider(
   val display = remember(progress) { (progress * (high - low)).toInt() }
 
   Column(
+    modifier = Modifier.graphicsLayer(scaleX = scale, scaleY = scale),
     verticalArrangement = Arrangement.spacedBy(ElementPadding)
   ) {
     Text(
@@ -174,8 +176,15 @@ fun NewGoalSliderPreview() {
 }
 
 @Composable
-fun DrinkSizeSelectionGroup(drinks: List<DrinkSizeState>, action: (DrinkSizeState) -> Unit) {
+fun DrinkSizeSelectionGroup(
+  drinks: List<DrinkSizeState>,
+  onboarding: Boolean = false,
+  action: (DrinkSizeState) -> Unit
+) {
+  val scale = remember(onboarding) { if (onboarding) 0.75f else 1f }
+
   Column(
+    modifier = Modifier.graphicsLayer(scaleX = scale, scaleY = scale),
     verticalArrangement = Arrangement.spacedBy(ComponentPadding),
   ) {
     Text(
@@ -192,11 +201,13 @@ fun DrinkSizeSelectionGroup(drinks: List<DrinkSizeState>, action: (DrinkSizeStat
         if (state.custom) {
           CustomDrinkSizeSelection(
             state = state,
+            onboarding = onboarding,
             update = action
           )
         } else {
           DrinkSizeSelection(
             state = state,
+            onboarding = onboarding,
             select = action
           )
         }
@@ -208,6 +219,7 @@ fun DrinkSizeSelectionGroup(drinks: List<DrinkSizeState>, action: (DrinkSizeStat
 @Composable
 fun DrinkSizeSelection(
   state: DrinkSizeState,
+  onboarding: Boolean = false,
   select: (DrinkSizeState) -> Unit
 ) {
 
@@ -216,7 +228,8 @@ fun DrinkSizeSelection(
     animationSpec = spring(
       dampingRatio = Spring.DampingRatioNoBouncy,
       stiffness = Spring.StiffnessVeryLow
-    )
+    ),
+    label = "DrinkSizeSelection progress"
   )
 
   val scale by animateFloatAsState(
@@ -224,11 +237,19 @@ fun DrinkSizeSelection(
     animationSpec = spring(
       dampingRatio = Spring.DampingRatioMediumBouncy,
       stiffness = Spring.StiffnessLow
-    )
+    ),
+    label = "DrinkSizeSelection scale"
   )
 
-  val width = 75.dp
-  val height = 125.dp
+  val width = remember(onboarding) { if (onboarding) 56.dp else 75.dp }
+  val height = remember(onboarding) { if (onboarding) 96.dp else 125.dp }
+  val shape = remember(onboarding) {
+    if (onboarding) {
+      RoundedCornerShape(12.dp)
+    } else {
+      RoundedCornerShape(16.dp)
+    }
+  }
 
   val color = OceanBlue
 
@@ -236,7 +257,7 @@ fun DrinkSizeSelection(
     Box(
       modifier = Modifier
         .graphicsLayer(scaleX = scale, scaleY = scale)
-        .clip(RoundedCornerShape(16.dp))
+        .clip(shape)
         .clickable { select(state) }
     ) {
       Box(
@@ -260,7 +281,7 @@ fun DrinkSizeSelection(
             .width(width)
             .height(height)
             .background(color = SpaceCadet)
-            .border(width = 1.dp, shape = RoundedCornerShape(16.dp), color = color),
+            .border(width = 1.dp, shape = shape, color = color),
           contentAlignment = Alignment.Center
         ) {
           Text(state.label, color = color, fontSize = 16.sp)
@@ -273,6 +294,7 @@ fun DrinkSizeSelection(
 @Composable
 fun CustomDrinkSizeSelection(
   state: DrinkSizeState,
+  onboarding: Boolean = false,
   update: (DrinkSizeState) -> Unit
 ) {
   val max = 128f
@@ -284,19 +306,27 @@ fun CustomDrinkSizeSelection(
     animationSpec = spring(
       dampingRatio = Spring.DampingRatioMediumBouncy,
       stiffness = Spring.StiffnessLow
-    )
+    ),
+    label = "CustomDrinkSizeSelection scale"
   )
 
   val amount = ((1 - progress) * max).roundToInt()
-  val width = 75.dp
-  val height = 125.dp
+  val width = remember(onboarding) { if (onboarding) 56.dp else 75.dp }
+  val height = remember(onboarding) { if (onboarding) 96.dp else 125.dp }
+  val shape = remember(onboarding) {
+    if (onboarding) {
+      RoundedCornerShape(12.dp)
+    } else {
+      RoundedCornerShape(16.dp)
+    }
+  }
 
   val color = PopRed
 
   Box(
     modifier = Modifier
       .graphicsLayer(scaleX = scale, scaleY = scale)
-      .clip(RoundedCornerShape(16.dp))
+      .clip(shape)
       .pointerInput(Unit) {
         forEachGesture {
           awaitPointerEventScope {
@@ -334,7 +364,7 @@ fun CustomDrinkSizeSelection(
           .width(width)
           .height(height)
           .background(color = SpaceCadet)
-          .border(width = 1.dp, shape = RoundedCornerShape(16.dp), color = color),
+          .border(width = 1.dp, shape = shape, color = color),
         contentAlignment = Alignment.Center
       ) {
         Text("$amount oz", color = color, fontSize = 16.sp)

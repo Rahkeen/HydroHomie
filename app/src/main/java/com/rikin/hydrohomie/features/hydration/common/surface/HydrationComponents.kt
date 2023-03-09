@@ -97,11 +97,11 @@ fun BoxScope.ActionBar(
 
       NavButton(
         iconTint = ThemeTwo,
-        painter = painterResource(id = R.drawable.ic_calendar_days),
-        iconDescription = "Streaks",
-        action = {
-          navigation(NavTarget.StreaksTarget)
-        }
+      painter = painterResource(id = R.drawable.ic_calendar_days),
+      iconDescription = "Streaks",
+      action = {
+        navigation(NavTarget.StreaksTarget)
+      }
       )
       NavButton(
         iconTint = ThemeThree,
@@ -239,7 +239,7 @@ fun ActionBarPreview() {
   HydroHomieTheme {
     Box {
       ActionBar(
-        state = HydrationState(drank = 32, goal = 64),
+        state = HydrationState(drank = 0, goal = 64),
         actions = {},
         navigation = {}
       )
