@@ -42,7 +42,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rikin.hydrohomie.R
-import com.rikin.hydrohomie.app.common.domain.AppAction
 import com.rikin.hydrohomie.design.DrinkDisplay
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.IconDeleteButton
@@ -56,16 +55,225 @@ import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import com.rikin.hydrohomie.features.hydration.common.surface.NewWaterContainer
+import com.rikin.hydrohomie.features.onboarding.surface.OnboardingStep.Welcome
 import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
 import com.rikin.hydrohomie.features.settings.common.surface.DrinkSizeSelectionGroup
 import com.rikin.hydrohomie.features.settings.common.surface.NewGoalSlider
 
+data class ComponentState(val show: Boolean, val right: Boolean = true)
+
+sealed class OnboardingStep(
+  val instructions: String,
+
+  val waterContainer: HydrationState,
+  val plusButton: ComponentState,
+  val trashButton: ComponentState,
+  val display: ComponentState,
+  val settingsNavButton: ComponentState,
+  val streaksNavButton: ComponentState,
+
+  val goalSlider: ComponentState,
+  val drinkSelection: ComponentState,
+  val notifications: ComponentState,
+
+  val weeklyStreak: ComponentState,
+  val weeklyStats: ComponentState,
+) {
+
+  object Welcome: OnboardingStep(
+    instructions = "Welcome to Hydro Homie",
+    waterContainer = HydrationState(drank = 32, goal = 64),
+    plusButton = ComponentState(false),
+    trashButton = ComponentState(false),
+    display = ComponentState(false),
+    settingsNavButton = ComponentState(false),
+    streaksNavButton = ComponentState(false),
+
+    goalSlider = ComponentState(false),
+    drinkSelection = ComponentState(false),
+    notifications = ComponentState(false),
+
+    weeklyStreak = ComponentState(false),
+    weeklyStats = ComponentState(false)
+  )
+
+  object DrinkButton: OnboardingStep(
+    instructions = "Press this when you drink water",
+    waterContainer = HydrationState(drank = 32, goal = 64),
+    plusButton = ComponentState(true),
+    trashButton = ComponentState(false),
+    display = ComponentState(false),
+    settingsNavButton = ComponentState(false),
+    streaksNavButton = ComponentState(false),
+
+    goalSlider = ComponentState(false),
+    drinkSelection = ComponentState(false),
+    notifications = ComponentState(false),
+
+    weeklyStreak = ComponentState(false),
+    weeklyStats = ComponentState(false)
+  )
+
+  object IncrementWater: OnboardingStep(
+    instructions = "Press this when you drink water",
+    waterContainer = HydrationState(drank = 40, goal = 64),
+    plusButton = ComponentState(true),
+    trashButton = ComponentState(false),
+    display = ComponentState(false),
+    settingsNavButton = ComponentState(false),
+    streaksNavButton = ComponentState(false),
+
+    goalSlider = ComponentState(false),
+    drinkSelection = ComponentState(false),
+    notifications = ComponentState(false),
+
+    weeklyStreak = ComponentState(false),
+    weeklyStats = ComponentState(false)
+  )
+
+  object ShowTrashButton: OnboardingStep(
+    instructions = "Press this if you want to reset",
+    waterContainer = HydrationState(drank = 40, goal = 64),
+    plusButton = ComponentState(true),
+    trashButton = ComponentState(true),
+    display = ComponentState(false),
+    settingsNavButton = ComponentState(false),
+    streaksNavButton = ComponentState(false),
+
+    goalSlider = ComponentState(false),
+    drinkSelection = ComponentState(false),
+    notifications = ComponentState(false),
+
+    weeklyStreak = ComponentState(false),
+    weeklyStats = ComponentState(false)
+  )
+
+  object ResetWater: OnboardingStep(
+    instructions = "Press this if you want to reset",
+    waterContainer = HydrationState(drank = 0, goal = 64),
+    plusButton = ComponentState(true),
+    trashButton = ComponentState(true),
+    display = ComponentState(false),
+    settingsNavButton = ComponentState(false),
+    streaksNavButton = ComponentState(false),
+
+    goalSlider = ComponentState(false),
+    drinkSelection = ComponentState(false),
+    notifications = ComponentState(false),
+
+    weeklyStreak = ComponentState(false),
+    weeklyStats = ComponentState(false)
+  )
+
+  object ShowDisplay: OnboardingStep(
+    instructions = "This displays how much you have drank",
+    waterContainer = HydrationState(drank = 32, goal = 64),
+    plusButton = ComponentState(true),
+    trashButton = ComponentState(true),
+    display = ComponentState(true),
+    settingsNavButton = ComponentState(false),
+    streaksNavButton = ComponentState(false),
+
+    goalSlider = ComponentState(false),
+    drinkSelection = ComponentState(false),
+    notifications = ComponentState(false),
+
+    weeklyStreak = ComponentState(false),
+    weeklyStats = ComponentState(false)
+  )
+
+  object NavigateToSettings: OnboardingStep(
+    instructions = "Press this to navigate to your Settings",
+    waterContainer = HydrationState(drank = 32, goal = 64),
+    plusButton = ComponentState(true),
+    trashButton = ComponentState(true),
+    display = ComponentState(true),
+    settingsNavButton = ComponentState(true),
+    streaksNavButton = ComponentState(false),
+
+    goalSlider = ComponentState(false),
+    drinkSelection = ComponentState(false),
+    notifications = ComponentState(false),
+
+    weeklyStreak = ComponentState(false),
+    weeklyStats = ComponentState(false)
+  )
+
+  object ShowGoalSlider: OnboardingStep(
+    instructions = "Use this to set your daily goal",
+    waterContainer = HydrationState(drank = 0, goal = 64),
+    plusButton = ComponentState(false),
+    trashButton = ComponentState(false),
+    display = ComponentState(false),
+    settingsNavButton = ComponentState(false),
+    streaksNavButton = ComponentState(false),
+
+    goalSlider = ComponentState(true, right = false),
+    drinkSelection = ComponentState(false),
+    notifications = ComponentState(false),
+
+    weeklyStreak = ComponentState(false),
+    weeklyStats = ComponentState(false)
+  )
+
+  object ShowDrinkSelection: OnboardingStep(
+    instructions = "Use this to set your default drink size",
+    waterContainer = HydrationState(drank = 0, goal = 64),
+    plusButton = ComponentState(false),
+    trashButton = ComponentState(false),
+    display = ComponentState(false),
+    settingsNavButton = ComponentState(false),
+    streaksNavButton = ComponentState(false),
+
+    goalSlider = ComponentState(true, right = false),
+    drinkSelection = ComponentState(true, right = false),
+    notifications = ComponentState(false),
+
+    weeklyStreak = ComponentState(false),
+    weeklyStats = ComponentState(false)
+  )
+
+
+  fun nextStep(): OnboardingStep {
+    return when(this) {
+      Welcome -> {
+        DrinkButton
+      }
+      DrinkButton -> {
+        IncrementWater
+      }
+      IncrementWater -> {
+        ShowTrashButton
+      }
+      ShowTrashButton -> {
+        ResetWater
+      }
+      ResetWater -> {
+        ShowDisplay
+      }
+      ShowDisplay -> {
+        NavigateToSettings
+      }
+      NavigateToSettings -> {
+        ShowGoalSlider
+      }
+      ShowGoalSlider -> {
+        ShowDrinkSelection
+      }
+      ShowDrinkSelection -> {
+        Welcome
+      }
+    }
+  }
+}
+
 @ExperimentalAnimationApi
 @Preview
 @Composable
 fun HydrationOnboarding() {
-  var step by remember { mutableStateOf(0) }
+  var step by remember { mutableStateOf<OnboardingStep>(Welcome) }
+
   HydroHomieTheme {
     Box(
       modifier = Modifier
@@ -84,7 +292,7 @@ fun HydrationOnboarding() {
           modifier = Modifier
             .fillMaxWidth()
             .weight(0.2f),
-          targetState = step,
+          targetState = step.instructions,
           transitionSpec = {
             fadeIn(
               animationSpec = tween(
@@ -99,43 +307,9 @@ fun HydrationOnboarding() {
               )
             )
           }
-        ) { state ->
-          when (state) {
-            0 -> {
-              Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Welcome to Hydro Homie", color = WispyWhite, fontSize = 20.sp)
-              }
-            }
-
-            1 -> {
-              Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "This is Step 1", color = WispyWhite, fontSize = 20.sp)
-              }
-            }
-
-            2 -> {
-              Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "This is Step 2", color = WispyWhite, fontSize = 20.sp)
-              }
-            }
-
-            3 -> {
-              Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "This is Step 3", color = WispyWhite, fontSize = 20.sp)
-              }
-            }
-
-            4 -> {
-              Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "This is Step 4", color = WispyWhite, fontSize = 20.sp)
-              }
-            }
-
-            5 -> {
-              Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "This is Step 5", color = WispyWhite, fontSize = 20.sp)
-              }
-            }
+        ) { instructions ->
+          Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(text = instructions, color = WispyWhite, fontSize = 20.sp)
           }
         }
 
@@ -153,12 +327,7 @@ fun HydrationOnboarding() {
           contentAlignment = Alignment.Center
         ) {
           // Hydration
-          NewWaterContainer(
-            state = HydrationState(
-              drank = if (step == 3 || step > 5) 0 else 32,
-              goal = 64
-            )
-          )
+          NewWaterContainer(state = step.waterContainer)
           Column(
             modifier = Modifier
               .align(Alignment.BottomEnd)
@@ -166,7 +335,7 @@ fun HydrationOnboarding() {
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
           ) {
-            OnboardingSlideIn(show = step == 5) {
+            OnboardingSlideIn(show = step.streaksNavButton.show) {
               NavButton(
                 iconTint = ThemeTwo,
                 buttonSize = 30.dp,
@@ -179,7 +348,7 @@ fun HydrationOnboarding() {
                 }
               )
             }
-            OnboardingSlideIn(show = step in 4..5) {
+            OnboardingSlideIn(show = step.settingsNavButton.show) {
               NavButton(
                 iconTint = ThemeThree,
                 buttonSize = 30.dp,
@@ -193,15 +362,15 @@ fun HydrationOnboarding() {
               )
             }
             Spacer(modifier = Modifier.height(48.dp))
-            OnboardingSlideIn(show = step in 3..5) {
-              DrinkDisplay(fontSize = 12.sp, state = HydrationState(drank = 0, goal = 64))
+            OnboardingSlideIn(show = step.display.show) {
+              DrinkDisplay(fontSize = 12.sp, state = step.waterContainer)
             }
-            OnboardingSlideIn(show = step in 2..5) {
+            OnboardingSlideIn(show = step.trashButton.show) {
               IconDeleteButton(buttonSize = 30.dp, iconSize = 20.dp) {}
             }
-            OnboardingSlideIn(show = step in 1..5) {
+            OnboardingSlideIn(show = step.plusButton.show) {
               SuperButton(
-                state = HydrationState(drank = 0, goal = 64),
+                state = step.waterContainer,
                 size = 40.dp,
                 iconSize = 20.dp,
                 shape = RoundedCornerShape(8.dp),
@@ -212,7 +381,7 @@ fun HydrationOnboarding() {
           }
           // Settings
           Column {
-            OnboardingSlideIn(show = step > 5, right = false) {
+            OnboardingSlideIn(show = step.goalSlider.show, right = step.goalSlider.right) {
               NewGoalSlider(
                 low = 0,
                 high = 128,
@@ -222,7 +391,7 @@ fun HydrationOnboarding() {
                 update = {}
               )
             }
-            OnboardingSlideIn(show = step > 6, right = false) {
+            OnboardingSlideIn(show = step.drinkSelection.show, right = step.drinkSelection.right) {
               DrinkSizeSelectionGroup(
                 drinks = SettingsState(
                   personalGoal = 64,
@@ -256,11 +425,7 @@ fun HydrationOnboarding() {
             style = Style.Primary,
             text = "Next",
             action = {
-              if (step == 7) {
-                step = 0
-              } else {
-                step += 1
-              }
+              step = step.nextStep()
             }
           )
         }
@@ -270,7 +435,11 @@ fun HydrationOnboarding() {
 }
 
 @Composable
-fun OnboardingSlideIn(show: Boolean, right: Boolean = true, content: @Composable BoxScope.() -> Unit) {
+fun OnboardingSlideIn(
+  show: Boolean,
+  right: Boolean = true,
+  content: @Composable BoxScope.() -> Unit
+) {
   val multiplier = if (right) 1 else -1
   val translationX by animateFloatAsState(
     targetValue = if (show) 0f else 400f * multiplier,
@@ -278,12 +447,10 @@ fun OnboardingSlideIn(show: Boolean, right: Boolean = true, content: @Composable
       dampingRatio = Spring.DampingRatioLowBouncy,
       stiffness = Spring.StiffnessLow
     ),
-    label = "OnboardingSlideIn translationX"
   )
   val alpha by animateFloatAsState(
     targetValue = if (show) 1f else 0f,
     animationSpec = tween(durationMillis = 100, easing = EaseInOut),
-    label = "OnboardingSlideIn alpha"
   )
   Box(
     modifier = Modifier.graphicsLayer(translationX = translationX, alpha = alpha)

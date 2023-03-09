@@ -229,7 +229,6 @@ fun DrinkSizeSelection(
       dampingRatio = Spring.DampingRatioNoBouncy,
       stiffness = Spring.StiffnessVeryLow
     ),
-    label = "DrinkSizeSelection progress"
   )
 
   val scale by animateFloatAsState(
@@ -238,7 +237,6 @@ fun DrinkSizeSelection(
       dampingRatio = Spring.DampingRatioMediumBouncy,
       stiffness = Spring.StiffnessLow
     ),
-    label = "DrinkSizeSelection scale"
   )
 
   val width = remember(onboarding) { if (onboarding) 56.dp else 75.dp }
@@ -307,7 +305,6 @@ fun CustomDrinkSizeSelection(
       dampingRatio = Spring.DampingRatioMediumBouncy,
       stiffness = Spring.StiffnessLow
     ),
-    label = "CustomDrinkSizeSelection scale"
   )
 
   val amount = ((1 - progress) * max).roundToInt()
