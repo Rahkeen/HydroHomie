@@ -18,9 +18,12 @@ val HydrationBinding = composeViewFactory<HydrationRendering> { rendering, _ ->
         NavTarget.SettingsTarget -> {
           rendering.transitions(AppTransition.ToSettings)
         }
+
         NavTarget.StreaksTarget -> {
           rendering.transitions(AppTransition.ToStreaks)
         }
+
+        NavTarget.OnboardingTarget -> TODO()
       }
     }
   )

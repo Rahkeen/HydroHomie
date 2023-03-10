@@ -6,8 +6,8 @@ import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.dates.Dates
 import com.rikin.hydrohomie.drinks.DrinkRepository
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
-import com.rikin.hydrohomie.settings.LocalSettingsRepository
-import com.rikin.hydrohomie.settings.SettingsRepository
+import com.rikin.hydrohomie.features.onboarding.surface.OnboardingStep
+import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus
 import com.squareup.workflow1.Worker
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -20,6 +20,9 @@ class InitialLoadWorker(
     val drink = drinkRepository.getDrink(day = dates.today)
     val appState = AppState(
       weekday = dates.dayOfWeek.toWeekday(),
+      defaultDrinkAmount = 16,
+      notificationStatus = NotificationStatus.Disabled,
+      onboardingStep = OnboardingStep.Finished,
       hydrations = buildList {
         repeat(HYDRATION_LIMIT) { index ->
           if (index == dates.dayOfWeek) {

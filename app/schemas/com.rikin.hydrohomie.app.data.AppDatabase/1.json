@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "130e2c7ddf00d7a6e15fd357c7a9f193",
+    "identityHash": "b85c3d16c1a0c4b7149435d90cd57df8",
     "entities": [
       {
         "tableName": "LocalDrink",
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "LocalSettings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `drink_size` INTEGER NOT NULL, `goal` INTEGER NOT NULL, `user_image_url` TEXT NOT NULL, PRIMARY KEY(`user_id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `drink_size` INTEGER NOT NULL, `goal` INTEGER NOT NULL, `user_image_url` TEXT NOT NULL, `notifications_enabled` INTEGER NOT NULL, `onboarded` INTEGER NOT NULL, PRIMARY KEY(`user_id`))",
         "fields": [
           {
             "fieldPath": "userId",
@@ -63,6 +63,18 @@
             "columnName": "user_image_url",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "notificationsEnabled",
+            "columnName": "notifications_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "onboarded",
+            "columnName": "onboarded",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -78,7 +90,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '130e2c7ddf00d7a6e15fd357c7a9f193')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b85c3d16c1a0c4b7149435d90cd57df8')"
     ]
   }
 }

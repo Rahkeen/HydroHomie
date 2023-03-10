@@ -1,6 +1,7 @@
 package com.rikin.hydrohomie.app.mavericks.suface
 
 import android.os.Parcelable
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,19 +22,24 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.node.node
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackSlider
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.rikin.hydrohomie.app.mavericks.domain.AppViewModel
 import com.rikin.hydrohomie.app.mavericks.suface.NavTarget.HydrationTarget
+import com.rikin.hydrohomie.app.mavericks.suface.NavTarget.OnboardingTarget
 import com.rikin.hydrohomie.app.mavericks.suface.NavTarget.SettingsTarget
 import com.rikin.hydrohomie.app.mavericks.suface.NavTarget.StreaksTarget
 import com.rikin.hydrohomie.app.platform.LocalIntegrationPoint
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.common.surface.Hydration
+import com.rikin.hydrohomie.features.onboarding.surface.Onboarding
+import com.rikin.hydrohomie.features.onboarding.surface.OnboardingStep
 import com.rikin.hydrohomie.features.settings.common.surface.Settings
 import com.rikin.hydrohomie.features.streak.common.surface.Streaks
 import kotlinx.parcelize.Parcelize
 
+@ExperimentalAnimationApi
 @Composable
 fun MavericksApp() {
   val systemUiController = rememberSystemUiController()
@@ -46,19 +52,24 @@ fun MavericksApp() {
 
   HydroHomieTheme {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+      val viewModel: AppViewModel = mavericksActivityViewModel()
+      val onboarded by viewModel.collectAsState { it.onboardingStep == OnboardingStep.Finished }
       NodeHost(integrationPoint = LocalIntegrationPoint.current) {
-        RootNode(it)
+        RootNode(
+          it, backStack = BackStack(
+            initialElement = if (onboarded) HydrationTarget else OnboardingTarget,
+            savedStateMap = it.savedStateMap
+          )
+        )
       }
     }
   }
 }
 
+@ExperimentalAnimationApi
 class RootNode(
   buildContext: BuildContext,
-  private val backStack: BackStack<NavTarget> = BackStack(
-    initialElement = HydrationTarget,
-    savedStateMap = buildContext.savedStateMap,
-  )
+  private val backStack: BackStack<NavTarget>
 ) : ParentNode<NavTarget>(
   buildContext = buildContext,
   navModel = backStack
@@ -79,6 +90,18 @@ class RootNode(
 
   override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
     return when (navTarget) {
+      OnboardingTarget -> {
+        node(buildContext) {
+          val viewModel: AppViewModel = mavericksActivityViewModel()
+          val state by viewModel.collectAsState { it.onboardingState }
+          Onboarding(
+            state = state,
+            actions = viewModel::send,
+            navigation = backStack::replace
+          )
+        }
+      }
+
       HydrationTarget -> {
         node(buildContext) {
           val viewModel: AppViewModel = mavericksActivityViewModel()
@@ -120,6 +143,9 @@ sealed class NavTarget : Parcelable {
 
   @Parcelize
   object SettingsTarget : NavTarget()
+
+  @Parcelize
+  object OnboardingTarget : NavTarget()
 }
 
 

@@ -22,12 +22,15 @@ object SettingsWorkflow :
         state = state.copy(defaultDrinkSize = action.drinkSize)
         setOutput(UpdateState(state))
       }
+
       is AppAction.UpdateGoal -> {
         state = state.copy(personalGoal = action.goal)
         setOutput(UpdateState(state))
       }
 
       is AppAction.UpdateNotifications -> TODO()
+      AppAction.NextOnboardingStep -> TODO()
+      AppAction.OnboardingFinished -> TODO()
     }
   }
 

@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Update
 
-class LocalSettingsRepository(private val settingsDao: LocalSettingsDao): SettingsRepository {
+class LocalSettingsRepository(private val settingsDao: LocalSettingsDao) : SettingsRepository {
   override suspend fun getSettings(): LocalSettings =
     settingsDao.getSettings()
 
@@ -29,10 +29,11 @@ data class LocalSettings(
   val goal: Int = 64,
   @ColumnInfo(name = "user_image_url")
   val userImageUrl: String = "",
-  @ColumnInfo(name = "notifications_enabled", defaultValue = "false")
-  val notificationsEnabled: Boolean = false
+  @ColumnInfo(name = "notifications_enabled")
+  val notificationsEnabled: Boolean = false,
+  @ColumnInfo(name = "onboarded")
+  val onboarded: Boolean = false,
 )
-
 
 @Dao
 interface LocalSettingsDao {

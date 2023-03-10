@@ -12,6 +12,8 @@ import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput.SettingsTapped
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationOutput.StreaksTapped
 import com.rikin.hydrohomie.features.hydration.workflow.domain.HydrationWorkflow
+import com.rikin.hydrohomie.features.onboarding.surface.OnboardingStep
+import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus
 import com.rikin.hydrohomie.features.settings.workflow.domain.SettingsOutput
 import com.rikin.hydrohomie.features.settings.workflow.domain.SettingsWorkflow
 import com.rikin.hydrohomie.features.streak.workflow.domain.StreakWorkflow
@@ -45,7 +47,11 @@ class AppWorkflow(
   override fun initialState(props: Unit, snapshot: Snapshot?): WorkflowState {
     return InitialLoad(
       appState = AppState(
-        weekday = environment.dates.dayOfWeek.toWeekday()
+        weekday = environment.dates.dayOfWeek.toWeekday(),
+        defaultDrinkAmount = 16,
+        notificationStatus = NotificationStatus.Disabled,
+        onboardingStep = OnboardingStep.Finished,
+        hydrations = emptyList()
       )
     )
   }
@@ -63,9 +69,11 @@ class AppWorkflow(
       StreaksTapped -> {
         StreaksMachine(state.appState)
       }
+
       SettingsTapped -> {
         SettingsMachine(state.appState)
       }
+
       is HydrationOutput.UpdateState -> {
         val appState = with(state.appState) {
           copy(
@@ -127,6 +135,7 @@ class AppWorkflow(
           initialLoadAction(it)
         }
       }
+
       is HydrationMachine -> {}
       is SettingsMachine -> {
         val settingsScreen = context.renderChild(
@@ -141,6 +150,7 @@ class AppWorkflow(
           }
         )
       }
+
       is StreaksMachine -> {
         val streaksScreen = context.renderChild(
           child = StreakWorkflow,

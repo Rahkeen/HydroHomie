@@ -29,9 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -43,7 +41,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rikin.hydrohomie.R
+import com.rikin.hydrohomie.app.common.domain.AppAction
+import com.rikin.hydrohomie.app.common.domain.AppAction.NextOnboardingStep
+import com.rikin.hydrohomie.app.common.domain.AppAction.OnboardingFinished
 import com.rikin.hydrohomie.app.common.domain.Weekday
+import com.rikin.hydrohomie.app.mavericks.suface.NavTarget
 import com.rikin.hydrohomie.design.ComponentPadding
 import com.rikin.hydrohomie.design.DrinkDisplay
 import com.rikin.hydrohomie.design.HydroHomieTheme
@@ -58,6 +60,7 @@ import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
 import com.rikin.hydrohomie.features.hydration.common.surface.NewWaterContainer
+import com.rikin.hydrohomie.features.onboarding.surface.OnboardingStep.Finished
 import com.rikin.hydrohomie.features.onboarding.surface.OnboardingStep.Welcome
 import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus
 import com.rikin.hydrohomie.features.settings.common.domain.SettingsState
@@ -67,6 +70,7 @@ import com.rikin.hydrohomie.features.settings.common.surface.NotificationSetting
 import com.rikin.hydrohomie.features.streak.common.domain.StreakState
 import com.rikin.hydrohomie.features.streak.common.surface.WeeklyStats
 import com.rikin.hydrohomie.features.streak.common.surface.WeeklyStreak
+import kotlin.math.roundToInt
 
 data class OnboardingState(
   val step: OnboardingStep,
@@ -349,7 +353,6 @@ sealed class OnboardingStep(
   )
 
 
-
   fun nextStep(): OnboardingStep {
     return when (this) {
       Welcome -> {
@@ -416,11 +419,12 @@ sealed class OnboardingStep(
 }
 
 @ExperimentalAnimationApi
-@Preview
 @Composable
-fun HydrationOnboarding() {
-  var step by remember { mutableStateOf<OnboardingStep>(Welcome) }
-
+fun Onboarding(
+  state: OnboardingState,
+  actions: (AppAction) -> Unit,
+  navigation: (NavTarget) -> Unit
+) {
   HydroHomieTheme {
     Box(
       modifier = Modifier
@@ -439,7 +443,7 @@ fun HydrationOnboarding() {
           modifier = Modifier
             .fillMaxWidth(0.75f)
             .weight(0.2f),
-          targetState = step.instructions,
+          targetState = state.step.instructions,
           transitionSpec = {
             fadeIn(
               animationSpec = tween(
@@ -479,7 +483,7 @@ fun HydrationOnboarding() {
           contentAlignment = Alignment.Center
         ) {
           // Hydration
-          NewWaterContainer(state = step.waterContainer)
+          NewWaterContainer(state = state.step.waterContainer)
           Column(
             modifier = Modifier
               .align(Alignment.BottomEnd)
@@ -487,7 +491,7 @@ fun HydrationOnboarding() {
             verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
             horizontalAlignment = Alignment.CenterHorizontally,
           ) {
-            OnboardingSlideIn(show = step.streaksNavButton.show) {
+            OnboardingSlideIn(show = state.step.streaksNavButton.show) {
               NavButton(
                 iconTint = ThemeTwo,
                 buttonSize = 30.dp,
@@ -500,7 +504,7 @@ fun HydrationOnboarding() {
                 }
               )
             }
-            OnboardingSlideIn(show = step.settingsNavButton.show) {
+            OnboardingSlideIn(show = state.step.settingsNavButton.show) {
               NavButton(
                 iconTint = ThemeThree,
                 buttonSize = 30.dp,
@@ -514,15 +518,15 @@ fun HydrationOnboarding() {
               )
             }
             Spacer(modifier = Modifier.height(48.dp))
-            OnboardingSlideIn(show = step.display.show) {
-              DrinkDisplay(fontSize = 12.sp, state = step.waterContainer)
+            OnboardingSlideIn(show = state.step.display.show) {
+              DrinkDisplay(fontSize = 12.sp, state = state.step.waterContainer)
             }
-            OnboardingSlideIn(show = step.trashButton.show) {
+            OnboardingSlideIn(show = state.step.trashButton.show) {
               IconDeleteButton(buttonSize = 30.dp, iconSize = 20.dp) {}
             }
-            OnboardingSlideIn(show = step.plusButton.show) {
+            OnboardingSlideIn(show = state.step.plusButton.show) {
               SuperButton(
-                state = step.waterContainer,
+                state = state.step.waterContainer,
                 size = 40.dp,
                 iconSize = 20.dp,
                 shape = RoundedCornerShape(8.dp),
@@ -534,40 +538,39 @@ fun HydrationOnboarding() {
           // Settings
           Column {
             OnboardingSlideIn(
-              show = step.goalSlider.show,
+              show = state.step.goalSlider.show,
               right = false
             ) {
               NewGoalSlider(
                 low = 0,
                 high = 128,
                 scale = 0.75f,
-                progress = 0.5f,
+                progress = state.settingsState.personalGoal / 128f,
                 label = "Goal",
-                update = {}
+                update = { percent ->
+                  val amount = (percent * 128).roundToInt()
+                  actions(AppAction.UpdateGoal(goal = amount))
+                }
               )
             }
             OnboardingSlideIn(
-              show = step.drinkSelection.show,
+              show = state.step.drinkSelection.show,
               right = false
             ) {
               DrinkSizeSelectionGroup(
-                drinks = SettingsState(
-                  personalGoal = 64,
-                  defaultDrinkSize = 8,
-                  notificationStatus = NotificationStatus.Disabled
-                ).drinkSizes,
+                drinks = state.settingsState.drinkSizes,
                 onboarding = true,
-                action = {}
+                action = { actions(AppAction.UpdateDrinkSize(it.amount)) }
               )
             }
             OnboardingSlideIn(
-              show = step.notifications.show,
+              show = state.step.notifications.show,
               right = false
             ) {
               NotificationSettings(
-                state = NotificationStatus.Disabled,
+                state = state.settingsState.notificationStatus,
                 onboarding = true,
-                actions = {}
+                actions = actions
               )
             }
           }
@@ -582,7 +585,7 @@ fun HydrationOnboarding() {
             horizontalAlignment = Alignment.CenterHorizontally
           ) {
             OnboardingSlideIn(
-              show = step.weeklyStreak.show,
+              show = state.step.weeklyStreak.show,
               right = false
             ) {
               WeeklyStreak(
@@ -603,7 +606,7 @@ fun HydrationOnboarding() {
             }
 
             OnboardingSlideIn(
-              show = step.weeklyStats.show,
+              show = state.step.weeklyStats.show,
               right = false
             ) {
               WeeklyStats(
@@ -637,18 +640,45 @@ fun HydrationOnboarding() {
           OnboardingButton(
             style = Style.Secondary,
             text = "Skip",
-            action = {}
+            action = {
+              navigation(NavTarget.HydrationTarget)
+            }
           )
           OnboardingButton(
             style = Style.Primary,
-            text = "Next",
+            text = if (state.step is Finished) "Finish" else "Next",
             action = {
-              step = step.nextStep()
+              if (state.step is Finished) {
+                actions(OnboardingFinished)
+                navigation(NavTarget.HydrationTarget)
+              } else {
+                actions(NextOnboardingStep)
+              }
             }
           )
         }
       }
     }
+  }
+}
+
+@ExperimentalAnimationApi
+@Preview
+@Composable
+fun OnboardingPreview() {
+  HydroHomieTheme {
+    Onboarding(
+      state = OnboardingState(
+        step = Welcome,
+        settingsState = SettingsState(
+          personalGoal = 64,
+          defaultDrinkSize = 8,
+          notificationStatus = NotificationStatus.Disabled
+        )
+      ),
+      actions = {},
+      navigation = {}
+    )
   }
 }
 

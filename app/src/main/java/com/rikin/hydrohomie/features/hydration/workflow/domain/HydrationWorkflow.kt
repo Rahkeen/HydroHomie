@@ -31,13 +31,17 @@ object HydrationWorkflow :
         )
         setOutput(UpdateState(state))
       }
+
       AppAction.Reset -> {
         state = state.copy(drank = 0)
         setOutput(UpdateState(state))
       }
+
       is AppAction.UpdateDrinkSize -> {}
       is AppAction.UpdateGoal -> {}
       is AppAction.UpdateNotifications -> TODO()
+      AppAction.NextOnboardingStep -> TODO()
+      AppAction.OnboardingFinished -> TODO()
     }
   }
 
@@ -46,6 +50,7 @@ object HydrationWorkflow :
       AppTransition.ToStreaks -> {
         setOutput(HydrationOutput.StreaksTapped)
       }
+
       AppTransition.ToSettings -> {
         setOutput(HydrationOutput.SettingsTapped)
       }

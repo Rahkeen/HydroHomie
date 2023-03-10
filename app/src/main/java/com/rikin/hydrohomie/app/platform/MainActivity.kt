@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.core.view.WindowCompat
@@ -11,6 +12,7 @@ import com.bumble.appyx.core.integrationpoint.ActivityIntegrationPoint
 import com.bumble.appyx.core.integrationpoint.IntegrationPoint
 import com.rikin.hydrohomie.app.mavericks.suface.MavericksApp
 
+@ExperimentalAnimationApi
 class MainActivity : ComponentActivity() {
 
   private lateinit var integrationPoint: ActivityIntegrationPoint

@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -23,6 +24,7 @@ interface Notifier {
   fun cancel()
 }
 
+@ExperimentalAnimationApi
 class RealNotifier(private val appContext: Context) : Notifier {
 
   init {
@@ -58,12 +60,13 @@ class RealNotifier(private val appContext: Context) : Notifier {
   }
 }
 
-class FakeNotifier: Notifier {
+class FakeNotifier : Notifier {
   override fun start() = Unit
 
   override fun cancel() = Unit
 }
 
+@ExperimentalAnimationApi
 class NotificationWorker(
   appContext: Context,
   workerParameters: WorkerParameters

@@ -12,6 +12,7 @@ import com.rikin.hydrohomie.app.common.domain.toWeekday
 import com.rikin.hydrohomie.app.platform.HydroHomieApplication
 import com.rikin.hydrohomie.drinks.LocalDrink
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
+import com.rikin.hydrohomie.features.onboarding.surface.OnboardingStep
 import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus.Disabled
 import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus.Enabled
 import com.rikin.hydrohomie.features.settings.common.domain.NotificationStatus.PermissionDenied
@@ -47,6 +48,8 @@ class AppViewModel(
       )
 
       val settings = environment.settingsRepository.getSettings()
+      val onboardingStep =
+        if (settings.onboarded) OnboardingStep.Finished else OnboardingStep.Welcome
       val notificationStatus = if (settings.notificationsEnabled) {
         Enabled
       } else {
@@ -58,6 +61,7 @@ class AppViewModel(
           defaultDrinkAmount = settings.drinkSize,
           weekday = environment.dates.dayOfWeek.toWeekday(),
           notificationStatus = notificationStatus,
+          onboardingStep = onboardingStep,
           hydrations = buildList {
             currentWeek.forEachIndexed { index, date ->
               val drink = dateToDrink[date]
@@ -154,6 +158,8 @@ class AppViewModel(
                 LocalSettings(
                   drinkSize = state.settingsState.defaultDrinkSize,
                   goal = state.settingsState.personalGoal,
+                  notificationsEnabled = state.settingsState.notificationStatus.enabled,
+                  onboarded = state.onboardingStep == OnboardingStep.Finished
                 )
               )
           }
@@ -180,6 +186,8 @@ class AppViewModel(
                 LocalSettings(
                   drinkSize = state.settingsState.defaultDrinkSize,
                   goal = state.settingsState.personalGoal,
+                  notificationsEnabled = state.settingsState.notificationStatus.enabled,
+                  onboarded = state.onboardingStep == OnboardingStep.Finished
                 )
               )
           }
@@ -206,9 +214,29 @@ class AppViewModel(
                 localSettings = LocalSettings(
                   drinkSize = state.settingsState.defaultDrinkSize,
                   goal = state.settingsState.personalGoal,
-                  notificationsEnabled = state.notificationStatus.enabled
+                  notificationsEnabled = state.settingsState.notificationStatus.enabled,
+                  onboarded = state.onboardingStep == OnboardingStep.Finished
                 )
               )
+          }
+        }
+      }
+
+      is AppAction.NextOnboardingStep -> {
+        setState { copy(onboardingStep = onboardingStep.nextStep()) }
+      }
+
+      is AppAction.OnboardingFinished -> {
+        withState { state ->
+          viewModelScope.launch {
+            environment.settingsRepository.updateSettings(
+              localSettings = LocalSettings(
+                drinkSize = state.settingsState.defaultDrinkSize,
+                goal = state.settingsState.personalGoal,
+                notificationsEnabled = state.notificationStatus.enabled,
+                onboarded = true
+              )
+            )
           }
         }
       }

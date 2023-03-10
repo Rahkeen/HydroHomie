@@ -1,6 +1,7 @@
 package com.rikin.hydrohomie.app.platform
 
 import android.app.Application
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
@@ -31,14 +32,15 @@ import java.time.format.DateTimeFormatter
 class HydroHomieApplication : Application() {
 
   private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+  val dates: Dates = RealDates(formatter = DateTimeFormatter.ofPattern(DATE_PATTERN))
 
   private lateinit var appDatabase: AppDatabase
   lateinit var drinkRepository: DrinkRepository
   lateinit var settingsRepository: SettingsRepository
   lateinit var appWorkflow: AppWorkflow
-  val dates: Dates = RealDates(formatter = DateTimeFormatter.ofPattern(DATE_PATTERN))
   lateinit var notifier: Notifier
 
+  @OptIn(ExperimentalAnimationApi::class)
   override fun onCreate() {
     super.onCreate()
 
@@ -73,8 +75,10 @@ class HydroHomieApplication : Application() {
     applicationScope.launch {
       appDatabase.localSettingsDao().insertSettings(
         LocalSettings(
-          drinkSize = 8,
-          goal = 64
+          drinkSize = 16,
+          goal = 64,
+          notificationsEnabled = false,
+          onboarded = false
         )
       )
     }
