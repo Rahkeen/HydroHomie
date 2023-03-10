@@ -187,7 +187,7 @@ sealed class OnboardingStep(
   )
 
   object IncrementWater : OnboardingStep(
-    instructions = "Click.",
+    instructions = "Nice.",
     waterContainer = HydrationState(drank = 40, goal = 64),
     plusButton = ComponentState(true),
     trashButton = ComponentState(false),
@@ -221,7 +221,7 @@ sealed class OnboardingStep(
   )
 
   object ResetWater : OnboardingStep(
-    instructions = "Oops.",
+    instructions = "Poof.",
     waterContainer = HydrationState(drank = 0, goal = 64),
     plusButton = ComponentState(true),
     trashButton = ComponentState(true),
@@ -408,7 +408,7 @@ sealed class OnboardingStep(
   )
 
   object NavigateToStreaks : OnboardingStep(
-    instructions = "Oh yea! Let's check on how you've been doing this week.",
+    instructions = "Oh yea! Check on how you've been doing this week by tapping here.",
     waterContainer = HydrationState(drank = 48, goal = 64),
     plusButton = ComponentState(true),
     trashButton = ComponentState(true),
