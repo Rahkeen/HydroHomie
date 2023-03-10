@@ -34,7 +34,6 @@ import com.rikin.hydrohomie.app.platform.LocalIntegrationPoint
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.common.surface.Hydration
 import com.rikin.hydrohomie.features.onboarding.surface.Onboarding
-import com.rikin.hydrohomie.features.onboarding.surface.OnboardingStep
 import com.rikin.hydrohomie.features.settings.common.surface.Settings
 import com.rikin.hydrohomie.features.streak.common.surface.Streaks
 import kotlinx.parcelize.Parcelize
@@ -52,13 +51,12 @@ fun MavericksApp() {
 
   HydroHomieTheme {
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
-      val viewModel: AppViewModel = mavericksActivityViewModel()
-      val onboarded by viewModel.collectAsState { it.onboardingStep == OnboardingStep.Finished }
-      NodeHost(integrationPoint = LocalIntegrationPoint.current) {
+      NodeHost(integrationPoint = LocalIntegrationPoint.current) { buildContext ->
         RootNode(
-          it, backStack = BackStack(
-            initialElement = if (onboarded) HydrationTarget else OnboardingTarget,
-            savedStateMap = it.savedStateMap
+          buildContext,
+          backStack = BackStack(
+            initialElement = OnboardingTarget,
+            savedStateMap = buildContext.savedStateMap
           )
         )
       }
