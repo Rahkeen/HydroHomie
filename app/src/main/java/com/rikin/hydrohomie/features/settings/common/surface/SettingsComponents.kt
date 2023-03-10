@@ -14,11 +14,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -194,18 +193,20 @@ fun DrinkSizeSelectionGroup(
     )
     Row(
       modifier = Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.SpaceEvenly,
+      horizontalArrangement = Arrangement.spacedBy(16.dp),
       verticalAlignment = Alignment.CenterVertically
     ) {
       drinks.forEach { state ->
         if (state.custom) {
           CustomDrinkSizeSelection(
+            modifier = Modifier.weight(1f),
             state = state,
             onboarding = onboarding,
             update = action
           )
         } else {
           DrinkSizeSelection(
+            modifier = Modifier.weight(1f),
             state = state,
             onboarding = onboarding,
             select = action
@@ -218,6 +219,7 @@ fun DrinkSizeSelectionGroup(
 
 @Composable
 fun DrinkSizeSelection(
+  modifier: Modifier = Modifier,
   state: DrinkSizeState,
   onboarding: Boolean = false,
   select: (DrinkSizeState) -> Unit
@@ -239,8 +241,6 @@ fun DrinkSizeSelection(
     ),
   )
 
-  val width = remember(onboarding) { if (onboarding) 56.dp else 75.dp }
-  val height = remember(onboarding) { if (onboarding) 96.dp else 125.dp }
   val shape = remember(onboarding) {
     if (onboarding) {
       RoundedCornerShape(12.dp)
@@ -253,15 +253,16 @@ fun DrinkSizeSelection(
 
   HydroHomieTheme {
     Box(
-      modifier = Modifier
+      modifier = modifier
         .graphicsLayer(scaleX = scale, scaleY = scale)
+        .fillMaxWidth()
+        .aspectRatio(3/5f)
         .clip(shape)
         .clickable { select(state) }
     ) {
       Box(
         modifier = Modifier
-          .width(width)
-          .height(height)
+          .fillMaxSize()
           .background(color = color),
         contentAlignment = Alignment.Center
       ) {
@@ -270,14 +271,12 @@ fun DrinkSizeSelection(
 
       Box(
         modifier = Modifier
-          .width(width)
-          .height(height)
+          .fillMaxSize()
           .clip(ClipShape(progress))
       ) {
         Box(
           modifier = Modifier
-            .width(width)
-            .height(height)
+            .fillMaxSize()
             .background(color = SpaceCadet)
             .border(width = 1.dp, shape = shape, color = color),
           contentAlignment = Alignment.Center
@@ -291,6 +290,7 @@ fun DrinkSizeSelection(
 
 @Composable
 fun CustomDrinkSizeSelection(
+  modifier: Modifier = Modifier,
   state: DrinkSizeState,
   onboarding: Boolean = false,
   update: (DrinkSizeState) -> Unit
@@ -307,9 +307,7 @@ fun CustomDrinkSizeSelection(
     ),
   )
 
-  val amount = ((1 - progress) * max).roundToInt()
-  val width = remember(onboarding) { if (onboarding) 56.dp else 75.dp }
-  val height = remember(onboarding) { if (onboarding) 96.dp else 125.dp }
+  val amount = remember(progress) { ((1 - progress) * max).roundToInt() }
   val shape = remember(onboarding) {
     if (onboarding) {
       RoundedCornerShape(12.dp)
@@ -321,8 +319,10 @@ fun CustomDrinkSizeSelection(
   val color = PopRed
 
   Box(
-    modifier = Modifier
+    modifier = modifier
       .graphicsLayer(scaleX = scale, scaleY = scale)
+      .fillMaxWidth()
+      .aspectRatio(3/5f)
       .clip(shape)
       .pointerInput(Unit) {
         forEachGesture {
@@ -332,9 +332,9 @@ fun CustomDrinkSizeSelection(
               val event = awaitPointerEvent()
               val clampedY = event.changes.last().position.y.coerceIn(
                 minimumValue = 0f,
-                maximumValue = height.toPx()
+                maximumValue = size.height.toFloat()
               )
-              val normalizedY = clampedY / height.toPx()
+              val normalizedY = clampedY / size.height.toFloat()
               Log.d("Custom Button", "Dragged")
               progress = normalizedY
             } while (event.changes.none { it.changedToUp() })
@@ -345,8 +345,7 @@ fun CustomDrinkSizeSelection(
   ) {
     Box(
       modifier = Modifier
-        .width(width)
-        .height(height)
+        .fillMaxSize()
         .background(color = color),
       contentAlignment = Alignment.Center
     ) {
@@ -358,8 +357,7 @@ fun CustomDrinkSizeSelection(
     ) {
       Box(
         modifier = Modifier
-          .width(width)
-          .height(height)
+          .fillMaxSize()
           .background(color = SpaceCadet)
           .border(width = 1.dp, shape = shape, color = color),
         contentAlignment = Alignment.Center
