@@ -128,14 +128,15 @@ fun NewGoalSlider(
       verticalAlignment = Alignment.CenterVertically
     ) {
       NewSquigglySlider(
-        modifier = Modifier.weight(0.85f),
+        modifier = Modifier.weight(0.8f),
         state = progress,
         update = update
       )
       Text(
-        modifier = Modifier.weight(0.15f),
+        modifier = Modifier.weight(0.2f),
         text = "$display oz",
         style = MaterialTheme.typography.caption,
+        textAlign = TextAlign.Center,
         color = color
       )
     }
