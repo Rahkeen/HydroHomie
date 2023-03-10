@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -34,8 +35,10 @@ import com.rikin.hydrohomie.app.platform.LocalIntegrationPoint
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.features.hydration.common.surface.Hydration
 import com.rikin.hydrohomie.features.onboarding.surface.Onboarding
+import com.rikin.hydrohomie.features.onboarding.surface.OnboardingStep
 import com.rikin.hydrohomie.features.settings.common.surface.Settings
 import com.rikin.hydrohomie.features.streak.common.surface.Streaks
+import kotlinx.coroutines.delay
 import kotlinx.parcelize.Parcelize
 
 @ExperimentalAnimationApi
@@ -55,7 +58,7 @@ fun MavericksApp() {
         RootNode(
           buildContext,
           backStack = BackStack(
-            initialElement = OnboardingTarget,
+            initialElement = HydrationTarget,
             savedStateMap = buildContext.savedStateMap
           )
         )
@@ -104,6 +107,13 @@ class RootNode(
         node(buildContext) {
           val viewModel: AppViewModel = mavericksActivityViewModel()
           val state by viewModel.collectAsState { it.hydrationState }
+          val onboarding by viewModel.collectAsState { it.onboardingStep }
+          if (onboarding is OnboardingStep.Welcome) {
+            LaunchedEffect(Unit) {
+              delay(500)
+              backStack.replace(OnboardingTarget)
+            }
+          }
           Hydration(
             state = state,
             actions = viewModel::send,

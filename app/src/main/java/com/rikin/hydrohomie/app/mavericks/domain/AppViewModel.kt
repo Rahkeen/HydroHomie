@@ -227,6 +227,7 @@ class AppViewModel(
       }
 
       is AppAction.OnboardingFinished -> {
+        setState { copy(onboardingStep = OnboardingStep.Finished) }
         withState { state ->
           viewModelScope.launch {
             environment.settingsRepository.updateSettings(

@@ -12,15 +12,9 @@ data class AppState(
   val weekday: Weekday = Weekday.Monday,
   val defaultDrinkAmount: Int = 16,
   val notificationStatus: NotificationStatus = NotificationStatus.Disabled,
-  val onboardingStep: OnboardingStep = OnboardingStep.Welcome,
+  val onboardingStep: OnboardingStep = OnboardingStep.Finished,
   val hydrations: List<HydrationState> = listOf(
-    HydrationState(drank = 32, goal = 64),
-    HydrationState(drank = 32, goal = 64),
-    HydrationState(drank = 32, goal = 64),
-    HydrationState(drank = 32, goal = 64),
-    HydrationState(drank = 32, goal = 64),
-    HydrationState(drank = 32, goal = 64),
-    HydrationState(drank = 32, goal = 64),
+    HydrationState(drank = 0, goal = 64),
   ),
 ) : MavericksState {
 
