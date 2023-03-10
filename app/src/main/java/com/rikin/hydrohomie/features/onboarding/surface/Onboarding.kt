@@ -153,7 +153,7 @@ sealed class OnboardingStep(
   )
 
   object WaterCup : OnboardingStep(
-    instructions = "This is your water bottle. Your goal is to fill this to the top.",
+    instructions = "This is your water bottle. Your goal is to fill it to the top.",
     waterContainer = HydrationState(drank = 32, goal = 64),
     plusButton = ComponentState(false),
     trashButton = ComponentState(false),
@@ -221,7 +221,7 @@ sealed class OnboardingStep(
   )
 
   object ResetWater : OnboardingStep(
-    instructions = "Poof.",
+    instructions = "Awe.",
     waterContainer = HydrationState(drank = 0, goal = 64),
     plusButton = ComponentState(true),
     trashButton = ComponentState(true),
@@ -272,7 +272,7 @@ sealed class OnboardingStep(
   )
 
   object TakeADrink : OnboardingStep(
-    instructions = "Ahh. Much better.",
+    instructions = "Ahh, much better.",
     waterContainer = HydrationState(drank = 48, goal = 64),
     plusButton = ComponentState(true),
     trashButton = ComponentState(true),
@@ -408,7 +408,7 @@ sealed class OnboardingStep(
   )
 
   object NavigateToStreaks : OnboardingStep(
-    instructions = "Oh yea! Check on how you've been doing this week by tapping here.",
+    instructions = "Oh yea! Check on how you've been doing this week by tapping that calendar.",
     waterContainer = HydrationState(drank = 48, goal = 64),
     plusButton = ComponentState(true),
     trashButton = ComponentState(true),
@@ -442,7 +442,7 @@ sealed class OnboardingStep(
   )
 
   object ShowWeeklyStats : OnboardingStep(
-    instructions = "Also some helpful stats, if you're into that kinda thing.",
+    instructions = "And here are some stats, if you're into that kinda thing.",
     waterContainer = HydrationState(drank = 0, goal = 64),
     plusButton = ComponentState(false),
     trashButton = ComponentState(false),
