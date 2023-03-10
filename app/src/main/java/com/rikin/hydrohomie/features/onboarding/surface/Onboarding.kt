@@ -13,6 +13,8 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -21,13 +23,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +39,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -53,12 +57,12 @@ import com.rikin.hydrohomie.design.DrinkDisplay
 import com.rikin.hydrohomie.design.HydroHomieTheme
 import com.rikin.hydrohomie.design.IconDeleteButton
 import com.rikin.hydrohomie.design.NavButton
+import com.rikin.hydrohomie.design.PopRed
 import com.rikin.hydrohomie.design.SpaceCadet
 import com.rikin.hydrohomie.design.SpaceCadetDark
 import com.rikin.hydrohomie.design.SuperButton
 import com.rikin.hydrohomie.design.ThemeThree
 import com.rikin.hydrohomie.design.ThemeTwo
-import com.rikin.hydrohomie.design.WaterBlue
 import com.rikin.hydrohomie.design.WaterGradient
 import com.rikin.hydrohomie.design.WispyWhite
 import com.rikin.hydrohomie.features.hydration.common.domain.HydrationState
@@ -170,7 +174,7 @@ sealed class OnboardingStep(
   )
 
   object DrinkButton : OnboardingStep(
-    instructions = "If you wanna record a drink, press this button.",
+    instructions = "If you drink some water, let me know by pressing that button.",
     waterContainer = HydrationState(drank = 32, goal = 64),
     plusButton = ComponentState(true),
     trashButton = ComponentState(false),
@@ -898,15 +902,30 @@ fun OnboardingButton(
   text: String,
   action: () -> Unit
 ) {
+  val interactionSource = remember { MutableInteractionSource() }
+  val pressed by interactionSource.collectIsPressedAsState()
+  val scale by animateFloatAsState(
+    targetValue = if (pressed) 0.9f else 1f,
+    animationSpec = spring(
+      dampingRatio = Spring.DampingRatioNoBouncy,
+      stiffness = Spring.StiffnessLow
+    )
+  )
+
   when (style) {
     Style.Primary -> {
       Box(
         modifier = modifier
-          .width(80.dp)
-          .height(60.dp)
+          .scale(scale)
+          .defaultMinSize(
+            minWidth = 80.dp,
+            minHeight = 60.dp
+          )
+          .wrapContentWidth()
           .background(brush = WaterGradient, shape = RoundedCornerShape(16.dp))
           .clip(RoundedCornerShape(16.dp))
-          .clickable { action() },
+          .padding(16.dp)
+          .clickable(interactionSource = interactionSource, indication = null) { action() },
         contentAlignment = Alignment.Center
       ) {
         Text(text = text, color = WispyWhite, fontSize = 20.sp)
@@ -916,15 +935,29 @@ fun OnboardingButton(
     Style.Secondary -> {
       Box(
         modifier = modifier
-          .width(80.dp)
-          .height(60.dp)
+          .scale(scale)
+          .defaultMinSize(
+            minWidth = 80.dp,
+            minHeight = 60.dp
+          )
+          .wrapContentWidth()
           .clip(RoundedCornerShape(16.dp))
-          .clickable { action() },
+          .padding(16.dp)
+          .clickable(interactionSource = interactionSource, indication = null) { action() },
         contentAlignment = Alignment.Center
       ) {
-        Text(text = text, color = WaterBlue, fontSize = 20.sp)
+        Text(text = text, color = PopRed, fontSize = 20.sp)
       }
     }
+  }
+}
+
+@Preview
+@Composable
+fun OnboardingButtons() {
+  Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+    OnboardingButton(text = "Skip", style = Style.Secondary) {}
+    OnboardingButton(text = "Next", style = Style.Primary) {}
   }
 }
 

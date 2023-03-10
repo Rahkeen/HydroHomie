@@ -24,13 +24,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowForward
@@ -56,7 +53,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.DefaultFillType
 import androidx.compose.ui.graphics.vector.Group
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.Path
 import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
