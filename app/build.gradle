@@ -5,9 +5,8 @@ plugins {
     id 'kotlin-parcelize'
 }
 
-def keystorePropertiesFile= rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+keystoreProperties.load(new FileInputStream(rootProject.file("keystore.properties")))
 
 android {
     signingConfigs {
@@ -39,6 +38,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+        }
+        debug {
+            applicationIdSuffix = ".debug"
+            debuggable = true
         }
     }
     compileOptions {
