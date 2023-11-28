@@ -1,4 +1,4 @@
-![hh-banner-small](https://github.com/Rahkeen/HydroHomie/assets/2228493/c5789617-5829-455b-82ba-eb48df38acbc)
+[![hh-banner-small](https://github.com/Rahkeen/HydroHomie/assets/2228493/c5789617-5829-455b-82ba-eb48df38acbc)](https://www.hydrohomie.co)
 
 | Drink  | Set | Track |
 | ------------- | ------------- | ------------ |
