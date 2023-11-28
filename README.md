@@ -18,6 +18,6 @@ Each screen is setup in it's own feature package, which is usually split up into
 
 Data dependencies are wrapped with a `Repository`, but it's really just an interface that sits on top.
 
-The core entry point is in `MavericksApp` and feel free to disregard any `workflow` components as they are remnants of using [Workflow](https://square.github.io/workflow/).
+The core entry point is in `MavericksApp` and feel free to disregard any `workflow` components as they are remnants of using [Workflow](https://square.github.io/workflow/). If you are curious, this repo was used to compare architecture libraries which I talked about at [DroidconSF 2022](https://www.droidcon.com/2022/06/28/state-machines-and-hopeful-dreams/)
 
 
